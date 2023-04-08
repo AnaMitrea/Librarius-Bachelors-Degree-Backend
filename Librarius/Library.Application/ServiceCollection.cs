@@ -13,12 +13,13 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(BookshelfProfile));
         services.AddAutoMapper(typeof(CategoryProfile));
         services.AddAutoMapper(typeof(BookProfile));
+        services.AddAutoMapper(typeof(BookCategoryProfile));
         
         // TODO add services as:  services.AddScoped<IDogService, DogService>();
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IBookService, BookService>();
-        
+
         // TODO models validators as:  services.AddScoped<IValidator<DogRequestModel>, DogRequestModelValidator>();
         
         
