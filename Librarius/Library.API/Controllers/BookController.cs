@@ -16,7 +16,7 @@ public class BookController : ControllerBase
         _bookService = bookService;
     }
 
-    [HttpGet("{bookId}")]
+    [HttpGet("{bookId:int}")]
     public async Task<IActionResult> GetBookByIdAsync(int bookId)
     {
         var book = await _bookService.GetBookByIdAsync(bookId);
@@ -24,7 +24,7 @@ public class BookController : ControllerBase
         return Ok(ApiResponse<BookResponseModel>.Success(book));
     }
     
-    [HttpGet("{bookId}/category")]
+    [HttpGet("{bookId:int}/category")]
     public async Task<IActionResult> GetBookWithCategoryByIdAsync(int bookId)
     {
         var book = await _bookService.GetBookWithCategoryByIdAsync(bookId);

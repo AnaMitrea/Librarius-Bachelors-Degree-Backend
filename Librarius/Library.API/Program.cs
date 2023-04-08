@@ -37,7 +37,7 @@ builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
 
-// app.UsePathBase(new PathString("/api"));
+app.UsePathBase(new PathString("/api/Library"));
 app.UseRouting();
 
 // Configure the HTTP request pipeline.

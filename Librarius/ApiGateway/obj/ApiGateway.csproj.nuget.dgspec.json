@@ -44,19 +44,15 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "MMLib.SwaggerForOcelot": {
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
-              "version": "[6.2.0, )"
+              "version": "[1.17.2, )"
             },
             "Ocelot": {
               "target": "Package",
               "version": "[18.0.0, )"
             },
             "Ocelot.Cache.CacheManager": {
-              "target": "Package",
-              "version": "[18.0.0, )"
-            },
-            "Ocelot.Provider.Polly": {
               "target": "Package",
               "version": "[18.0.0, )"
             }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TJ77EpPiy2AbggfhlHmE+Ic1UffqG1bm+cMTx7MagH6Dm8hdyNBdiNiOFQI/AZh9z6TejlkapNzZINeebObGUA==",
+  "dgSpecHash": "qDddwCR7MZ1SKIeakPhr8uAECoAArycMWJ6qzRe1jri8+6JaLia3v/aO09zyE7cJqhGPkozzBJapsBW6+EdS/w==",
   "success": true,
   "projectFilePath": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.API\\Library.API.csproj",
   "expectedPackageFiles": [
@@ -45,6 +45,7 @@
     "C:\\Users\\Ana\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\Ana\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\Ana\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\Ana\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512",
     "C:\\Users\\Ana\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Ana\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Ana\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
