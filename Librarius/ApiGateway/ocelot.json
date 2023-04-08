@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Library/Book",
+      "DownstreamPathTemplate": "/api/Library/Book/{everything}",
       "SwaggerKey": "library/book",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -10,24 +10,11 @@
           "Port": 5104
         }
       ],
-      "UpstreamPathTemplate": "/gateway/Library/Book",
+      "UpstreamPathTemplate": "/api/Library/Book/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
     },
     {
-      "DownstreamPathTemplate": "/api/Library/Book/{bookId}",
-      "SwaggerKey": "library/book",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5104
-        }
-      ],
-      "UpstreamPathTemplate": "/gateway/Library/Book/{bookId}",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/User",
+      "DownstreamPathTemplate": "/api/User/{everything}",
       "SwaggerKey": "user",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -36,7 +23,7 @@
           "Port": 5251
         }
       ],
-      "UpstreamPathTemplate": "/gateway/User",
+      "UpstreamPathTemplate": "/gateway/User/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
     }
   ],

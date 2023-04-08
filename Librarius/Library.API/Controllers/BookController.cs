@@ -16,15 +16,15 @@ public class BookController : ControllerBase
         _bookService = bookService;
     }
 
-    [HttpGet("{bookId:int}")]
-    public async Task<IActionResult> GetBookByIdAsync(int bookId)
-    {
-        var book = await _bookService.GetBookByIdAsync(bookId);
-
-        return Ok(ApiResponse<BookResponseModel>.Success(book));
-    }
+    // [HttpGet("{bookId:int}")]
+    // public async Task<IActionResult> GetBookByIdAsync(int bookId)
+    // {
+    //     var book = await _bookService.GetBookByIdAsync(bookId);
+    //
+    //     return Ok(ApiResponse<BookResponseModel>.Success(book));
+    // }
     
-    [HttpGet("{bookId:int}/category")]
+    [HttpGet("{bookId:int}")]
     public async Task<IActionResult> GetBookWithCategoryByIdAsync(int bookId)
     {
         var book = await _bookService.GetBookWithCategoryByIdAsync(bookId);
