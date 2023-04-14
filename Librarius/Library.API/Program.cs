@@ -34,10 +34,11 @@ builder.Services.AddDataAccess(builder.Configuration);
 
 // Library.Application configs
 builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-app.UsePathBase(new PathString("/api/Library"));
+app.UsePathBase(new PathString("/api/library"));
 app.UseRouting();
 
 // Configure the HTTP request pipeline.

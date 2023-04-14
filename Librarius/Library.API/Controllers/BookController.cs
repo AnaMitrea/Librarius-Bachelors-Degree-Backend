@@ -15,20 +15,42 @@ public class BookController : ControllerBase
     {
         _bookService = bookService;
     }
-
-    // [HttpGet("{bookId:int}")]
-    // public async Task<IActionResult> GetBookByIdAsync(int bookId)
-    // {
-    //     var book = await _bookService.GetBookByIdAsync(bookId);
-    //
-    //     return Ok(ApiResponse<BookResponseModel>.Success(book));
-    // }
     
+    // Route: /api/library/book/{bookId}
     [HttpGet("{bookId:int}")]
     public async Task<IActionResult> GetBookWithCategoryByIdAsync(int bookId)
     {
-        var book = await _bookService.GetBookWithCategoryByIdAsync(bookId);
+        var response = await _bookService.GetBookWithCategoryByIdAsync(bookId);
 
-        return Ok(ApiResponse<BookResponseModel>.Success(book));
+        return Ok(ApiResponse<BookResponseModel>.Success(response));
+    }
+
+    /*
+     * Route:
+     * Trending Now : /api/library/book/trending?duration=now
+     * Trending Week : /api/library/book/trending?duration=week
+     */
+    [HttpGet("trending")]
+    public async Task<IActionResult> GetTrendingBooks([FromQuery] string duration)
+    {
+        switch (duration)
+        {
+            case "now":
+            {
+                // currently trending
+                var response = await _bookService.GetTrendingNowBooksAsync();
+
+                return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
+            }
+            case "week":
+            {
+                // the top 10 books of the week based on popularity
+                var response = await _bookService.GetTrendingWeekBooksAsync();
+            
+                return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
+            }
+            default:
+                return BadRequest("Invalid parameter.");
+        }
     }
 }
