@@ -24,6 +24,15 @@ public class BookController : ControllerBase
 
         return Ok(ApiResponse<BookResponseModel>.Success(response));
     }
+    
+    // Route: /api/library/book/{bookId}/read
+    [HttpGet("{bookId:int}/read")]
+    public async Task<IActionResult> GetReadingBookByIdAsync(int bookId)
+    {
+        var response = await _bookService.GetReadingBookByIdAsync(bookId);
+
+        return Ok(ApiResponse<BookReadingResponseModel>.Success(response));
+    }
 
     /*
      * Route:

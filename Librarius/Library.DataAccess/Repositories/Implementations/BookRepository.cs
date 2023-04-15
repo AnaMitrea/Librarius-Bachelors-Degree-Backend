@@ -1,10 +1,13 @@
-﻿using Library.DataAccess.Entities;
+﻿using System.Text.RegularExpressions;
+using Library.DataAccess.DTOs;
+using Library.DataAccess.Entities;
 using Library.DataAccess.Persistance;
+using Library.DataAccess.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess.Repositories.Implementations;
 
-public class BookRepository : IBookRepository
+public partial class BookRepository : IBookRepository
 {
     private readonly DatabaseContext _databaseContext;
     
@@ -24,22 +27,7 @@ public class BookRepository : IBookRepository
         
         return book;
     }
-    
-    // public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId)
-    // {
-    //     var book = (await _databaseContext.Books
-    //         .Include(x => x.BookCategories)
-    //         .ThenInclude(x => x.Category)
-    //         .ToListAsync()).SingleOrDefault(book => book.Id == bookId);
-    //     
-    //     if (book == default)
-    //     {
-    //         throw new Exception("The book id is invalid");
-    //     }
-    //     
-    //     return book;
-    // }
-    
+
     public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId)
     {
         var book = await _databaseContext.Books
@@ -60,6 +48,44 @@ public class BookRepository : IBookRepository
         return book;
     }
 
+    public async Task<BookWithContent?> GetReadingBookByIdAsync(int bookId)
+    {
+        var book = await _databaseContext.Books
+            .SingleOrDefaultAsync(book => book.Id == bookId);
+    
+        if (book == default)
+        {
+            throw new Exception("The book id is invalid");
+        }
+    
+        var bookWithContent = new BookWithContent
+        {
+            Id = book.Id
+        };
+    
+        if (!string.IsNullOrEmpty(book.HtmlContentUrl))
+        {
+            // get the HTML content from the book's URL
+            // var url = "https://www.gutenberg.org" + book.HtmlContentUrl;
+            const string url = "https://www.gutenberg.org/cache/epub/1513/pg1513-images.html";
+            
+            var client = new HttpClient();
+            var response = await client.GetAsync(url);
+            var html = await response.Content.ReadAsStringAsync();
+
+            // extract the content between the pg-header and pg-footer sections
+            var content = await BookContentUtil.GetContentBetweenSectionsAsync(html);
+
+            // remove any images from the content
+            content = MyRegex().Replace(content, "");
+
+            bookWithContent.Content = content;
+        }
+
+        return bookWithContent;
+    }
+
+
     public async Task<IEnumerable<Book?>> GetTrendingNowBooksAsync()
     {
         // TODO implement
@@ -75,6 +101,9 @@ public class BookRepository : IBookRepository
 
         return result;
     }
+
+    [GeneratedRegex("<img[^>]+>")]
+    private static partial Regex MyRegex();
 
     // TODO implement CRUD operations defined in interface
 }

@@ -6,6 +6,8 @@ public interface IBookService
 {
     Task<BookResponseModel> GetBookWithCategoryByIdAsync(int id);
 
+    Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id);
+
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync();
     
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingWeekBooksAsync();

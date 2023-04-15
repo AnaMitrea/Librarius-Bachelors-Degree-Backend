@@ -12,3 +12,17 @@ C:\Users\Ana\Documents\GitHub\Licenta-Backend\Librarius\Library.DataAccess\obj\D
 C:\Users\Ana\Documents\GitHub\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.pdb
 C:\Users\Ana\Documents\GitHub\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.genruntimeconfig.cache
 C:\Users\Ana\Documents\GitHub\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\ref\Library.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\bin\Debug\net7.0\Library.DataAccess.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\bin\Debug\net7.0\Library.DataAccess.runtimeconfig.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\bin\Debug\net7.0\Library.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\bin\Debug\net7.0\Library.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\refint\Library.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\Library.DataAccess.genruntimeconfig.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.DataAccess\obj\Debug\net7.0\ref\Library.DataAccess.dll

@@ -7770,24 +7770,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ana\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\anstoian\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.API\\Library.API.csproj",
+      "projectUniqueName": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.API\\Library.API.csproj",
       "projectName": "Library.API",
-      "projectPath": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.API\\Library.API.csproj",
-      "packagesPath": "C:\\Users\\Ana\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.API\\obj\\",
+      "projectPath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.API\\Library.API.csproj",
+      "packagesPath": "C:\\Users\\anstoian\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.API\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Ana\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\anstoian\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7801,11 +7796,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.Application\\Library.Application.csproj": {
-              "projectPath": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.Application\\Library.Application.csproj"
+            "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.Application\\Library.Application.csproj": {
+              "projectPath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.Application\\Library.Application.csproj"
             },
-            "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.DataAccess\\Library.DataAccess.csproj": {
-              "projectPath": "C:\\Users\\Ana\\Documents\\GitHub\\Licenta-Backend\\Librarius\\Library.DataAccess\\Library.DataAccess.csproj"
+            "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.DataAccess\\Library.DataAccess.csproj": {
+              "projectPath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.DataAccess\\Library.DataAccess.csproj"
             }
           }
         }
@@ -7860,7 +7855,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

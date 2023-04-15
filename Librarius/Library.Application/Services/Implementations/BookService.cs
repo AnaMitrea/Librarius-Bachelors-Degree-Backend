@@ -29,6 +29,13 @@ public class BookService : IBookService
         return _mapper.Map<BookResponseModel>(response);
     }
 
+    public async Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id)
+    {
+        var response = await _bookRepository.GetReadingBookByIdAsync(id);
+
+        return _mapper.Map<BookReadingResponseModel>(response);
+    }
+
     public async Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync()
     {
         var response = await _bookRepository.GetTrendingNowBooksAsync();
