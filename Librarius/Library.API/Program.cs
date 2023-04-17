@@ -8,16 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: myAllowAnyOrigin,
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy(name: myAllowAnyOrigin,
+//         policy =>
+//         {
+//             policy.AllowAnyOrigin()
+//                 .AllowAnyHeader()
+//                 .AllowAnyMethod();
+//         });
+// });
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -27,7 +27,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 // Library.DataAccess configs
 builder.Services.AddDataAccess(builder.Configuration);
@@ -52,7 +51,7 @@ if (app.Environment.IsDevelopment())
 //         c.SwaggerEndpoint("library/swagger/v1/swagger.json", "Library.API V1");
 // });
 
-app.UseCors(myAllowAnyOrigin);
+// app.UseCors(myAllowAnyOrigin);
 
 app.UseAuthorization();
 

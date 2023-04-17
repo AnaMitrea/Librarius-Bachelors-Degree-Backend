@@ -1,0 +1,12 @@
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\bin\Debug\net7.0\Identity.Application.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\bin\Debug\net7.0\Identity.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\bin\Debug\net7.0\Identity.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\refint\Identity.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\ref\Identity.Application.dll

@@ -22,19 +22,25 @@
         }
       ],
       "UpstreamPathTemplate": "/api/library/book/trending",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "User"
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/User/{everything}",
-      "SwaggerKey": "user",
+      "DownstreamPathTemplate": "/api/account/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5251
+          "Port": 5257
         }
       ],
-      "UpstreamPathTemplate": "/gateway/User/{everything}",
+      "UpstreamPathTemplate": "/api/account/login",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
     }
   ],

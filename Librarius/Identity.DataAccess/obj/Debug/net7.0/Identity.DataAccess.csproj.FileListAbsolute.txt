@@ -1,0 +1,12 @@
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\bin\Debug\net7.0\Identity.DataAccess.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\bin\Debug\net7.0\Identity.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\bin\Debug\net7.0\Identity.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\refint\Identity.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\Identity.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.DataAccess\obj\Debug\net7.0\ref\Identity.DataAccess.dll
