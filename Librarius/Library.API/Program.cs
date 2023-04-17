@@ -8,16 +8,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy(name: myAllowAnyOrigin,
-//         policy =>
-//         {
-//             policy.AllowAnyOrigin()
-//                 .AllowAnyHeader()
-//                 .AllowAnyMethod();
-//         });
-// });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowAnyOrigin,
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -51,7 +51,7 @@ if (app.Environment.IsDevelopment())
 //         c.SwaggerEndpoint("library/swagger/v1/swagger.json", "Library.API V1");
 // });
 
-// app.UseCors(myAllowAnyOrigin);
+app.UseCors(myAllowAnyOrigin);
 
 app.UseAuthorization();
 

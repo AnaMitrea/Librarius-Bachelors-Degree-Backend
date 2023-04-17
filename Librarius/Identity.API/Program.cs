@@ -1,7 +1,23 @@
 using Identity.Application;
 using Identity.DataAccess;
 
+const string myAllowAnyOrigin = "_myAllowAnyOrigin";
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowAnyOrigin,
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 
 // Add services to the container.
 
@@ -30,6 +46,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(myAllowAnyOrigin);
 
 app.UseAuthorization();
 
