@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Models.Requests;
 
-public class AuthenticationRequest
+public class AuthenticationRequestModel
 {
     public string Username { get; set; }
     

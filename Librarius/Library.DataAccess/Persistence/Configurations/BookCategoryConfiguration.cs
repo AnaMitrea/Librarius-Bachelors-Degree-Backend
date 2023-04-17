@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Library.DataAccess.Persistance.Configurations;
+namespace Library.DataAccess.Persistence.Configurations;
 
 public class BookCategoryConfiguration : IEntityTypeConfiguration<Entities.BookCategory>
 {

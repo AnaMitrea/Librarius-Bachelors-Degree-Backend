@@ -1,6 +1,6 @@
-﻿namespace Identity.Application.Models;
+﻿namespace Identity.DataAccess.Entities;
 
-public class UserAccount
+public class Account : Entity
 {
     public string Username { get; set; }
     

@@ -15,7 +15,7 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(BookProfile));
         services.AddAutoMapper(typeof(BookCategoryProfile));
         
-        // TODO add services as:  services.AddScoped<IDogService, DogService>();
+        // Service Implementations
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IBookService, BookService>();

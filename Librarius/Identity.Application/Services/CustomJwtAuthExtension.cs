@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Identity.Application;
+namespace Identity.Application.Services;
 
 public static class CustomJwtAuthExtension
 {

@@ -1,11 +1,17 @@
 using Identity.Application;
+using Identity.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// Identity.Application JWT Token Handler
 builder.Services.AddSingleton<JwtTokenHandler>();
+
+// Identity.Application configs
+builder.Services.AddApplication(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

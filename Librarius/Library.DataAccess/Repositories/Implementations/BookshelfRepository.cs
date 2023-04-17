@@ -1,5 +1,5 @@
 ﻿using Library.DataAccess.Entities;
-using Library.DataAccess.Persistance;
+using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess.Repositories.Implementations;

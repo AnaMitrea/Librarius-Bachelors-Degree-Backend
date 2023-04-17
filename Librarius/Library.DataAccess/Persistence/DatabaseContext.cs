@@ -2,7 +2,7 @@
 using Library.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.DataAccess.Persistance;
+namespace Library.DataAccess.Persistence;
 
 public class DatabaseContext : DbContext
 {

@@ -9,6 +9,8 @@ public class BookProfile : Profile
 {
     public BookProfile()
     {
+        // DataAccess Entity -> Application Model
+        
         CreateMap<Book, BookResponseModel>();
         
         CreateMap<BookWithContent, BookReadingResponseModel>();

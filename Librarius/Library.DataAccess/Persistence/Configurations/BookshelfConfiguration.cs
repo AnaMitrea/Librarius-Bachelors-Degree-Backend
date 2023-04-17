@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Library.DataAccess.Persistance.Configurations;
+namespace Library.DataAccess.Persistence.Configurations;
 
 internal class BookshelfConfiguration : IEntityTypeConfiguration<Bookshelf>
 {

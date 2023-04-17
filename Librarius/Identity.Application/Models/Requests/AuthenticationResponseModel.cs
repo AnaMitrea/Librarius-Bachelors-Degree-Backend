@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Models;
 
-public class AuthenticationResponse
+public class AuthenticationResponseModel
 {
     public string Username { get; set; }
     

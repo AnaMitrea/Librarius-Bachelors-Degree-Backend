@@ -1,4 +1,5 @@
 using Identity.Application;
+using Identity.Application.Services;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -8,6 +9,7 @@ builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+// Identity.Application JWT Token Config Service
 builder.Services.AddCustomJwtAuthentication();
 builder.Services.AddOcelot(builder.Configuration);
 
