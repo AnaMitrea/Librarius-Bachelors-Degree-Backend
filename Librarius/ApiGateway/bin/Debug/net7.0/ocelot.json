@@ -1,6 +1,18 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/account/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5257
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account/login",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/library/book/{bookId}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -31,18 +43,6 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       }
-    },
-    {
-      "DownstreamPathTemplate": "/api/account/login",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5257
-        }
-      ],
-      "UpstreamPathTemplate": "/api/account/login",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
     }
   ],
   "GlobalConfiguration": {

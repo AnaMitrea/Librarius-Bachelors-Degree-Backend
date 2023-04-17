@@ -1,6 +1,4 @@
 using Identity.Application;
-using Identity.Application.Services;
-using Identity.Application.Services.Implementations;
 using Identity.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +21,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
 
-app.UsePathBase(new PathString("/api/account"));
+app.UsePathBase(new PathString("/api"));
 app.UseRouting();
 
 // Configure the HTTP request pipeline.

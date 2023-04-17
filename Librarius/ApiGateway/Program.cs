@@ -1,4 +1,3 @@
-using Identity.Application;
 using Identity.Application.Services;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
