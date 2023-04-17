@@ -1,7 +1,6 @@
 ﻿using Library.API.Models;
 using Library.Application.Models.Book;
 using Library.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers;
@@ -28,7 +27,6 @@ public class BookController : ControllerBase
     
     // Route: /api/library/book/{bookId}/read
     [HttpGet("{bookId:int}/read")]
-    [Authorize]
     public async Task<IActionResult> GetReadingBookByIdAsync(int bookId)
     {
         var response = await _bookService.GetReadingBookByIdAsync(bookId);

@@ -14,6 +14,9 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": ["User"]
       }
     },
     {
@@ -32,7 +35,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "Role": "User"
+        "Role": ["User"]
       }
     },
     {

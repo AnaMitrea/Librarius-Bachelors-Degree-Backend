@@ -10,7 +10,14 @@
         }
       ],
       "UpstreamPathTemplate": "/api/library/book/{bookId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": ["User"]
+      }
     },
     {
       "DownstreamPathTemplate": "/api/library/book/trending",
@@ -28,7 +35,7 @@
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "Role": "User"
+        "Role": ["User"]
       }
     },
     {
