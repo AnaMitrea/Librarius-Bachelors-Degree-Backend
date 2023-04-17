@@ -1,4 +1,5 @@
 ﻿using Identity.Application.Mapping;
+using Identity.Application.Services;
 using Identity.Application.Services.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(UserProfile));
 
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IJwtTokenHandlerService, JwtTokenHandlerService>();
 
         return services;
     }

@@ -1,5 +1,7 @@
 using Identity.Application;
 using Identity.Application.Services;
+using Identity.Application.Services.Implementations;
+using Identity.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Identity.Application JWT Token Handler
-builder.Services.AddSingleton<JwtTokenHandler>();
+// Identity.DataAccess configs
+builder.Services.AddDataAccess(builder.Configuration);
 
 // Identity.Application configs
 builder.Services.AddApplication(builder.Configuration);

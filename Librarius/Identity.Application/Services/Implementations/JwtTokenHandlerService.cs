@@ -6,45 +6,34 @@ using Identity.Application.Models.Requests;
 using Identity.Application.Models.User;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Identity.Application.Services;
+namespace Identity.Application.Services.Implementations;
 
-public class JwtTokenHandler
+public class JwtTokenHandlerService : IJwtTokenHandlerService
 {
     // TODO read these from a config file!!!!
     public const string JWT_SECURITY_KEY = "sajfkafbnebrkgbT%kcba82CffskgrhtgaBGDS9f71anflgbgvbvfe";
 
     private const int JWT_TOKEN_VALIDITY_MINUTES = 30;
 
-    // hardcoded users for now
-    // TODO get them from db after making the auth work
+    private readonly IAccountService _accountService;
 
-    private readonly List<UserAccountModel> _userAccounts;
-
-    public JwtTokenHandler()
+    public JwtTokenHandlerService(IAccountService accountService)
     {
-        _userAccounts = new List<UserAccountModel>
-        {
-            new() { Username = "admin", Password = "admin", Role = "Administrator" },
-            new() { Username = "ana", Password = "maria", Role = "User" }
-        };
+        _accountService = accountService;
     }
-
-    // TODO break the method into smaller ones
-    public AuthenticationResponseModel? GenerateJwtToken(AuthenticationRequestModel authRequest)
+    
+    public async Task<AuthenticationResponseModel?> AuthenticateAccount(AuthenticationRequestModel authRequest)
     {
         if (string.IsNullOrEmpty(authRequest.Username) ||
             string.IsNullOrEmpty(authRequest.Password))
             return null;
         
-        // TODO Validate username and password from DB
-        var userAccount = _userAccounts.Find(x => x.Username == authRequest.Username && x.Password == authRequest.Password);
+        var userAccount = await _accountService.GetAccountAsync(authRequest.Username, authRequest.Password);
         
-        if (userAccount == default) return null;
-
-        return CreateResponseWithToken(authRequest: authRequest, userAccount: userAccount);
+        return userAccount == default ? null : CreateResponseWithToken(authRequest: authRequest, userAccount: userAccount);
     }
 
-    private static AuthenticationResponseModel CreateResponseWithToken(AuthenticationRequestModel authRequest, UserAccountModel userAccount)
+    private static AuthenticationResponseModel? CreateResponseWithToken(AuthenticationRequestModel authRequest, UserAccountModel userAccount)
     {
         var claimsIdentity = ConfigureClaims(username: authRequest.Username, role: userAccount.Role);
         var signingCredentials = ConfigureSigningCredentials();

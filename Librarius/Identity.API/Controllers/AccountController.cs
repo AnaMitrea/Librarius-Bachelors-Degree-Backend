@@ -1,4 +1,4 @@
-﻿using Identity.Application;
+﻿using Identity.API.Models;
 using Identity.Application.Models;
 using Identity.Application.Models.Requests;
 using Identity.Application.Services;
@@ -10,20 +10,20 @@ namespace Identity.API.Controllers;
 [Route("[controller]")]
 public class AccountController : ControllerBase
 {
-    private readonly JwtTokenHandler _jwtTokenHandler;
+    private readonly IJwtTokenHandlerService _jwtTokenHandlerService;
 
-    public AccountController(JwtTokenHandler jwtTokenHandler)
+    public AccountController(IJwtTokenHandlerService jwtTokenHandlerService)
     {
-        _jwtTokenHandler = jwtTokenHandler;
+        _jwtTokenHandlerService = jwtTokenHandlerService;
     }
 
     // Route: /api/account/login
     [HttpPost("login")]
-    public ActionResult<AuthenticationResponseModel?> Authenticate([FromBody] AuthenticationRequestModel authenticationRequest)
+    public async Task<IActionResult> Authenticate([FromBody] AuthenticationRequestModel authenticationRequest)
     {
-        var authenticationResponse = _jwtTokenHandler.GenerateJwtToken(authenticationRequest);
-        if (authenticationResponse == null) return Unauthorized();
+        var response = await _jwtTokenHandlerService.AuthenticateAccount(authenticationRequest);
+        if (response == null) return Unauthorized();
         
-        return authenticationResponse;
+        return Ok(ApiResponse<AuthenticationResponseModel>.Success(response));
     }
 }

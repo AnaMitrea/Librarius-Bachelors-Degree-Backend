@@ -18,7 +18,8 @@ public partial class BookRepository : IBookRepository
     
     public async Task<Book?> GetBookByIdAsync(int bookId)
     {
-        var book = (await _databaseContext.Books.ToListAsync()).SingleOrDefault(book => book.Id == bookId);
+        var book = await _databaseContext.Books
+            .SingleOrDefaultAsync(book => book.Id == bookId);
         
         if (book == default)
         {

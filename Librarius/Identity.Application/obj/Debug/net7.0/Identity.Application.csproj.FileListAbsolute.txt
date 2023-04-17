@@ -10,3 +10,6 @@ C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Applicatio
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\refint\Identity.Application.dll
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.pdb
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\ref\Identity.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\bin\Debug\net7.0\Identity.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\bin\Debug\net7.0\Identity.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Identity.Application\obj\Debug\net7.0\Identity.Application.csproj.CopyComplete
