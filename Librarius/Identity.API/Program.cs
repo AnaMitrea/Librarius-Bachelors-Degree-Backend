@@ -1,7 +1,7 @@
 using Identity.Application;
 using Identity.DataAccess;
 
-const string myAllowAnyOrigin = "_myAllowAnyOrigin";
+const string myAllowAnyOrigin = "_CorsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
             policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
-        });
+        }
+    );
 });
 
 

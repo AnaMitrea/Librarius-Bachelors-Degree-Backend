@@ -67,8 +67,7 @@ public partial class BookRepository : IBookRepository
         if (!string.IsNullOrEmpty(book.HtmlContentUrl))
         {
             // get the HTML content from the book's URL
-            // var url = "https://www.gutenberg.org" + book.HtmlContentUrl;
-            const string url = "https://www.gutenberg.org/cache/epub/1513/pg1513-images.html";
+            var url = $"https://www.gutenberg.org{book.HtmlContentUrl}";
             
             var client = new HttpClient();
             var response = await client.GetAsync(url);

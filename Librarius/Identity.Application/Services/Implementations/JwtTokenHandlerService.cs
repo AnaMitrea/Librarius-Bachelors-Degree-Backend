@@ -13,7 +13,7 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
     // TODO read these from a config file!!!!
     public const string JWT_SECURITY_KEY = "sajfkafbnebrkgbT%kcba82CffskgrhtgaBGDS9f71anflgbgvbvfe";
 
-    private const int JWT_TOKEN_VALIDITY_MINUTES = 30;
+    // private const int JWT_TOKEN_VALIDITY_MINUTES = 30;
 
     private readonly IAccountService _accountService;
 
@@ -38,7 +38,8 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
         var claimsIdentity = ConfigureClaims(username: authRequest.Username, role: userAccount.Role);
         var signingCredentials = ConfigureSigningCredentials();
         
-        var tokenExpiryTimeStamp = DateTime.Now.AddMinutes(JWT_TOKEN_VALIDITY_MINUTES);
+        // var tokenExpiryTimeStamp = DateTime.Now.AddMinutes(JWT_TOKEN_VALIDITY_MINUTES);
+        var tokenExpiryTimeStamp = DateTime.Now.AddDays(1);
         
         var token = ConfigureJwtToken(claimsIdentity, signingCredentials, tokenExpiryTimeStamp);
 
