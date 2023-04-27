@@ -21,4 +21,11 @@ public class AccountService : IAccountService
 
         return response == null ? null : _mapper.Map<UserAccountModel>(response);
     }
+    
+    public async Task<UserModel?> GetUserInformationAsync(string username)
+    {
+        var response = await _accountRepository.GetUserInformationAsync(username);
+
+        return response == null ? null : _mapper.Map<UserModel>(response);
+    }
 }

@@ -9,6 +9,8 @@ public class UserProfile : Profile
     public UserProfile()
     {
         // DataAccess Entity -> Application Model
-        CreateMap<Account, UserAccountModel>();
+        CreateMap<Account, UserAccountModel>(); // Only for Authentication
+
+        CreateMap<Account, UserModel>();
     }
 }

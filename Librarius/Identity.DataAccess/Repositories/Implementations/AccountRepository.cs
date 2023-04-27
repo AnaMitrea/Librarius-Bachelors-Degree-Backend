@@ -25,4 +25,17 @@ public class AccountRepository : IAccountRepository
         
         return account;
     }
+    
+    public async Task<Account?> GetUserInformationAsync(string username)
+    {
+        var account = await _databaseContext.Accounts
+            .SingleOrDefaultAsync(user => user.Username == username);
+        
+        if (account == default)
+        {
+            throw new Exception("No account found.");
+        }
+        
+        return account;
+    }
 }

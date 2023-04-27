@@ -5,4 +5,6 @@ namespace Identity.Application.Services;
 public interface IAccountService
 {
     Task<UserAccountModel?> GetAccountAsync(string username, string password);
+
+    Task<UserModel?> GetUserInformationAsync(string username);
 }
