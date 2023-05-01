@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Identity.Application.Models.Requests;
 using Identity.Application.Models.User;
 using Identity.DataAccess.Entities;
 
@@ -9,8 +10,13 @@ public class UserProfile : Profile
     public UserProfile()
     {
         // DataAccess Entity -> Application Model
-        CreateMap<Account, UserAccountModel>(); // Only for Authentication
+        
+        // Authentication Only;
+        CreateMap<Account, UserAccountModel>(); 
+        CreateMap<Account, AuthenticationResponseModel>();
+        CreateMap<Account, AuthJwtResponseModel>();
 
+        // 
         CreateMap<Account, UserModel>();
     }
 }

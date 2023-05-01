@@ -43,5 +43,8 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
 
         builder.Property(x => x.LongestStreak)
             .HasColumnName("longest_streak");
+        
+        builder.Property(x => x.CurrentStreak)
+            .HasColumnName("current_streak");
     }
 }

@@ -1,5 +1,4 @@
-﻿using Identity.Application.Models;
-using Identity.Application.Models.Requests;
+﻿using Identity.Application.Models.Requests;
 
 namespace Identity.Application.Services;
 

@@ -14,7 +14,9 @@ public class Account : Entity
     
     public int Points { get; set; }
     
-    public int? LongestStreak { get; set; }
+    public int LongestStreak { get; set; }
     
-    public DateTime? LastLogin { get; set; } 
+    public int CurrentStreak { get; set; }
+    
+    public string LastLogin { get; set; } 
 }

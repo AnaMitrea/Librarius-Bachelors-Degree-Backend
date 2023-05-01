@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Models.User;
+﻿namespace Identity.DataAccess.DTOs;
 
 public class UserModel
 {

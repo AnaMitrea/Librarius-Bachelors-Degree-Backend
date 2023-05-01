@@ -13,6 +13,7 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(UserProfile));
 
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IAccountActivityService, AccountActivityService>();
         services.AddScoped<IJwtTokenHandlerService, JwtTokenHandlerService>();
 
         return services;
