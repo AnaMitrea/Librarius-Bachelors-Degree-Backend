@@ -78,4 +78,20 @@ public class AccountController : ControllerBase
             return NotFound(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
+    
+    // Route: /api/account/register
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestModel registerRequest)
+    {
+        try
+        {
+            var response = await _jwtTokenHandlerService.RegisterAccount(registerRequest);
+          
+            return Ok(ApiResponse<AuthJwtResponseModel>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return NotFound(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
 }

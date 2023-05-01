@@ -11,7 +11,8 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.ToTable("accounts");
         
         builder.Property(x => x.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .ValueGeneratedOnAdd();
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Email)
@@ -28,14 +29,17 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         
         builder.Property(x => x.Role)
             .HasColumnName("role")
+            .HasDefaultValue("User")
             .IsRequired();
         
         builder.Property(x => x.Level)
             .HasColumnName("level")
+            .HasDefaultValue("Beginner")
             .IsRequired();
 
         builder.Property(x => x.Points)
             .HasColumnName("points")
+            .HasDefaultValue(0)
             .IsRequired();
 
         builder.Property(x => x.LastLogin)

@@ -1,9 +1,9 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Identity.Application.Exceptions;
 using Identity.Application.Models;
 using Identity.Application.Models.Requests;
-using Identity.Application.Models.User;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.Application.Services.Implementations;
@@ -12,8 +12,6 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
 {
     // TODO read these from a config file!!!!
     public const string JWT_SECURITY_KEY = "sajfkafbnebrkgbT%kcba82CffskgrhtgaBGDS9f71anflgbgvbvfe";
-
-    // private const int JWT_TOKEN_VALIDITY_MINUTES = 30;
 
     private readonly IAccountService _accountService;
 
@@ -30,25 +28,50 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
         
         var userAccount = await _accountService.GetAccountAsync(authRequest.Username, authRequest.Password);
         
-        return userAccount == default ? null : CreateResponseWithToken(authRequest: authRequest, userAccount: userAccount);
+        return userAccount == default ? null : CreateResponseWithToken(authRequest.Username, userAccount.Role);
     }
 
-    private static AuthenticationResponseModel? CreateResponseWithToken(AuthenticationRequestModel authRequest, UserAccountModel userAccount)
+    public async Task<AuthJwtResponseModel> RegisterAccount(RegisterRequestModel registerRequest)
     {
-        var claimsIdentity = ConfigureClaims(username: authRequest.Username, role: userAccount.Role);
+        if (string.IsNullOrEmpty(registerRequest.Username) ||
+            string.IsNullOrEmpty(registerRequest.Password) ||
+            string.IsNullOrEmpty(registerRequest.Email))
+            throw new InvalidParametersException();
+        
+        _accountService.CheckUsernameExistence(registerRequest.Username);
+        _accountService.CheckEmailExistence(registerRequest.Email);
+
+        var userAccount = await _accountService.CreateAccountAsync(registerRequest);
+        return CreateJwtOnlyResponse(registerRequest.Username, userAccount.Role);
+    }
+
+    private static AuthenticationResponseModel CreateResponseWithToken(string username, string role)
+    {
+        var claimsIdentity = ConfigureClaims(username, role);
         var signingCredentials = ConfigureSigningCredentials();
         
-        // var tokenExpiryTimeStamp = DateTime.Now.AddMinutes(JWT_TOKEN_VALIDITY_MINUTES);
         var tokenExpiryTimeStamp = DateTime.Now.AddDays(1);
         
         var token = ConfigureJwtToken(claimsIdentity, signingCredentials, tokenExpiryTimeStamp);
 
         return new AuthenticationResponseModel
         {
-            Username = userAccount.Username,
+            Username = username,
             ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.Now).TotalSeconds,
             JwtToken = token
         };
+    }
+    
+    private static AuthJwtResponseModel CreateJwtOnlyResponse(string username, string role)
+    {
+        var claimsIdentity = ConfigureClaims(username, role);
+        var signingCredentials = ConfigureSigningCredentials();
+        
+        var tokenExpiryTimeStamp = DateTime.Now.AddDays(1);
+        
+        var token = ConfigureJwtToken(claimsIdentity, signingCredentials, tokenExpiryTimeStamp);
+
+        return new AuthJwtResponseModel { JwtToken = token };
     }
 
     private static ClaimsIdentity ConfigureClaims(string username, string role)

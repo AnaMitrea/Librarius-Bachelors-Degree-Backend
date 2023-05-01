@@ -1,5 +1,6 @@
 ﻿using Identity.DataAccess.DTOs;
 using Identity.DataAccess.Entities;
+using Identity.DataAccess.Exceptions;
 using Identity.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,46 @@ public class AccountRepository : IAccountRepository
     public AccountRepository(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
+    }
+
+    public async Task<Account> CreateAccountAsync(RegisterUserModel registerUser)
+    {
+        // TODO encrypt PASSWORD before inserting into database
+
+        var account = new Account
+        {
+            Username = registerUser.Username,
+            Password = registerUser.Password,
+            Email = registerUser.Email,
+            CurrentStreak = 1,
+            LongestStreak = 1,
+            LastLogin = DateTime.Now.Date.ToString("dd/MM/yyyy"),
+            Level = "Beginner",
+            Points = 0,
+            Role = "User"
+        };
+        var addedAccount = (await _databaseContext.Accounts.AddAsync(account)).Entity;
+        await _databaseContext.SaveChangesAsync();
+        
+        return addedAccount;
+    }
+
+    public void CheckUsernameExistence(string username)
+    {
+        var account = _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Username == username).Result;
+        if (account == default)
+        {
+            throw new UsernameAlreadyExistsException();
+        }
+    }
+
+    public void CheckEmailExistence(string email)
+    {
+        var account = _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Email == email).Result;
+        if (account == default)
+        {
+            throw new EmailAlreadyExistsException();
+        }
     }
 
     public async Task<bool> FindAccountByUsernameAsync(string username)
