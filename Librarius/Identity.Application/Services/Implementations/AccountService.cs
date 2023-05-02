@@ -44,13 +44,13 @@ public class AccountService : IAccountService
         return response == null ? null : _mapper.Map<UserModel>(response);
     }
 
-    public void CheckUsernameExistence(string username)
+    public async Task<bool> CheckUsernameExistence(string username)
     {
-        _accountRepository.CheckUsernameExistence(username);
+       return await _accountRepository.CheckUsernameExistence(username);
     }
 
-    public void CheckEmailExistence(string email)
+    public async Task<bool> CheckEmailExistence(string email)
     {
-        _accountRepository.CheckEmailExistence(email);
+        return await _accountRepository.CheckEmailExistence(email);
     }
 }

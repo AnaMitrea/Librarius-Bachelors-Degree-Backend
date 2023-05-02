@@ -11,7 +11,7 @@ public interface IAccountService
 
     Task<UserModel?> GetUserInformationAsync(string username);
 
-    void CheckUsernameExistence(string username);
+    Task<bool> CheckUsernameExistence(string username);
 
-    void CheckEmailExistence(string email);
+    Task<bool> CheckEmailExistence(string email);
 }

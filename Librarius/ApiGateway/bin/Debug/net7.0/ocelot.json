@@ -1,6 +1,18 @@
 {
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/account/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5257
+        }
+      ],
+      "UpstreamPathTemplate": "/api/account/register",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/account/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -10,7 +22,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/account/login",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ]
     },
     {
       "DownstreamPathTemplate": "/api/account",
@@ -22,7 +34,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/user",
-      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []

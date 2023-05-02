@@ -38,8 +38,8 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
             string.IsNullOrEmpty(registerRequest.Email))
             throw new InvalidParametersException();
         
-        _accountService.CheckUsernameExistence(registerRequest.Username);
-        _accountService.CheckEmailExistence(registerRequest.Email);
+        await _accountService.CheckUsernameExistence(registerRequest.Username);
+        await _accountService.CheckEmailExistence(registerRequest.Email);
 
         var userAccount = await _accountService.CreateAccountAsync(registerRequest);
         return CreateJwtOnlyResponse(registerRequest.Username, userAccount.Role);

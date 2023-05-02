@@ -7,9 +7,9 @@ public interface IAccountRepository
 {
     Task<Account> CreateAccountAsync(RegisterUserModel registerUser);
     
-    void CheckUsernameExistence(string username);
+    Task<bool> CheckUsernameExistence(string username);
 
-    void CheckEmailExistence(string email);
+    Task<bool> CheckEmailExistence(string email);
 
     Task<bool> FindAccountByUsernameAsync(string username);
     

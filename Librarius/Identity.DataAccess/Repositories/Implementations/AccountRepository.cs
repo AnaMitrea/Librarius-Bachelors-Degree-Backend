@@ -2,27 +2,31 @@
 using Identity.DataAccess.Entities;
 using Identity.DataAccess.Exceptions;
 using Identity.DataAccess.Persistence;
+using Identity.DataAccess.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Identity.DataAccess.Repositories.Implementations;
 
 public class AccountRepository : IAccountRepository
 {
     private readonly DatabaseContext _databaseContext;
+    private readonly string _pepper;
 
-    public AccountRepository(DatabaseContext databaseContext)
+    public AccountRepository(DatabaseContext databaseContext, IConfiguration configuration)
     {
         _databaseContext = databaseContext;
+        _pepper = configuration["PepperHash"]!;
     }
 
     public async Task<Account> CreateAccountAsync(RegisterUserModel registerUser)
     {
-        // TODO encrypt PASSWORD before inserting into database
+        var hashedPassword = PasswordHasher.HashPassword(registerUser.Password, _pepper);
 
         var account = new Account
         {
             Username = registerUser.Username,
-            Password = registerUser.Password,
+            Password = hashedPassword,
             Email = registerUser.Email,
             CurrentStreak = 1,
             LongestStreak = 1,
@@ -37,22 +41,26 @@ public class AccountRepository : IAccountRepository
         return addedAccount;
     }
 
-    public void CheckUsernameExistence(string username)
+    public async Task<bool> CheckUsernameExistence(string username)
     {
-        var account = _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Username == username).Result;
-        if (account == default)
+        var account = await _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Username == username);
+        if (account != default)
         {
             throw new UsernameAlreadyExistsException();
         }
+
+        return false;
     }
 
-    public void CheckEmailExistence(string email)
+    public async Task<bool> CheckEmailExistence(string email)
     {
-        var account = _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Email == email).Result;
-        if (account == default)
+        var account = await _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Email == email);
+        if (account != default)
         {
             throw new EmailAlreadyExistsException();
         }
+
+        return false;
     }
 
     public async Task<bool> FindAccountByUsernameAsync(string username)
@@ -66,9 +74,14 @@ public class AccountRepository : IAccountRepository
     public async Task<Account?> GetAccountAsync(string username, string password)
     {
         var account = await _databaseContext.Accounts
-            .SingleOrDefaultAsync(user => user.Username == username && user.Password == password);
-        
+            .SingleOrDefaultAsync(user => user.Username == username);
         if (account == default)
+        {
+            throw new Exception("Invalid Credentials.");
+        }
+        
+        var isPasswordValid = PasswordHasher.VerifyPassword(password, account.Password, _pepper);
+        if (!isPasswordValid)
         {
             throw new Exception("Invalid Credentials.");
         }

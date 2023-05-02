@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using Identity.API.Models;
 using Identity.Application.Models.Requests;
 using Identity.Application.Models.User;
@@ -75,7 +76,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     
@@ -91,7 +92,7 @@ public class AccountController : ControllerBase
         }
         catch (Exception e)
         {
-            return NotFound(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
 }
