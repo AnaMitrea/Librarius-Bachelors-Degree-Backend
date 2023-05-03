@@ -18,5 +18,6 @@ public class UserProfile : Profile
 
         // 
         CreateMap<Account, UserModel>();
+        CreateMap<Account, DashboardUserModel>();
     }
 }

@@ -41,15 +41,12 @@ app.UsePathBase(new PathString("/api/library"));
 app.UseRouting();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-// app.UseSwagger().UseSwaggerUI(c => {
-//         c.SwaggerEndpoint("library/swagger/v1/swagger.json", "Library.API V1");
-// });
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
 
 app.UseCors(myAllowAnyOrigin);
 

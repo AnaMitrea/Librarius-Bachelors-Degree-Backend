@@ -9,7 +9,7 @@ public interface IAccountService
     
     Task<UserAccountModel?> GetAccountAsync(string username, string password);
 
-    Task<UserModel?> GetUserInformationAsync(string username);
+    Task<DashboardUserModel?> GetUserInformationAsync(string username);
 
     Task<bool> CheckUsernameExistence(string username);
 

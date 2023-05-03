@@ -37,11 +37,11 @@ public class AccountService : IAccountService
         return response == null ? null : _mapper.Map<UserAccountModel>(response);
     }
     
-    public async Task<UserModel?> GetUserInformationAsync(string username)
+    public async Task<DashboardUserModel?> GetUserInformationAsync(string username)
     {
         var response = await _accountRepository.GetUserInformationAsync(username);
 
-        return response == null ? null : _mapper.Map<UserModel>(response);
+        return response == null ? null : _mapper.Map<DashboardUserModel>(response);
     }
 
     public async Task<bool> CheckUsernameExistence(string username)

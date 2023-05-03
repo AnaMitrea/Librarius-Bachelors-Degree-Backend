@@ -40,7 +40,7 @@ public class AccountController : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> GetUserInformation()
     {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("bearer ", "");
         var username = ExtractUsernameFromAccessToken(authorizationHeaderValue);
         
         try
@@ -49,11 +49,11 @@ public class AccountController : ControllerBase
 
             if (response == null) throw new Exception("Access Token Invalid.");
 
-            return Ok(ApiResponse<UserModel>.Success(response));
+            return Ok(ApiResponse<DashboardUserModel>.Success(response));
         }
         catch (Exception e)
         {
-            return NotFound(ApiResponse<UserModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return NotFound(ApiResponse<DashboardUserModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
 
