@@ -1,5 +1,4 @@
 ﻿using Library.Application.Models.Category;
-using Library.DataAccess.Entities;
 
 namespace Library.Application.Models.Bookshelf;
 

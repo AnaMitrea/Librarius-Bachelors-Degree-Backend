@@ -1,11 +1,7 @@
-﻿using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
-using Identity.API.Models;
+﻿using Identity.API.Models;
 using Identity.Application.Models.Requests;
-using Identity.Application.Models.User;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 
 namespace Identity.API.Controllers;
 
@@ -15,46 +11,11 @@ public class AccountController : ControllerBase
 {
     private readonly IJwtTokenHandlerService _jwtTokenHandlerService;
     private readonly IAccountService _accountService;
-    private readonly IAccountActivityService _accountActivityService;
 
-    public AccountController(
-        IJwtTokenHandlerService jwtTokenHandlerService,
-        IAccountService accountService,
-        IAccountActivityService accountActivityService)
+    public AccountController(IJwtTokenHandlerService jwtTokenHandlerService, IAccountService accountService)
     {
         _jwtTokenHandlerService = jwtTokenHandlerService;
         _accountService = accountService;
-        _accountActivityService = accountActivityService;
-    }
-    
-    private static string ExtractUsernameFromAccessToken(string accessToken)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var jwtSecurityToken = handler.ReadJwtToken(accessToken);
-        var username = jwtSecurityToken.Claims.First(claim => claim.Type == "name").Value;
-
-        return username;
-    }
-    
-    // Route: /api/account/
-    [HttpGet("")]
-    public async Task<IActionResult> GetUserInformation()
-    {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("bearer ", "");
-        var username = ExtractUsernameFromAccessToken(authorizationHeaderValue);
-        
-        try
-        {
-            var response = await _accountService.GetUserInformationAsync(username);
-
-            if (response == null) throw new Exception("Access Token Invalid.");
-
-            return Ok(ApiResponse<DashboardUserModel>.Success(response));
-        }
-        catch (Exception e)
-        {
-            return NotFound(ApiResponse<DashboardUserModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
-        }
     }
 
     // Route: /api/account/login
@@ -66,7 +27,7 @@ public class AccountController : ControllerBase
             var response = await _jwtTokenHandlerService.AuthenticateAccount(authenticationRequest);
             if (response == null) return Unauthorized();
             
-            var account = await _accountActivityService.UpdateUserActivity(response.Username);
+            var account = await _accountService.UpdateUserActivity(response.Username);
             if (account == null) throw new Exception("Invalid User Information.");
             
             return Ok(ApiResponse<AuthJwtResponseModel>.Success(new AuthJwtResponseModel

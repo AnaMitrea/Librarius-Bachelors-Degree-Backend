@@ -10,11 +10,12 @@ public static class ServiceCollection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddAutoMapper(typeof(JwtAccountProfile));
         services.AddAutoMapper(typeof(UserProfile));
-
-        services.AddScoped<IAccountService, AccountService>();
-        services.AddScoped<IAccountActivityService, AccountActivityService>();
+        
         services.AddScoped<IJwtTokenHandlerService, JwtTokenHandlerService>();
+        services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IUserService, UserService>();
 
         return services;
     }

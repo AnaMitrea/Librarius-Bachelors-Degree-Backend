@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8TR1I01tp9U1wcuOgE6HR0XRAL9XddipnJCzsQDNZ0e63Hew4p3nfNtt38KuRyrURQFd3ybSGoo2LOQm5jg7eg==",
+  "dgSpecHash": "3G2RFi19gKCPKMFsI+fCmBHlqSdaVFM4Ue3G+KMJ1naZ6KRVCDYECjYK53buEMx0Ja4ASWpNh0yQL+1z9RHbQA==",
   "success": true,
   "projectFilePath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Library.DataAccess\\Library.DataAccess.csproj",
   "expectedPackageFiles": [
@@ -45,8 +45,8 @@
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\anstoian\\.nuget\\packages\\npgsql\\8.0.0-preview.2\\npgsql.8.0.0-preview.2.nupkg.sha512",
-    "C:\\Users\\anstoian\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\8.0.0-preview.2\\npgsql.entityframeworkcore.postgresql.8.0.0-preview.2.nupkg.sha512",
+    "C:\\Users\\anstoian\\.nuget\\packages\\npgsql\\7.0.4\\npgsql.7.0.4.nupkg.sha512",
+    "C:\\Users\\anstoian\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.4\\npgsql.entityframeworkcore.postgresql.7.0.4.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql.design\\1.1.0\\npgsql.entityframeworkcore.postgresql.design.1.1.0.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

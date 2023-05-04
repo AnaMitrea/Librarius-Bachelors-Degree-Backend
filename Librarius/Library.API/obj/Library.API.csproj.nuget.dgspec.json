@@ -49,7 +49,7 @@
           "dependencies": {
             "FluentValidation": {
               "target": "Package",
-              "version": "[11.5.1, )"
+              "version": "[11.5.2, )"
             },
             "FluentValidation.AspNetCore": {
               "target": "Package",
@@ -57,11 +57,11 @@
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.4, )"
+              "version": "[7.0.5, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
-              "version": "[1.17.2, )"
+              "version": "[1.18.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -141,7 +141,7 @@
             },
             "FluentValidation": {
               "target": "Package",
-              "version": "[11.5.1, )"
+              "version": "[11.5.2, )"
             },
             "FluentValidation.AspNetCore": {
               "target": "Package",
@@ -230,7 +230,7 @@
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
-              "version": "[8.0.0-preview.2, )"
+              "version": "[7.0.4, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL.Design": {
               "target": "Package",

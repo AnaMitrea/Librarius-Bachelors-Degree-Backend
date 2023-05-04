@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using Identity.Application.Exceptions;
-using Identity.Application.Models;
 using Identity.Application.Models.Requests;
 using Microsoft.IdentityModel.Tokens;
 
