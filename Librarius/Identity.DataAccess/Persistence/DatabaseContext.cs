@@ -10,6 +10,10 @@ public class DatabaseContext : DbContext
     
     public DbSet<Account> Accounts { get; set; }
     
+    public DbSet<Trophy> Trophies { get; set; }
+    
+    public DbSet<TrophyAccount> TrophyAccounts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

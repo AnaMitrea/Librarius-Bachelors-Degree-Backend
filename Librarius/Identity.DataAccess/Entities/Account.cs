@@ -19,4 +19,7 @@ public class Account : Entity
     public int CurrentStreak { get; set; }
     
     public string LastLogin { get; set; } 
+    
+    // many-to-many: Account -> Trophies
+    public IEnumerable<TrophyAccount> TrophyAccounts { get; set; }
 }

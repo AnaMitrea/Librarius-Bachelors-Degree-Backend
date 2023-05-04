@@ -40,6 +40,24 @@ public class AccountRepository : IAccountRepository
         
         return addedAccount;
     }
+    
+    public async Task<Account?> UpdateUserInformationAsync(Account userModel)
+    {
+        var account = await _databaseContext.Accounts
+            .SingleOrDefaultAsync(user => user.Username == userModel.Username);
+        
+        if (account == default)
+        {
+            throw new Exception("No account found.");
+        }
+
+        account.LastLogin = userModel.LastLogin;
+        account.CurrentStreak = userModel.CurrentStreak;
+        account.LongestStreak = userModel.LongestStreak;
+        await _databaseContext.SaveChangesAsync();
+        
+        return account;
+    }
 
     public async Task<bool> CheckUsernameExistence(string username)
     {
@@ -98,24 +116,6 @@ public class AccountRepository : IAccountRepository
         {
             throw new Exception("No account found.");
         }
-        
-        return account;
-    }
-
-    public async Task<Account?> UpdateUserInformationAsync(Account userModel)
-    {
-        var account = await _databaseContext.Accounts
-            .SingleOrDefaultAsync(user => user.Username == userModel.Username);
-        
-        if (account == default)
-        {
-            throw new Exception("No account found.");
-        }
-
-        account.LastLogin = userModel.LastLogin;
-        account.CurrentStreak = userModel.CurrentStreak;
-        account.LongestStreak = userModel.LongestStreak;
-        await _databaseContext.SaveChangesAsync();
         
         return account;
     }

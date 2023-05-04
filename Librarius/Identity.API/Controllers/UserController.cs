@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetUserInformation()
     {
         var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            .ToString().Replace("bearer ", "");
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
         var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
         
         try

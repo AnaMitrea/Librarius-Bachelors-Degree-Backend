@@ -41,6 +41,22 @@
       }
     },
     {
+      "DownstreamPathTemplate": "/api/trophy/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5257
+        }
+      ],
+      "UpstreamPathTemplate": "/api/trophy/{everything}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/account/dashboard/streaks",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
