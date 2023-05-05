@@ -56,4 +56,27 @@ public class TrophyRepository : ITrophyRepository
 
         return completedTrophies;
     }
+
+    public async Task<Dictionary<string, IEnumerable<Trophy>>> GetUserAllCompletedTrophiesAsync(string username)
+    {
+        var account = await _databaseContext.Accounts
+            .SingleOrDefaultAsync(user => user.Username == username);
+        if (account == default)
+        {
+            throw new Exception("User not found.");
+        }
+
+        await _databaseContext.Entry(account)
+            .Collection(user => user.TrophyAccounts)
+            .Query()
+            .Include(trophyAccount => trophyAccount.Trophy)
+            .LoadAsync();
+        
+        var trophiesByCategory = account.TrophyAccounts
+            .Select(trophyAccount => trophyAccount.Trophy)
+            .GroupBy(trophy => trophy.Category)
+            .ToDictionary(group => group.Key, group => group.AsEnumerable());
+
+        return trophiesByCategory;
+    }
 }

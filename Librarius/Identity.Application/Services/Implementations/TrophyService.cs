@@ -29,4 +29,11 @@ public class TrophyService : ITrophyService
         
         return _mapper.Map<IEnumerable<TrophyModel>>(trophies);
     }
+
+    public async Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(string username)
+    {
+        var trophies = await _trophyRepository.GetUserAllCompletedTrophiesAsync(username);
+        
+        return _mapper.Map<Dictionary<string, IEnumerable<TrophyModel>>>(trophies);
+    }
 }

@@ -38,22 +38,29 @@ public class TrophyController : ControllerBase
         }
     }
     
-    // Route: /api/trophy/user?category=...
+    // Route: /api/trophy/user for all completed trophies
+    // Route: /api/trophy/user?category=... for all completed trophies for certain category
     [HttpGet("user")]
-    public async Task<IActionResult> GetUserCompletedTrophiesByCategoryAsync([FromQuery] string category)
+    public async Task<IActionResult> GetUserCompletedTrophiesAsync([FromQuery] string? category)
     {
         try
         {
-            if (string.IsNullOrEmpty(category) || string.IsNullOrWhiteSpace(category))
-                throw new Exception("Invalid category parameter.");
-            
             var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
                 .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+
+            if (string.IsNullOrEmpty(category) || string.IsNullOrWhiteSpace(category))
+            {
+                var response = await _trophyService.GetUserAllCompletedTrophiesAsync(username);
             
-            var response = await _trophyService.GetUserCompletedTrophiesByCategoryAsync(username, category);
+                return Ok(ApiResponse<ICollection<KeyValuePair<string,IEnumerable<TrophyModel>>>>.Success(response));
+            }
+            else
+            {
+                var response = await _trophyService.GetUserCompletedTrophiesByCategoryAsync(username, category);
             
-            return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
+                return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
+            }
         }
         catch (Exception e)
         {
