@@ -26,10 +26,11 @@ public class BookController : ControllerBase
     }
     
     // Route: /api/library/book/{bookId}/read
-    [HttpGet("{bookId:int}/read")]
-    public async Task<IActionResult> GetReadingBookByIdAsync(int bookId)
+    // ROute: /api/library/book/read?id=
+    [HttpGet("read")]
+    public async Task<IActionResult> GetReadingBookByIdAsync([FromQuery] int id)
     {
-        var response = await _bookService.GetReadingBookByIdAsync(bookId);
+        var response = await _bookService.GetReadingBookByIdAsync(id);
 
         return Ok(ApiResponse<BookReadingResponseModel>.Success(response));
     }

@@ -73,7 +73,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/library/book/{bookId}",
+      "DownstreamPathTemplate": "/api/library/book/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -81,23 +81,7 @@
           "Port": 5104
         }
       ],
-      "UpstreamPathTemplate": "/api/library/book/{bookId}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/library/book/trending",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5104
-        }
-      ],
-      "UpstreamPathTemplate": "/api/library/book/trending",
+      "UpstreamPathTemplate": "/api/library/book/{everything}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
