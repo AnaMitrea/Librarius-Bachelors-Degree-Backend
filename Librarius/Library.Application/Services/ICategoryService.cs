@@ -4,5 +4,5 @@ namespace Library.Application.Services;
 
 public interface ICategoryService
 {
-    Task<List<CategoryResponseModel>> GetAllAsync();
+    Task<List<CategoryWithBookshelfResponseModel>> GetAllAsync();
 }

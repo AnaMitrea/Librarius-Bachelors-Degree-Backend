@@ -49,6 +49,68 @@ public partial class BookRepository : IBookRepository
         return book;
     }
 
+    public async Task<IEnumerable<Book>> GetBooksForAllBookshelves()
+    {
+        var bookshelves = await _databaseContext.Bookshelves
+            .Include(bs => bs.Categories)
+            .ToListAsync();
+        
+        var categoryIds = bookshelves
+            .SelectMany(bs => bs.Categories.Select(c => c.Id))
+            .Distinct().ToList();
+        
+        var bookIds = _databaseContext.BooksCategories
+            .Where(bc => categoryIds.Contains(bc.CategoryId))
+            .Select(bc => bc.BookId)
+            .Distinct()
+            .ToList();
+        
+        var books = _databaseContext.Books
+            .Where(b => bookIds.Contains(b.Id))
+            .GroupBy(b => b.Id)
+            .Select(g => g.First())
+            .Take(bookshelves.Count * 10)
+            .ToList();
+
+        return books;
+    }
+    
+    public async Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf()
+    {
+        // aprox 300ms
+        // var booksGroupedByBookshelf = await _databaseContext.BooksCategories
+        //     .Include(bc => bc.Book)
+        //     .Include(bc => bc.Category)
+        //     .ThenInclude(c => c.Bookshelf)
+        //     .GroupBy(bc => bc.Category.Bookshelf)
+        //     .Select(g => new { Bookshelf = g.Key, Books = g.Select(bc => bc.Book) })
+        //     .ToListAsync();
+        //
+        // return booksGroupedByBookshelf.ToDictionary(
+        //     bgbb => bgbb.Bookshelf.Title, 
+        //     bgbb => bgbb.Books.ToList());
+        
+        
+        // aprox 300ms
+        
+        /*
+         * In this implementation, the query for retrieving books has been simplified
+         * to only include the Book and Category entities, and uses a projection to
+         * select only the Title of the Bookshelf entity. The AsNoTracking() method
+         * is called to disable change tracking for the entities returned by the query. 
+         */
+        var booksGroupedByBookshelf = await _databaseContext.BooksCategories
+            .AsNoTracking()
+            .Select(bc => new { BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
+            .ToListAsync();
+        
+        var groupedBooks = booksGroupedByBookshelf
+            .GroupBy(bgbb => bgbb.BookshelfTitle)
+            .ToDictionary(g => g.Key, g => g.Select(bgbb => bgbb.Book).ToList());
+        
+        return groupedBooks;
+    }
+
     public async Task<BookWithContent?> GetReadingBookByIdAsync(int bookId)
     {
         var book = await _databaseContext.Books
@@ -104,6 +166,4 @@ public partial class BookRepository : IBookRepository
 
     [GeneratedRegex("<img[^>]+>")]
     private static partial Regex MyRegex();
-
-    // TODO implement CRUD operations defined in interface
 }

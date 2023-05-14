@@ -15,10 +15,10 @@ public class CategoryService : ICategoryService
         _mapper = mapper;
     }
     
-    public async Task<List<CategoryResponseModel>> GetAllAsync()
+    public async Task<List<CategoryWithBookshelfResponseModel>> GetAllAsync()
     {
         var categories = await this._categoryRepository.GetAllAsync();
 
-        return _mapper.Map<List<CategoryResponseModel>>(categories);
+        return _mapper.Map<List<CategoryWithBookshelfResponseModel>>(categories);
     }
 }

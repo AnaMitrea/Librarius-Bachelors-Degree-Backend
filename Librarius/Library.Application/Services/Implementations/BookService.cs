@@ -28,6 +28,20 @@ public class BookService : IBookService
 
         return _mapper.Map<BookResponseModel>(response);
     }
+    
+    public async Task<IEnumerable<ExploreBookResponseModel>> GetBooksForAllBookshelves()
+    {
+        var response = await _bookRepository.GetBooksForAllBookshelves();
+
+        return _mapper.Map<IEnumerable<ExploreBookResponseModel>>(response);
+    }
+    
+    public async Task<Dictionary<string, List<BookResponseModel>>> GetBooksGroupedByBookshelf()
+    {
+        var response = await _bookRepository.GetBooksGroupedByBookshelf();
+
+        return _mapper.Map<Dictionary<string, List<BookResponseModel>>>(response);
+    }
 
     public async Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id)
     {

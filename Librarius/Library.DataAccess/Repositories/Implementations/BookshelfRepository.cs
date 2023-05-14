@@ -17,4 +17,9 @@ public class BookshelfRepository : IBookshelfRepository
     {
         return await _databaseContext.Bookshelves.ToListAsync();
     }
+
+    public async Task<List<Bookshelf>> GetAllWithCategoryAsync()
+    {
+        return await _databaseContext.Bookshelves.Include(bookshelf => bookshelf.Categories).ToListAsync();
+    }
 }

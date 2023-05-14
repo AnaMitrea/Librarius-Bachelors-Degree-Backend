@@ -73,7 +73,7 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/library/book/{everything}",
+      "DownstreamPathTemplate": "/api/library/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -81,8 +81,8 @@
           "Port": 5104
         }
       ],
-      "UpstreamPathTemplate": "/api/library/book/{everything}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/api/library/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []

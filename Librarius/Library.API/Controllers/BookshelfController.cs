@@ -15,13 +15,36 @@ public class BookshelfController : ControllerBase
     {
         _bookshelfService = bookshelfService;
     }
-
-    // Get: /Bookshelf
+    
+    // Route: /api/library/bookshelf
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
     {
-        var response = await _bookshelfService.GetAllAsync();
+        try
+        {
+            var response = await _bookshelfService.GetAllAsync();
 
-        return Ok(ApiResponse<List<BookshelfResponseModel>>.Success(response));
+            return Ok(ApiResponse<List<BookshelfResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<List<BookshelfResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/bookshelf/categories
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetAllWithCategoryAsync()
+    {
+        try
+        {
+            var response = await _bookshelfService.GetAllWithCategoryAsync();
+            
+            return Ok(ApiResponse<List<BookshelfWithCategoriesResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<List<BookshelfWithCategoriesResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
     }
 }

@@ -36,14 +36,5 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
         
         builder.Property(x => x.HtmlContentUrl)
             .HasColumnName("html_url");
-        
-        builder.Property(x => x.HtmlAsSubmittedContentUrl)
-            .HasColumnName("html_as_submitted_url");
-        
-        builder.Property(x => x.HtmlNoImagesContentUrl)
-            .HasColumnName("html_no_images_url");
-        
-        builder.Property(x => x.PlainTextContentUrl)
-            .HasColumnName("plain_text_url");
     }
 }

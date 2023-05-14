@@ -21,4 +21,11 @@ public class BookshelfService : IBookshelfService
 
         return _mapper.Map<List<BookshelfResponseModel>>(bookshelves);
     }
+
+    public async Task<List<BookshelfWithCategoriesResponseModel>> GetAllWithCategoryAsync()
+    {
+        var bookshelves = await _bookshelfRepository.GetAllWithCategoryAsync();
+
+        return _mapper.Map<List<BookshelfWithCategoriesResponseModel>>(bookshelves);
+    }
 }

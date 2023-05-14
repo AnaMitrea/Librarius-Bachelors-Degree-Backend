@@ -9,11 +9,14 @@ public interface IBookRepository
 
     Task<Book?> GetBookWithCategoryByIdAsync(int id);
 
+    Task<IEnumerable<Book>> GetBooksForAllBookshelves();
+
+    Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf();
+
     Task<BookWithContent?> GetReadingBookByIdAsync(int id);
 
     Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();
     
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
-
-    // TODO add CRUD operations
+    
 }

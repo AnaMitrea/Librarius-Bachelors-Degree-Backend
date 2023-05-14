@@ -25,8 +25,7 @@ public class BookController : ControllerBase
         return Ok(ApiResponse<BookResponseModel>.Success(response));
     }
     
-    // Route: /api/library/book/{bookId}/read
-    // ROute: /api/library/book/read?id=
+    // Route: /api/library/book/read?id=
     [HttpGet("read")]
     public async Task<IActionResult> GetReadingBookByIdAsync([FromQuery] int id)
     {
@@ -62,5 +61,35 @@ public class BookController : ControllerBase
             default:
                 return BadRequest("Invalid parameter.");
         }
+    }
+
+    // [HttpGet("bookshelves")]
+    // public async Task<IActionResult> GetBooksForAllBookshelves()
+    // {
+    //     try
+    //     {
+    //         var response = await _bookService.GetBooksForAllBookshelves();
+    //         return Ok(ApiResponse<IEnumerable<ExploreBookResponseModel>>.Success(response));
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         return BadRequest(ApiResponse<IEnumerable<ExploreBookResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+    //     }
+    //     
+    // }
+    
+    [HttpGet("bookshelves")]
+    public async Task<IActionResult> GetBooksGroupedByBookshelf()
+    {
+        try
+        {
+            var response = await _bookService.GetBooksGroupedByBookshelf();
+            return Ok(ApiResponse<Dictionary<string, List<BookResponseModel>>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<Dictionary<string, List<BookResponseModel>>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+        
     }
 }

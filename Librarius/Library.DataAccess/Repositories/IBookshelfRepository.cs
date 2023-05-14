@@ -5,6 +5,6 @@ namespace Library.DataAccess.Repositories;
 public interface IBookshelfRepository
 {
     Task<List<Bookshelf>> GetAllAsync();
-
-    // TODO add CRUD operations
+    
+    Task<List<Bookshelf>> GetAllWithCategoryAsync();
 }

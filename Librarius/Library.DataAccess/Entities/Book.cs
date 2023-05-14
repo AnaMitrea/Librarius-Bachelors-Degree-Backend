@@ -16,12 +16,6 @@ public class Book : Entity
 
     public string HtmlContentUrl { get; set; }
 
-    public string HtmlAsSubmittedContentUrl { get; set; }
-
-    public string HtmlNoImagesContentUrl { get; set; }
-
-    public string PlainTextContentUrl { get; set; }
-    
     // many-to-many: books - categories
     public IEnumerable<BookCategory> BookCategories { get; set; }
 }

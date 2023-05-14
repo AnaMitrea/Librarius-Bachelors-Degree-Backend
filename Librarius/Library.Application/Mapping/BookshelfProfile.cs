@@ -9,5 +9,7 @@ public class BookshelfProfile : Profile
     public BookshelfProfile()
     {
         CreateMap<Bookshelf, BookshelfResponseModel>();
+        
+        CreateMap<Bookshelf, BookshelfWithCategoriesResponseModel>();
     }
 }

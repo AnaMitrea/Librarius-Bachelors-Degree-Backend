@@ -13,9 +13,8 @@ public class CategoryRepository : ICategoryRepository
         _databaseContext = databaseContext;
     }
     
-    // TODO implement CRUD operations defined in interface
     public async Task<List<Category>>  GetAllAsync()
     {
-        return await _databaseContext.Categories.ToListAsync();
+        return await _databaseContext.Categories.Include(category => category.Bookshelf).ToListAsync();
     }
 }

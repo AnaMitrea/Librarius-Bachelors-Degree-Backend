@@ -16,5 +16,7 @@ public class BookProfile : Profile
         CreateMap<BookWithContent, BookReadingResponseModel>();
         
         CreateMap<Book, BookTrendingResponseModel>();
+
+        CreateMap<Book, ExploreBookResponseModel>();
     }
 }
