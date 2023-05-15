@@ -18,6 +18,9 @@ public class Book : Entity
 
     // many-to-many: books - categories
     public IEnumerable<BookCategory> BookCategories { get; set; }
+    
+    // one-to-many reviews
+    public ICollection<Review> Reviews { get; set; }
 }
 
 

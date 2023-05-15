@@ -91,7 +91,7 @@ public partial class BookRepository : IBookRepository
         //     bgbb => bgbb.Books.ToList());
         
         
-        // aprox 300ms
+        // aprox 250ms
         
         /*
          * In this implementation, the query for retrieving books has been simplified
