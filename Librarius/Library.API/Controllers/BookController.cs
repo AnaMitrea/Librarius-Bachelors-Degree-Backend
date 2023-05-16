@@ -1,5 +1,7 @@
-﻿using Library.API.Models;
+﻿using System.Collections;
+using Library.API.Models;
 using Library.Application.Models.Book;
+using Library.Application.Models.Reviews;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,28 +12,60 @@ namespace Library.API.Controllers;
 public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
+    private readonly IReviewService _reviewService;
 
-    public BookController(IBookService bookService)
+    public BookController(IBookService bookService, IReviewService reviewService)
     {
         _bookService = bookService;
+        _reviewService = reviewService;
     }
     
     // Route: /api/library/book/{bookId}
     [HttpGet("{bookId:int}")]
     public async Task<IActionResult> GetBookWithCategoryByIdAsync(int bookId)
     {
-        var response = await _bookService.GetBookWithCategoryByIdAsync(bookId);
+        try
+        {
+            var response = await _bookService.GetBookWithCategoryByIdAsync(bookId);
 
-        return Ok(ApiResponse<BookResponseModel>.Success(response));
+            return Ok(ApiResponse<BookResponseModel>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<BookResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/reviews
+    [HttpPost("reviews")]
+    public async Task<IActionResult> PostReviewsByBookIdAsync(ReviewsRequestModel reviewsRequestModel)
+    {
+        try
+        {
+            var response = await _reviewService.GetReviewsForBookByIdAsync(reviewsRequestModel);
+
+            return Ok(ApiResponse<ICollection<ReviewResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<ICollection<ReviewResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
     }
     
     // Route: /api/library/book/read?id=
     [HttpGet("read")]
     public async Task<IActionResult> GetReadingBookByIdAsync([FromQuery] int id)
     {
-        var response = await _bookService.GetReadingBookByIdAsync(id);
+        try
+        {
+            var response = await _bookService.GetReadingBookByIdAsync(id);
 
-        return Ok(ApiResponse<BookReadingResponseModel>.Success(response));
+            return Ok(ApiResponse<BookReadingResponseModel>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<BookReadingResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
     }
 
     /*
@@ -42,24 +76,34 @@ public class BookController : ControllerBase
     [HttpGet("trending")]
     public async Task<IActionResult> GetTrendingBooks([FromQuery] string duration)
     {
-        switch (duration)
+        try
         {
-            case "now":
+            switch (duration)
             {
-                // currently trending
-                var response = await _bookService.GetTrendingNowBooksAsync();
+                case "now":
+                {
+                    // currently trending
+                    var response = await _bookService.GetTrendingNowBooksAsync();
 
-                return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
-            }
-            case "week":
-            {
-                // the top 10 books of the week based on popularity
-                var response = await _bookService.GetTrendingWeekBooksAsync();
+                    return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
+                }
+                case "week":
+                {
+                    // the top 10 books of the week based on popularity
+                    var response = await _bookService.GetTrendingWeekBooksAsync();
             
-                return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
+                    return Ok(ApiResponse<IEnumerable<BookTrendingResponseModel>>.Success(response));
+                }
+                default:
+                    return BadRequest("Invalid parameter.");
             }
-            default:
-                return BadRequest("Invalid parameter.");
+        }
+        catch (Exception e)
+        {
+            return BadRequest(
+                ApiResponse<IEnumerable<BookTrendingResponseModel>>
+                    .Fail(new List<ApiValidationError> { new(null, e.Message) })
+            );
         }
     }
 

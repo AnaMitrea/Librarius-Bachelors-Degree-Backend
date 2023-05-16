@@ -2,7 +2,7 @@
 
 namespace Library.DataAccess.Repositories;
 
-public interface ICategoryRepository
+public interface IUserRepository
 {
-    Task<List<Category>> GetAllAsync();
+    public Task<User> GetUserById(int id);
 }

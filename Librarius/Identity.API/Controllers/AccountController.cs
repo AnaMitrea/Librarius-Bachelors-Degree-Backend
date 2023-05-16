@@ -45,6 +45,8 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestModel registerRequest)
     {
+        // todo Add Created User to Account & LibraryUser table!!!!
+        
         try
         {
             var response = await _jwtTokenHandlerService.RegisterAccount(registerRequest);

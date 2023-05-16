@@ -6,20 +6,20 @@ namespace Library.DataAccess.Repositories.Implementations;
 
 public class BookshelfRepository : IBookshelfRepository
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly DatabaseContext _dbContext;
 
     public BookshelfRepository(DatabaseContext databaseContext)
     {
-        _databaseContext = databaseContext;
+        _dbContext = databaseContext;
     }
 
     public async Task<List<Bookshelf>> GetAllAsync()
     {
-        return await _databaseContext.Bookshelves.ToListAsync();
+        return await _dbContext.Bookshelves.ToListAsync();
     }
 
     public async Task<List<Bookshelf>> GetAllWithCategoryAsync()
     {
-        return await _databaseContext.Bookshelves.Include(bookshelf => bookshelf.Categories).ToListAsync();
+        return await _dbContext.Bookshelves.Include(bookshelf => bookshelf.Categories).ToListAsync();
     }
 }

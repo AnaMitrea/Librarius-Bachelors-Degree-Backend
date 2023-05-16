@@ -9,16 +9,16 @@ namespace Library.DataAccess.Repositories.Implementations;
 
 public partial class BookRepository : IBookRepository
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly DatabaseContext _dbContext;
     
     public BookRepository(DatabaseContext databaseContext)
     {
-        _databaseContext = databaseContext;
+        _dbContext = databaseContext;
     }
     
     public async Task<Book?> GetBookByIdAsync(int bookId)
     {
-        var book = await _databaseContext.Books
+        var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
         
         if (book == default)
@@ -31,7 +31,7 @@ public partial class BookRepository : IBookRepository
 
     public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId)
     {
-        var book = await _databaseContext.Books
+        var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
         
         if (book == default)
@@ -40,7 +40,7 @@ public partial class BookRepository : IBookRepository
         }
         
         // Split query in order to increase performance from 500ms to 100ms !!!
-        await _databaseContext.Entry(book)
+        await _dbContext.Entry(book)
             .Collection(x => x.BookCategories)
             .Query()
             .Include(x => x.Category)
@@ -51,7 +51,7 @@ public partial class BookRepository : IBookRepository
 
     public async Task<IEnumerable<Book>> GetBooksForAllBookshelves()
     {
-        var bookshelves = await _databaseContext.Bookshelves
+        var bookshelves = await _dbContext.Bookshelves
             .Include(bs => bs.Categories)
             .ToListAsync();
         
@@ -59,13 +59,13 @@ public partial class BookRepository : IBookRepository
             .SelectMany(bs => bs.Categories.Select(c => c.Id))
             .Distinct().ToList();
         
-        var bookIds = _databaseContext.BooksCategories
+        var bookIds = _dbContext.BooksCategories
             .Where(bc => categoryIds.Contains(bc.CategoryId))
             .Select(bc => bc.BookId)
             .Distinct()
             .ToList();
         
-        var books = _databaseContext.Books
+        var books = _dbContext.Books
             .Where(b => bookIds.Contains(b.Id))
             .GroupBy(b => b.Id)
             .Select(g => g.First())
@@ -99,7 +99,7 @@ public partial class BookRepository : IBookRepository
          * select only the Title of the Bookshelf entity. The AsNoTracking() method
          * is called to disable change tracking for the entities returned by the query. 
          */
-        var booksGroupedByBookshelf = await _databaseContext.BooksCategories
+        var booksGroupedByBookshelf = await _dbContext.BooksCategories
             .AsNoTracking()
             .Select(bc => new { BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
             .ToListAsync();
@@ -113,7 +113,7 @@ public partial class BookRepository : IBookRepository
 
     public async Task<BookWithContent?> GetReadingBookByIdAsync(int bookId)
     {
-        var book = await _databaseContext.Books
+        var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
     
         if (book == default)
@@ -151,7 +151,7 @@ public partial class BookRepository : IBookRepository
     public async Task<IEnumerable<Book?>> GetTrendingNowBooksAsync()
     {
         // TODO implement
-        var result = await _databaseContext.Books.Take(10).ToListAsync();
+        var result = await _dbContext.Books.Take(10).ToListAsync();
 
         return result;
     }
@@ -159,7 +159,7 @@ public partial class BookRepository : IBookRepository
     public async Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync()
     {
         // TODO implement
-        var result = await _databaseContext.Books.Take(10).ToListAsync();
+        var result = await _dbContext.Books.Take(10).ToListAsync();
 
         return result;
     }

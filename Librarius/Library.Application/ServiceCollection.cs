@@ -14,14 +14,17 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(CategoryProfile));
         services.AddAutoMapper(typeof(BookProfile));
         services.AddAutoMapper(typeof(BookCategoryProfile));
+        services.AddAutoMapper(typeof(UserProfile));
+        services.AddAutoMapper(typeof(ReviewsProfile));
         
         // Service Implementations
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IReviewService, ReviewService>();
+        services.AddScoped<IUserService, UserService>();
 
         // TODO models validators as:  services.AddScoped<IValidator<DogRequestModel>, DogRequestModelValidator>();
-        
         
         return services;
     }

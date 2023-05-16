@@ -6,15 +6,15 @@ namespace Library.DataAccess.Repositories.Implementations;
 
 public class CategoryRepository : ICategoryRepository
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly DatabaseContext _dbContext;
 
     public CategoryRepository(DatabaseContext databaseContext)
     {
-        _databaseContext = databaseContext;
+        _dbContext = databaseContext;
     }
     
     public async Task<List<Category>>  GetAllAsync()
     {
-        return await _databaseContext.Categories.Include(category => category.Bookshelf).ToListAsync();
+        return await _dbContext.Categories.Include(category => category.Bookshelf).ToListAsync();
     }
 }

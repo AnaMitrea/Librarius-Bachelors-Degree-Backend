@@ -8,7 +8,7 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {
-        builder.ToTable("booksReviews");
+        builder.ToTable("bookReviews");
         
         builder.Property(x => x.Id)
             .HasColumnName("id");
@@ -25,14 +25,18 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
             .HasColumnName("timestamp");
 
         // 1 user has * reviews, userId as Foreign Key
-        builder.Property(x => x.UserId).IsRequired();
+        builder.Property(x => x.UserId)
+            .HasColumnName("user_id")
+            .IsRequired();
         builder.HasOne(review => review.User)
             .WithMany(user => user.Reviews)
             .HasForeignKey(review => review.UserId)
             .OnDelete(DeleteBehavior.Cascade);
         
         // 1 book has * reviews, bookId as Foreign Key
-        builder.Property(x => x.BookId).IsRequired();
+        builder.Property(x => x.BookId)
+            .HasColumnName("book_id")
+            .IsRequired();
         builder.HasOne(review => review.Book)
             .WithMany(book => book.Reviews)
             .HasForeignKey(review => review.BookId)

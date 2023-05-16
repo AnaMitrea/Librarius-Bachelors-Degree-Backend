@@ -11,7 +11,8 @@ public class BookCategoryProfile : Profile
         CreateMap<BookCategory, BookCategoryResponseModel>()
             .ForMember(
                 dest => dest.Title,
-                dest => dest.MapFrom(source => source.Category.Title)
+                dest 
+                    => dest.MapFrom(source => source.Category.Title)
             );
     }
 }
