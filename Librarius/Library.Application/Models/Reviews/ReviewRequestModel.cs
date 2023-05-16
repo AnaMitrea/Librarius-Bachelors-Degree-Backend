@@ -1,6 +1,6 @@
 ﻿namespace Library.Application.Models.Reviews;
 
-public class ReviewsRequestModel
+public class ReviewRequestModel
 {
     public int BookId { get; set; }
     

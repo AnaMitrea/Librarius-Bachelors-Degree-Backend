@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics;
+using AutoMapper;
 using Library.Application.Models.Reviews;
 using Library.DataAccess.Repositories;
 
@@ -15,15 +16,21 @@ public class ReviewService: IReviewService
         _reviewsRepository = reviewsRepository;
     }
     
-    public async Task<ICollection<ReviewResponseModel>> GetReviewsForBookByIdAsync(ReviewsRequestModel reviewsRequestModel)
+    public async Task<RatingReviewsResponseModel> GetReviewsForBookByIdAsync(ReviewRequestModel reviewRequestModel)
     {
         var reviews = await _reviewsRepository.GetAllForBookByIdAsync(
-            reviewsRequestModel.BookId,
-            reviewsRequestModel.MaxResults,
-            reviewsRequestModel.SortBy,
-            reviewsRequestModel.StartIndex
+            reviewRequestModel.BookId,
+            reviewRequestModel.MaxResults,
+            reviewRequestModel.SortBy,
+            reviewRequestModel.StartIndex
         );
         
-        return _mapper.Map<ICollection<ReviewResponseModel>>(reviews);
+        var response = new RatingReviewsResponseModel
+        {
+            overallRating = 0,
+            reviews = _mapper.Map<ICollection<ReviewModel>>(reviews)
+        };
+
+        return response;
     }
 }

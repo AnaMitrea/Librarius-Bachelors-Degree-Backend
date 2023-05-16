@@ -2,15 +2,16 @@
 
 namespace Library.Application.Models.Reviews;
 
-public class ReviewResponseModel
+public class ReviewModel
 {
     public int Id { get; set; }
     
     public string Content { get; set; }
     
     public int Likes { get; set; }
-    public string TimeUnit { get; set; }
     
+    public int Rating { get; set; }
+    public string TimeUnit { get; set; }
     public string TimeValue { get; set; }
 
     public UserResponseModel User { get; set; }

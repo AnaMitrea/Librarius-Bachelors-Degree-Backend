@@ -21,6 +21,9 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
         builder.Property(x => x.Likes)
             .HasColumnName("likes");
         
+        builder.Property(x => x.Rating)
+            .HasColumnName("rating");
+        
         builder.Property(x => x.Timestamp)
             .HasColumnName("timestamp");
 

@@ -8,6 +8,8 @@ public class Review : Entity
     
     public string Timestamp { get; set; }
     
+    public int Rating { get; set; }
+    
     // many-to-one Book
     public int BookId { get; set; }
     

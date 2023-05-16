@@ -22,8 +22,11 @@ public class ReviewsRepository : IReviewsRepository
                 .Where(r => r.BookId == id)
                 .ToListAsync();
 
-            return reviews.OrderByDescending(r 
+            return reviews
+                .OrderByDescending(r 
                     => DateTime.ParseExact(r.Timestamp, "dd/MM/yyyy", null))
+                .Skip(startIndex)
+                .Take(maxResults)
                 .ToList();
         }
 
@@ -31,6 +34,8 @@ public class ReviewsRepository : IReviewsRepository
             .Include(r => r.User)
             .Where(r => r.BookId == id)
             .OrderByDescending(r => r.Likes)
+            .Skip(startIndex)
+            .Take(maxResults)
             .ToListAsync();
     }
 }

@@ -38,17 +38,17 @@ public class BookController : ControllerBase
     
     // Route: /api/library/book/reviews
     [HttpPost("reviews")]
-    public async Task<IActionResult> PostReviewsByBookIdAsync(ReviewsRequestModel reviewsRequestModel)
+    public async Task<IActionResult> PostReviewsByBookIdAsync(ReviewRequestModel reviewRequestModel)
     {
         try
         {
-            var response = await _reviewService.GetReviewsForBookByIdAsync(reviewsRequestModel);
-
-            return Ok(ApiResponse<ICollection<ReviewResponseModel>>.Success(response));
+            var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel);
+            
+            return Ok(ApiResponse<RatingReviewsResponseModel>.Success(response));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<ICollection<ReviewResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<RatingReviewsResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     
