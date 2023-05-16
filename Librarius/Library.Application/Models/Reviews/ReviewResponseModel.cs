@@ -9,8 +9,9 @@ public class ReviewResponseModel
     public string Content { get; set; }
     
     public int Likes { get; set; }
+    public string TimeUnit { get; set; }
     
-    public string Timestamp { get; set; }
+    public string TimeValue { get; set; }
 
     public UserResponseModel User { get; set; }
 }

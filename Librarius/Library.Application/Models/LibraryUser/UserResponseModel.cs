@@ -9,5 +9,5 @@ public class UserResponseModel
     public string NameInitial 
         => string.IsNullOrEmpty(Username) 
         ? string.Empty 
-        : Username[..1];
+        : Username[..1].ToUpper();
 }

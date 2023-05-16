@@ -17,7 +17,12 @@ public class ReviewService: IReviewService
     
     public async Task<ICollection<ReviewResponseModel>> GetReviewsForBookByIdAsync(ReviewsRequestModel reviewsRequestModel)
     {
-        var reviews = await _reviewsRepository.GetAllForBookByIdAsync(reviewsRequestModel.BookId);
+        var reviews = await _reviewsRepository.GetAllForBookByIdAsync(
+            reviewsRequestModel.BookId,
+            reviewsRequestModel.MaxResults,
+            reviewsRequestModel.SortBy,
+            reviewsRequestModel.StartIndex
+        );
         
         return _mapper.Map<ICollection<ReviewResponseModel>>(reviews);
     }

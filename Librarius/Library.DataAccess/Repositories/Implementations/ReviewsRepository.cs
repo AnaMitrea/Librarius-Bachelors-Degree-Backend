@@ -13,15 +13,24 @@ public class ReviewsRepository : IReviewsRepository
         _dbContext = databaseContext;
     }
     
-    public async Task<ICollection<Review>> GetAllForBookByIdAsync(int id)
+    public async Task<ICollection<Review>> GetAllForBookByIdAsync(int id, int maxResults, string sortBy, int startIndex)
     {
-        // Having BookID, i need all the reviews of the certain book including the user information into the response.
-        
-        var reviews = await _dbContext.Reviews
+        if (sortBy == "MostRecent")
+        {
+            var reviews = await _dbContext.Reviews
+                .Include(r => r.User)
+                .Where(r => r.BookId == id)
+                .ToListAsync();
+
+            return reviews.OrderByDescending(r 
+                    => DateTime.ParseExact(r.Timestamp, "dd/MM/yyyy", null))
+                .ToList();
+        }
+
+        return await _dbContext.Reviews
             .Include(r => r.User)
             .Where(r => r.BookId == id)
+            .OrderByDescending(r => r.Likes)
             .ToListAsync();
-
-        return reviews;
     }
 }
