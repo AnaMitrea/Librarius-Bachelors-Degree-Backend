@@ -33,4 +33,11 @@ public class ReviewService: IReviewService
 
         return response;
     }
+
+    public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
+    {
+        var isSuccessful = await _reviewsRepository.UpdateLikeStatusAsync(username, reviewId, isLiked);
+        
+        return isSuccessful;
+    }
 }

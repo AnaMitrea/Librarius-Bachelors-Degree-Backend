@@ -24,12 +24,12 @@ public class UserController : ControllerBase
     [HttpGet("")]
     public async Task<IActionResult> GetUserInformation()
     {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-        var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
-        
         try
         {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
             var response = await _accountService.GetUserInformationAsync(username);
 
             if (response == null) throw new Exception("Access Token Invalid.");

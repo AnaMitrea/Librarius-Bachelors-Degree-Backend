@@ -18,14 +18,17 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
             .HasColumnName("content")
             .IsRequired();
 
-        builder.Property(x => x.Likes)
-            .HasColumnName("likes");
-        
         builder.Property(x => x.Rating)
             .HasColumnName("rating");
         
         builder.Property(x => x.Timestamp)
-            .HasColumnName("timestamp");
+            .HasColumnName("timestamp")
+            .IsRequired();
+        
+        builder.Property(review => review.LikesCount)
+            .HasColumnName("likes")
+            .HasDefaultValue(0)
+            .IsRequired();
 
         // 1 user has * reviews, userId as Foreign Key
         builder.Property(x => x.UserId)

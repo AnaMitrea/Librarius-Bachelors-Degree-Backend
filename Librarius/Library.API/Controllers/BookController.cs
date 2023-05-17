@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using Library.API.Models;
+using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Reviews;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Library.API.Controllers;
 
@@ -42,6 +44,10 @@ public class BookController : ControllerBase
     {
         try
         {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
             var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel);
             
             return Ok(ApiResponse<RatingReviewsResponseModel>.Success(response));
@@ -49,6 +55,30 @@ public class BookController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<RatingReviewsResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/reviews/like
+    [HttpPut("reviews/like")]
+    public async Task<IActionResult> UpdateReviewLikesByBookIdAsync(LikeReviewRequestModel requestModel)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _reviewService.UpdateLikeStatusAsync(
+                username,
+                requestModel.ReviewId,
+                requestModel.IsLiked
+            );
+            
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

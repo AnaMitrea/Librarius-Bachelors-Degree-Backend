@@ -3,12 +3,13 @@
 public class Review : Entity
 {
     public string Content { get; set; }
-    
-    public int Likes { get; set; }
-    
+
     public string Timestamp { get; set; }
     
     public int Rating { get; set; }
+    
+    // !!! Denormalized the data in order to remove the need to calculate the likes count dynamically each time
+    public int LikesCount { get; set; }
     
     // many-to-one Book
     public int BookId { get; set; }
@@ -19,4 +20,7 @@ public class Review : Entity
     public int UserId { get; set; }
     
     public User User { get; set; }
+    
+    // one-to-many Likes
+    public ICollection<ReviewLikedBy> Likes { get; set; }
 }

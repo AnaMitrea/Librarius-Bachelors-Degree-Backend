@@ -6,4 +6,7 @@ public class User : Entity
     
     // one-to-many reviews
     public ICollection<Review> Reviews { get; set; }
+    
+    // one-to-many likes
+    public ICollection<ReviewLikedBy> Likes { get; set; }
 }

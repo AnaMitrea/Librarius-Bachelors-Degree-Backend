@@ -8,7 +8,7 @@ public class ReviewModel
     
     public string Content { get; set; }
     
-    public int Likes { get; set; }
+    public int LikesCount { get; set; }
     
     public int Rating { get; set; }
     public string TimeUnit { get; set; }
