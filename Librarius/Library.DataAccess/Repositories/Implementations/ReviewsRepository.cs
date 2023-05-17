@@ -41,24 +41,15 @@ public class ReviewsRepository : IReviewsRepository
     
     public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
     {
-        if (string.IsNullOrEmpty(username))
-        {
-            return false; // Invalid token or user not authenticated
-        }
-
+        if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");
+        
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
 
-        if (user == null)
-        {
-            return false; // User not found
-        }
+        if (user == null) throw new Exception("User not found.");
 
         var review = await _dbContext.Reviews.FindAsync(reviewId);
 
-        if (review == null)
-        {
-            return false; // Review not found
-        }
+        if (review == null) throw new Exception("Review not found.");
 
         var existingLike = await _dbContext.ReviewLikedBys
             .SingleOrDefaultAsync(l => l.UserId == user.Id && l.ReviewId == reviewId);
@@ -77,7 +68,7 @@ public class ReviewsRepository : IReviewsRepository
             };
 
             _dbContext.ReviewLikedBys.Add(newLike);
-            review.LikesCount++; // Increment the likes count
+            review.LikesCount++;
         }
         else
         {
@@ -87,7 +78,7 @@ public class ReviewsRepository : IReviewsRepository
             }
 
             _dbContext.ReviewLikedBys.Remove(existingLike);
-            review.LikesCount--; // Decrement the likes count
+            review.LikesCount--;
         }
 
         await _dbContext.SaveChangesAsync();

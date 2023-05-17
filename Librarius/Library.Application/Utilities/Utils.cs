@@ -1,4 +1,6 @@
-﻿namespace Library.Application.Utilities;
+﻿using Library.DataAccess.Entities;
+
+namespace Library.Application.Utilities;
 
 public static class Utils
 {
@@ -44,5 +46,26 @@ public static class Utils
         }
 
         return " ";
+    }
+    
+    public static int CalculateOverallRating(IEnumerable<Review> reviews)
+    {
+        var enumerable = reviews.ToList();
+        if (!enumerable.Any())
+        {
+            return 0;
+        }
+
+        var totalRating = 0;
+        var reviewCount = 0;
+
+        foreach (var review in enumerable)
+        {
+            totalRating += review.Rating;
+            reviewCount++;
+        }
+
+        var overallRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+        return overallRating;
     }
 }

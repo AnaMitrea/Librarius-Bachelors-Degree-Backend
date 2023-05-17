@@ -17,7 +17,9 @@ public class ReviewsProfile : Profile
                     opt.MapFrom(src => Utils.CalculateTimeUnit(src.Timestamp)))
             .ForMember(dest => dest.TimeValue,
                 opt =>
-                    opt.MapFrom(src => Utils.CalculateTimeValue(src.Timestamp)));
+                    opt.MapFrom(src => Utils.CalculateTimeValue(src.Timestamp)))
+            .ForMember(dest => dest.Liked,
+                opt => opt.MapFrom(src => false));
 
         CreateMap<ReviewRequestModel, Review>();
     }

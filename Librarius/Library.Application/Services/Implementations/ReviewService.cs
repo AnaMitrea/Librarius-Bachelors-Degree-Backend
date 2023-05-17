@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AutoMapper;
 using Library.Application.Models.Reviews;
+using Library.Application.Utilities;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;
@@ -27,7 +28,7 @@ public class ReviewService: IReviewService
         
         var response = new RatingReviewsResponseModel
         {
-            overallRating = 0,
+            overallRating = Utils.CalculateOverallRating(reviews),
             reviews = _mapper.Map<ICollection<ReviewModel>>(reviews)
         };
 
