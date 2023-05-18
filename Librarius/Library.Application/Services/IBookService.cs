@@ -4,6 +4,8 @@ namespace Library.Application.Services;
 
 public interface IBookService
 {
+    Task<bool> AddReadingAsync(int id);
+    
     Task<BookResponseModel> GetBookWithCategoryByIdAsync(int id);
 
     Task<IEnumerable<ExploreBookResponseModel>> GetBooksForAllBookshelves();

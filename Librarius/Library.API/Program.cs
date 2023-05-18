@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using Library.API.SignalRHubs;
 using Library.Application;
 using Library.DataAccess;
 
@@ -23,6 +24,9 @@ builder.Services.AddFluentValidationAutoValidation();
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// SignalR
+builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -87,6 +87,23 @@
         "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       }
+    },
+    {
+      "DownstreamPathTemplate": "/api/library/readingfeed",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5104
+        }
+      ],
+      "UpstreamPathTemplate": "/api/library/readingfeed",
+      "UpstreamHttpMethod": [ "GET", "POST", "OPTIONS" ],
+      "UseServiceDiscovery": false,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     }
   ],
   "GlobalConfiguration": {

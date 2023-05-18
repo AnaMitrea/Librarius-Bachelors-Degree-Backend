@@ -385,3 +385,11 @@ C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Deb
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Library.API\bin\Debug\net7.0\Microsoft.Extensions.Features.dll
