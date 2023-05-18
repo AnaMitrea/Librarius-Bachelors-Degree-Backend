@@ -1,4 +1,6 @@
-﻿namespace Library.DataAccess.Entities;
+﻿using Library.DataAccess.Entities.BookRelated;
+
+namespace Library.DataAccess.Entities.Library;
 
 public class Book : Entity
 {
@@ -21,6 +23,9 @@ public class Book : Entity
     
     // one-to-many reviews
     public ICollection<Review> Reviews { get; set; }
+    
+    // many-to-many user readers
+    public ICollection<UserCompletedBooks> CompletedBooks { get; set; }
 }
 
 

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book;
+using Library.Application.Models.Book.Home;
+using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Trending;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;
@@ -48,6 +51,22 @@ public class BookService : IBookService
         var response = await _bookRepository.GetReadingBookByIdAsync(id);
 
         return _mapper.Map<BookReadingResponseModel>(response);
+    }
+    
+    public async Task<int> GetBookContentWordCount(int id)
+    {
+        return await _bookRepository.CountWordsInResponseAsync(id);
+    }
+
+    public async Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username)
+    {
+        var response = await _bookRepository.SetFinishedReadingBookByIdAsync(
+            requestModel.Id,
+            username,
+            requestModel.TimeSpent
+        );
+
+        return response;
     }
 
     public async Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync()

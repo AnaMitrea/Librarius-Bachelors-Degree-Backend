@@ -7,8 +7,8 @@ public partial class BookContentUtil
     public static async Task<string> GetContentBetweenSectionsAsync(string html)
     {
         // search for the start and end section IDs in the HTML
-        var startSectionRegex = MyRegex();
-        var endSectionRegex = MyRegex1();
+        var startSectionRegex = PgHeaderClassRegex();
+        var endSectionRegex = PgFooterClassRegex();
         var startMatch = startSectionRegex.Match(html);
         var endMatch = endSectionRegex.Match(html);
 
@@ -28,7 +28,7 @@ public partial class BookContentUtil
     }
 
     [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-header\"\\s+lang=\"en\">([\\s\\S]*?)<\\/section>", RegexOptions.IgnoreCase, "en-GB")]
-    private static partial Regex MyRegex();
+    private static partial Regex PgHeaderClassRegex();
     [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-footer\"\\s+lang=\"en\">", RegexOptions.IgnoreCase, "en-GB")]
-    private static partial Regex MyRegex1();
+    private static partial Regex PgFooterClassRegex();
 }

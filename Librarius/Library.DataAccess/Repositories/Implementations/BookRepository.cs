@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Library.DataAccess.DTOs;
-using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.BookRelated;
+using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Persistence;
 using Library.DataAccess.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -111,7 +112,7 @@ public partial class BookRepository : IBookRepository
         return groupedBooks;
     }
 
-    public async Task<BookWithContent?> GetReadingBookByIdAsync(int bookId)
+    public async Task<BookWithContent> GetReadingBookByIdAsync(int bookId)
     {
         var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
@@ -128,7 +129,6 @@ public partial class BookRepository : IBookRepository
     
         if (!string.IsNullOrEmpty(book.HtmlContentUrl))
         {
-            // get the HTML content from the book's URL
             var url = $"https://www.gutenberg.org{book.HtmlContentUrl}";
             
             var client = new HttpClient();
@@ -139,12 +139,88 @@ public partial class BookRepository : IBookRepository
             var content = await BookContentUtil.GetContentBetweenSectionsAsync(html);
 
             // remove any images from the content
-            content = MyRegex().Replace(content, "");
+            content = HtmlImgTagRegex().Replace(content, "");
 
             bookWithContent.Content = content;
         }
 
         return bookWithContent;
+    }
+    
+    public async Task<int> CountWordsInResponseAsync(int bookId)
+    {
+        var bookWithContent = await GetReadingBookByIdAsync(bookId);
+        
+        // var plainTextContent = RemoveHtmlTags(bookWithContent.Content);
+        //
+        // var words = plainTextContent.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        //
+        // return words.Length;
+        
+        return CountWords(bookWithContent.Content);
+    }
+
+    private int CountWords(string htmlContent)
+    {
+        var wordCount = 0;
+        var currentIndex = 0;
+        var inTag = false;
+
+        while (currentIndex < htmlContent.Length)
+        {
+            var currentChar = htmlContent[currentIndex];
+
+            if (currentChar == '<')
+            {
+                inTag = true;
+            }
+            else if (currentChar == '>')
+            {
+                inTag = false;
+            }
+            else if (!inTag && !char.IsWhiteSpace(currentChar))
+            {
+                wordCount++;
+
+                // Skip the word characters until the next whitespace or tag
+                while (currentIndex < htmlContent.Length && !char.IsWhiteSpace(htmlContent[currentIndex]) && htmlContent[currentIndex] != '<')
+                {
+                    currentIndex++;
+                }
+            }
+
+            currentIndex++;
+        }
+
+        return wordCount;
+    }
+    
+    private string RemoveHtmlTags(string htmlContent)
+    {
+        var regex = new Regex("<[^>]+?>");
+        return regex.Replace(htmlContent, "");
+    }
+
+    public async Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent)
+    {
+        var book = await _dbContext.Books
+            .SingleOrDefaultAsync(book => book.Id == bookId);
+        if (book == default) throw new Exception("Invalid book id.");
+
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(user => user.Username == username);
+        if (user == default) throw new Exception("Invalid user.");
+
+        var newCompletedBook = new UserCompletedBooks
+        {
+            UserId = user.Id,
+            BookId = book.Id,
+            TimeSpent = timeSpent
+        };
+
+        _dbContext.CompletedBooks.Add(newCompletedBook);
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 
 
@@ -159,11 +235,11 @@ public partial class BookRepository : IBookRepository
     public async Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync()
     {
         // TODO implement
-        var result = await _dbContext.Books.Take(10).ToListAsync();
+        var result = await _dbContext.Books.Skip(100).Take(10).ToListAsync();
 
         return result;
     }
 
     [GeneratedRegex("<img[^>]+>")]
-    private static partial Regex MyRegex();
+    private static partial Regex HtmlImgTagRegex();
 }

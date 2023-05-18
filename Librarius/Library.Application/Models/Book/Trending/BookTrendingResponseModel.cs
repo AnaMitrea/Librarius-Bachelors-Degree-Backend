@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.Book;
+﻿namespace Library.Application.Models.Book.Trending;
 
 public class BookTrendingResponseModel
 {

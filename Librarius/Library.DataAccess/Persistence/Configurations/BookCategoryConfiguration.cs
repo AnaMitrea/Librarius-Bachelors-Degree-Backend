@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Library.DataAccess.Entities.Library;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.DataAccess.Persistence.Configurations;
 
-public class BookCategoryConfiguration : IEntityTypeConfiguration<Entities.BookCategory>
+public class BookCategoryConfiguration : IEntityTypeConfiguration<BookCategory>
 {
-    public void Configure(EntityTypeBuilder<Entities.BookCategory> builder)
+    public void Configure(EntityTypeBuilder<BookCategory> builder)
     {
         builder.ToTable("booksCategories");
         

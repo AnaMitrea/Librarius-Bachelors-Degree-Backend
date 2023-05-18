@@ -1,5 +1,5 @@
 ﻿using Library.DataAccess.DTOs;
-using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.Library;
 
 namespace Library.DataAccess.Repositories;
 
@@ -13,7 +13,11 @@ public interface IBookRepository
 
     Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf();
 
-    Task<BookWithContent?> GetReadingBookByIdAsync(int id);
+    Task<BookWithContent> GetReadingBookByIdAsync(int id);
+
+    Task<int> CountWordsInResponseAsync(int bookId);
+
+    Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 
     Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();
     

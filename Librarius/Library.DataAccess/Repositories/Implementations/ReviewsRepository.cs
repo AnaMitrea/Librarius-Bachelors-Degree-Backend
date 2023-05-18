@@ -1,4 +1,5 @@
 ﻿using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,11 +57,8 @@ public class ReviewsRepository : IReviewsRepository
 
         if (isLiked)
         {
-            if (existingLike != null)
-            {
-                return false; // User has already liked this review
-            }
-
+            if (existingLike != null) return false; // User has already liked this review
+            
             var newLike = new ReviewLikedBy
             {
                 UserId = user.Id,
@@ -72,11 +70,8 @@ public class ReviewsRepository : IReviewsRepository
         }
         else
         {
-            if (existingLike == null)
-            {
-                return false; // User has not liked this review
-            }
-
+            if (existingLike == null) return false; // User has not liked this review
+            
             _dbContext.ReviewLikedBys.Remove(existingLike);
             review.LikesCount--;
         }

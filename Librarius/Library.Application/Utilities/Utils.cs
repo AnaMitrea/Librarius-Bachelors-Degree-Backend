@@ -1,4 +1,5 @@
 ﻿using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.BookRelated;
 
 namespace Library.Application.Utilities;
 

@@ -1,4 +1,4 @@
-﻿namespace Library.DataAccess.Entities;
+﻿namespace Library.DataAccess.Entities.BookRelated;
 
 public class ReviewLikedBy : Entity
 {

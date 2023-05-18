@@ -1,7 +1,7 @@
 ﻿using Library.Application.Models.BookCategory;
 using Library.Application.Models.Bookshelf;
 
-namespace Library.Application.Models.Book;
+namespace Library.Application.Models.Book.Home;
 
 public class ExploreBookResponseModel
 {

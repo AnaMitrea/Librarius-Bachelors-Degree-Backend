@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using Library.API.Models;
+﻿using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
+using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Trending;
 using Library.Application.Models.Reviews;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -82,6 +83,7 @@ public class BookController : ControllerBase
         }
     }
     
+    // Reading Content
     // Route: /api/library/book/read?id=
     [HttpGet("read")]
     public async Task<IActionResult> GetReadingBookByIdAsync([FromQuery] int id)
@@ -95,6 +97,44 @@ public class BookController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<BookReadingResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Reading Content Word count
+    // Route: /api/library/book/wordcount?id=
+    [HttpGet("wordcount")]
+    public async Task<IActionResult> GetWordCount([FromQuery] int id)
+    {
+        try
+        {
+            var response = await _bookService.GetBookContentWordCount(id);
+
+            return Ok(ApiResponse<int>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Finish Reading Content
+    // Route: /api/library/book/read
+    [HttpPut("read")]
+    public async Task<IActionResult> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
 
