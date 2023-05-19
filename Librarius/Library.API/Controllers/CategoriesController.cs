@@ -1,5 +1,4 @@
 ﻿using Library.API.Models;
-using Library.Application.Models.Bookshelf;
 using Library.Application.Models.Category;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;

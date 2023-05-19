@@ -5,6 +5,7 @@ using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
 using Library.Application.Models.Reviews;
 using Library.Application.Services;
+using Library.DataAccess.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 
@@ -101,19 +102,36 @@ public class BookController : ControllerBase
     }
     
     // Reading Content Word count
-    // Route: /api/library/book/wordcount?id=
-    [HttpGet("wordcount")]
-    public async Task<IActionResult> GetWordCount([FromQuery] int id)
+    // Route: /api/library/book/wordcount
+    [HttpPost("word-count")]
+    public async Task<IActionResult> GetWordCount(ReadingRequestModel requestModel)
     {
         try
         {
-            var response = await _bookService.GetBookContentWordCount(id);
+            var response = await _bookService.GetBookContentWordCount(requestModel.BookId);
 
             return Ok(ApiResponse<int>.Success(response));
         }
         catch (Exception e)
         {
             return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Reading Time Content
+    // Route: /api/library/book/reading-time
+    [HttpPost("reading-time")]
+    public async Task<IActionResult> GetReadingTime(ReadingRequestModel requestModel)
+    {
+        try
+        {
+            var response = await _bookService.GetReadingTimeOfBookContent(requestModel.BookId);
+
+            return Ok(ApiResponse<ReadingTimeResponse>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<ReadingTimeResponse>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

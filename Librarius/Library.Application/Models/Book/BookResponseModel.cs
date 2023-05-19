@@ -1,4 +1,5 @@
-﻿using Library.Application.Models.BookCategory;
+﻿using Library.Application.Models.Book.Author;
+using Library.Application.Models.BookCategory;
 
 namespace Library.Application.Models.Book;
 
@@ -8,7 +9,7 @@ public class BookResponseModel
     
     public string Title { get; set; }
 
-    public string Author { get; set; }
+    public AuthorResponseModel Author { get; set; }
     
     public string Link { get; set; }
 

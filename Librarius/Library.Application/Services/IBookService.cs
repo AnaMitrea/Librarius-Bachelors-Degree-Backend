@@ -2,6 +2,7 @@
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
+using Library.DataAccess.DTOs;
 
 namespace Library.Application.Services;
 
@@ -16,6 +17,8 @@ public interface IBookService
     Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id);
 
     Task<int> GetBookContentWordCount(int id);
+
+    Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int id);
 
     Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username);
 

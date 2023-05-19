@@ -33,7 +33,8 @@ public partial class BookRepository : IBookRepository
     public async Task<Book?> GetBookWithCategoryByIdAsync(int bookId)
     {
         var book = await _dbContext.Books
-            .SingleOrDefaultAsync(book => book.Id == bookId);
+            .Include(b => b.Author)
+            .SingleOrDefaultAsync(b => b.Id == bookId);
         
         if (book == default)
         {
@@ -151,54 +152,18 @@ public partial class BookRepository : IBookRepository
     {
         var bookWithContent = await GetReadingBookByIdAsync(bookId);
         
-        // var plainTextContent = RemoveHtmlTags(bookWithContent.Content);
-        //
+        // var plainTextContent = BookContentUtil.RemoveHtmlTags(bookWithContent.Content);
         // var words = plainTextContent.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-        //
         // return words.Length;
         
-        return CountWords(bookWithContent.Content);
-    }
-
-    private int CountWords(string htmlContent)
-    {
-        var wordCount = 0;
-        var currentIndex = 0;
-        var inTag = false;
-
-        while (currentIndex < htmlContent.Length)
-        {
-            var currentChar = htmlContent[currentIndex];
-
-            if (currentChar == '<')
-            {
-                inTag = true;
-            }
-            else if (currentChar == '>')
-            {
-                inTag = false;
-            }
-            else if (!inTag && !char.IsWhiteSpace(currentChar))
-            {
-                wordCount++;
-
-                // Skip the word characters until the next whitespace or tag
-                while (currentIndex < htmlContent.Length && !char.IsWhiteSpace(htmlContent[currentIndex]) && htmlContent[currentIndex] != '<')
-                {
-                    currentIndex++;
-                }
-            }
-
-            currentIndex++;
-        }
-
-        return wordCount;
+        return BookContentUtil.CountWords(bookWithContent.Content);
     }
     
-    private string RemoveHtmlTags(string htmlContent)
+    public async Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int bookId)
     {
-        var regex = new Regex("<[^>]+?>");
-        return regex.Replace(htmlContent, "");
+        var wordCount = await CountWordsInResponseAsync(bookId);
+
+        return BookContentUtil.CalculateReadingTime(wordCount);
     }
 
     public async Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent)
@@ -227,7 +192,7 @@ public partial class BookRepository : IBookRepository
     public async Task<IEnumerable<Book?>> GetTrendingNowBooksAsync()
     {
         // TODO implement
-        var result = await _dbContext.Books.Take(10).ToListAsync();
+        var result = await _dbContext.Books.Take(10).Include(b => b.Author).ToListAsync();
 
         return result;
     }
@@ -235,7 +200,7 @@ public partial class BookRepository : IBookRepository
     public async Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync()
     {
         // TODO implement
-        var result = await _dbContext.Books.Skip(100).Take(10).ToListAsync();
+        var result = await _dbContext.Books.Skip(100).Take(10).Include(b => b.Author).ToListAsync();
 
         return result;
     }

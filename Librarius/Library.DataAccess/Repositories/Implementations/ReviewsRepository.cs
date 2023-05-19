@@ -1,5 +1,4 @@
-﻿using Library.DataAccess.Entities;
-using Library.DataAccess.Entities.BookRelated;
+﻿using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 

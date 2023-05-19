@@ -5,8 +5,6 @@ namespace Library.DataAccess.Entities.Library;
 public class Book : Entity
 {
     public string Title { get; set; }
-
-    public string Author { get; set; }
     
     public string Link { get; set; }
 
@@ -17,6 +15,10 @@ public class Book : Entity
     public string CoverImageUrl { get; set; }
 
     public string HtmlContentUrl { get; set; }
+    
+    // many-to-one author
+    public int AuthorId { get; set; }
+    public Author Author { get; set; }
 
     // many-to-many: books - categories
     public IEnumerable<BookCategory> BookCategories { get; set; }

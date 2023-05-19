@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Reviews;
 using Library.Application.Utilities;
-using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
 
 namespace Library.Application.Mapping;

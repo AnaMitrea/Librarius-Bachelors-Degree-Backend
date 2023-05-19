@@ -13,6 +13,7 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(BookshelfProfile));
         services.AddAutoMapper(typeof(CategoryProfile));
         services.AddAutoMapper(typeof(BookProfile));
+        services.AddAutoMapper(typeof(AuthorProfile));
         services.AddAutoMapper(typeof(BookCategoryProfile));
         services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(ReviewsProfile));

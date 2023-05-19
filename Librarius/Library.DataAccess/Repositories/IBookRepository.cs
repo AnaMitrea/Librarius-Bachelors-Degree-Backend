@@ -17,6 +17,8 @@ public interface IBookRepository
 
     Task<int> CountWordsInResponseAsync(int bookId);
 
+    Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int bookId);
+
     Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 
     Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();

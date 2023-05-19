@@ -1,4 +1,6 @@
-﻿namespace Library.Application.Models.Book.Trending;
+﻿using Library.Application.Models.Book.Author;
+
+namespace Library.Application.Models.Book.Trending;
 
 public class BookTrendingResponseModel
 {
@@ -6,7 +8,7 @@ public class BookTrendingResponseModel
     
     public string Title { get; set; }
 
-    public string Author { get; set; }
+    public AuthorResponseModel Author { get; set; }
 
     public string CoverImageUrl { get; set; }
 }

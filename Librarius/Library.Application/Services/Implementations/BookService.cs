@@ -3,6 +3,7 @@ using Library.Application.Models.Book;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
+using Library.DataAccess.DTOs;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;
@@ -56,6 +57,11 @@ public class BookService : IBookService
     public async Task<int> GetBookContentWordCount(int id)
     {
         return await _bookRepository.CountWordsInResponseAsync(id);
+    }
+    
+    public async Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int id)
+    {
+        return await _bookRepository.GetReadingTimeOfBookContent(id);
     }
 
     public async Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username)
