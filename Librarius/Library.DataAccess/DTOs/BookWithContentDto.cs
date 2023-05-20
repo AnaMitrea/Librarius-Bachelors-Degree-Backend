@@ -2,7 +2,7 @@
 
 namespace Library.DataAccess.DTOs;
 
-public class BookWithContent : Entity
+public class BookWithContentDto : Entity
 {
     public string Content { get; set; }
 }

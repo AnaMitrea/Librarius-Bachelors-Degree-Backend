@@ -1,6 +1,6 @@
 ﻿namespace Library.DataAccess.DTOs;
 
-public class ReadingTimeResponse
+public class ReadingTimeResponseDto
 {
     public int Hours { get; set; }
     public int Minutes { get; set; }

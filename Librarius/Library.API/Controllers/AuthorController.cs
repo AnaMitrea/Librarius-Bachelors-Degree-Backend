@@ -33,18 +33,18 @@ public class AuthorController : ControllerBase
     }
     
     // Route: /api/library/author/materials
-    [HttpGet("materials")]
-    public async Task<IActionResult> GetBookWithCategoryByIdAsync(int authorId)
+    [HttpPost("materials")]
+    public async Task<IActionResult> GetBooksAsync(MaterialRequestModel requestModel)
     {
         try
         {
-            var response = await _authorService.GetAuthorInformationByIdAsync(authorId);
+            var response = await _authorService.GetAuthorBooksAsync(requestModel);
 
-            return Ok(ApiResponse<AuthorResponseModel>.Success(response));
+            return Ok(ApiResponse<ICollection<MaterialsResponseModel>>.Success(response));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<AuthorResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<ICollection<MaterialsResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
 }

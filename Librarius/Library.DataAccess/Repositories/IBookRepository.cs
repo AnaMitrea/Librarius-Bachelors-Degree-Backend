@@ -13,11 +13,11 @@ public interface IBookRepository
 
     Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf();
 
-    Task<BookWithContent> GetReadingBookByIdAsync(int id);
+    Task<BookWithContentDto> GetReadingBookByIdAsync(int id);
 
     Task<int> CountWordsInResponseAsync(int bookId);
 
-    Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int bookId);
+    Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int bookId);
 
     Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 

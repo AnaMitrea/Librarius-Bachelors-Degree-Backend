@@ -21,4 +21,12 @@ public class AuthorService : IAuthorService
 
         return _mapper.Map<AuthorResponseModel>(response);
     }
+
+    public async Task<ICollection<MaterialsResponseModel>> GetAuthorBooksAsync(MaterialRequestModel requestModel)
+    {
+        var response = 
+            await _authorRepository.GetAuthorBooksAsync(requestModel.AuthorId, requestModel.SortingOption);
+
+        return _mapper.Map<ICollection<MaterialsResponseModel>>(response);
+    }
 }

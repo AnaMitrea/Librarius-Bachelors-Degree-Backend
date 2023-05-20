@@ -59,7 +59,7 @@ public class BookService : IBookService
         return await _bookRepository.CountWordsInResponseAsync(id);
     }
     
-    public async Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int id)
+    public async Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int id)
     {
         return await _bookRepository.GetReadingTimeOfBookContent(id);
     }

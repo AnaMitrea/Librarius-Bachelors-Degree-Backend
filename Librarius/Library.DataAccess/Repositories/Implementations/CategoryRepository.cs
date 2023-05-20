@@ -13,7 +13,7 @@ public class CategoryRepository : ICategoryRepository
         _dbContext = databaseContext;
     }
     
-    public async Task<List<Category>>  GetAllAsync()
+    public async Task<List<Category>> GetAllAsync()
     {
         return await _dbContext.Categories.Include(category => category.Bookshelf).ToListAsync();
     }

@@ -113,7 +113,7 @@ public partial class BookRepository : IBookRepository
         return groupedBooks;
     }
 
-    public async Task<BookWithContent> GetReadingBookByIdAsync(int bookId)
+    public async Task<BookWithContentDto> GetReadingBookByIdAsync(int bookId)
     {
         var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
@@ -123,7 +123,7 @@ public partial class BookRepository : IBookRepository
             throw new Exception("The book id is invalid");
         }
     
-        var bookWithContent = new BookWithContent
+        var bookWithContent = new BookWithContentDto
         {
             Id = book.Id
         };
@@ -140,7 +140,7 @@ public partial class BookRepository : IBookRepository
             var content = await BookContentUtil.GetContentBetweenSectionsAsync(html);
 
             // remove any images from the content
-            content = HtmlImgTagRegex().Replace(content, "");
+            content = new Regex("<img[^>]+>").Replace(content, "");
 
             bookWithContent.Content = content;
         }
@@ -159,7 +159,7 @@ public partial class BookRepository : IBookRepository
         return BookContentUtil.CountWords(bookWithContent.Content);
     }
     
-    public async Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int bookId)
+    public async Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int bookId)
     {
         var wordCount = await CountWordsInResponseAsync(bookId);
 
@@ -204,7 +204,4 @@ public partial class BookRepository : IBookRepository
 
         return result;
     }
-
-    [GeneratedRegex("<img[^>]+>")]
-    private static partial Regex HtmlImgTagRegex();
 }

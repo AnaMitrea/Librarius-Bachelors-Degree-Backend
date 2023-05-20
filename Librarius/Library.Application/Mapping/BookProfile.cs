@@ -15,8 +15,9 @@ public class BookProfile : Profile
         // DataAccess Entity -> Application Model
 
         CreateMap<Book, BookResponseModel>();
-
-        CreateMap<BookWithContent, BookReadingResponseModel>();
+        CreateMap<Book, BookNoCategoriesResponseModel>();
+        
+        CreateMap<BookWithContentDto, BookReadingResponseModel>();
 
         CreateMap<Book, BookTrendingResponseModel>();
 

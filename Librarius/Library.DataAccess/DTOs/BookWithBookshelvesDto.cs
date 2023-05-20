@@ -2,7 +2,7 @@
 
 namespace Library.DataAccess.DTOs;
 
-public class BookWithBookshelves : Book
+public class BookWithBookshelvesDto : Book
 {
     
 }

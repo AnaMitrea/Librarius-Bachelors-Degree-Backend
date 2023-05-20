@@ -8,8 +8,8 @@ public partial class BookContentUtil
     public static async Task<string> GetContentBetweenSectionsAsync(string html)
     {
         // search for the start and end section IDs in the HTML
-        var startSectionRegex = PgHeaderClassRegex();
-        var endSectionRegex = PgFooterClassRegex();
+        var startSectionRegex = new Regex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-header\"\\s+lang=\"en\">([\\s\\S]*?)<\\/section>", RegexOptions.IgnoreCase);
+        var endSectionRegex = new Regex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-footer\"\\s+lang=\"en\">", RegexOptions.IgnoreCase);
         var startMatch = startSectionRegex.Match(html);
         var endMatch = endSectionRegex.Match(html);
 
@@ -68,7 +68,7 @@ public partial class BookContentUtil
         return wordCount;
     }
     
-    public static ReadingTimeResponse CalculateReadingTime(int wordCount)
+    public static ReadingTimeResponseDto CalculateReadingTime(int wordCount)
     {
         const int wordsPerMinute = 200; // Average reading speed (words per minute)
         const int secondsPerMinute = 60;
@@ -83,7 +83,7 @@ public partial class BookContentUtil
             minutes %= 60;
         }
 
-        var response = new ReadingTimeResponse
+        var response = new ReadingTimeResponseDto
         {
             Hours = hours,
             Minutes = minutes,
@@ -99,8 +99,8 @@ public partial class BookContentUtil
         return regex.Replace(htmlContent, "");
     }
     
-    [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-header\"\\s+lang=\"en\">([\\s\\S]*?)<\\/section>", RegexOptions.IgnoreCase, "en-GB")]
-    private static partial Regex PgHeaderClassRegex();
-    [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-footer\"\\s+lang=\"en\">", RegexOptions.IgnoreCase, "en-GB")]
-    private static partial Regex PgFooterClassRegex();
+    // [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-header\"\\s+lang=\"en\">([\\s\\S]*?)<\\/section>", RegexOptions.IgnoreCase, "en-GB")]
+    // private static partial Regex PgHeaderClassRegex();
+    // [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-footer\"\\s+lang=\"en\">", RegexOptions.IgnoreCase, "en-GB")]
+    // private static partial Regex PgFooterClassRegex();
 }

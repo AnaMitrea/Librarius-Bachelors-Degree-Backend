@@ -18,7 +18,7 @@ public interface IBookService
 
     Task<int> GetBookContentWordCount(int id);
 
-    Task<ReadingTimeResponse> GetReadingTimeOfBookContent(int id);
+    Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int id);
 
     Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username);
 

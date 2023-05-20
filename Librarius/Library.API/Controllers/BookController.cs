@@ -127,11 +127,11 @@ public class BookController : ControllerBase
         {
             var response = await _bookService.GetReadingTimeOfBookContent(requestModel.BookId);
 
-            return Ok(ApiResponse<ReadingTimeResponse>.Success(response));
+            return Ok(ApiResponse<ReadingTimeResponseDto>.Success(response));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<ReadingTimeResponse>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<ReadingTimeResponseDto>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     
