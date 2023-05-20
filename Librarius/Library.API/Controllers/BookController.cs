@@ -102,7 +102,7 @@ public class BookController : ControllerBase
     }
     
     // Reading Content Word count
-    // Route: /api/library/book/wordcount
+    // Route: /api/library/book/word-count
     [HttpPost("word-count")]
     public async Task<IActionResult> GetWordCount(ReadingRequestModel requestModel)
     {

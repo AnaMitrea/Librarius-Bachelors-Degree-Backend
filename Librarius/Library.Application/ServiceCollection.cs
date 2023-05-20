@@ -22,6 +22,7 @@ public static class ServiceCollection
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IUserService, UserService>();
 
