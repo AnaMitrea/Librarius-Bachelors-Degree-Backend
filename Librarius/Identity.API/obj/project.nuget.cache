@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Ne/hgzyL87FkgfLdbbAyB4Mm1xJkiz446jamAQ7xVeFQBnqSV+qkg9xJhpzhKNBu4bk2frX5ClTv4lBwXLFNsA==",
+  "dgSpecHash": "vw+EohCvUA9e0NGAPLqfGKpstWodNumx8fiUc2YM88SpRMkwlwI/ycPRAqDeDWCmYYSJYcn2pzJEKbUeICgrtA==",
   "success": true,
   "projectFilePath": "C:\\Users\\anstoian\\Source\\Facultate\\Licenta-Backend\\Librarius\\Identity.API\\Identity.API.csproj",
   "expectedPackageFiles": [
@@ -73,6 +73,7 @@
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.18.1\\microsoft.visualstudio.azure.containers.tools.targets.1.18.1.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\7.0.6\\microsoft.visualstudio.web.codegeneration.7.0.6.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.core\\7.0.6\\microsoft.visualstudio.web.codegeneration.core.7.0.6.nupkg.sha512",
     "C:\\Users\\anstoian\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.design\\7.0.6\\microsoft.visualstudio.web.codegeneration.design.7.0.6.nupkg.sha512",
