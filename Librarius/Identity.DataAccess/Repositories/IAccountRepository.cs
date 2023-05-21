@@ -15,7 +15,7 @@ public interface IAccountRepository
     
     Task<Account?> GetAccountAsync(string username, string password);
     
-    Task<Account?> GetUserInformationAsync(string username);
+    Task<Account> GetUserInformationAsync(string username);
 
     Task<Account?> UpdateUserInformationAsync(Account userModel);
 }

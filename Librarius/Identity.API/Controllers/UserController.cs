@@ -41,4 +41,26 @@ public class UserController : ControllerBase
             return NotFound(ApiResponse<DashboardUserModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
+    
+    // Route: /api/user/email
+    [HttpGet("email")]
+    public async Task<IActionResult> GetUserEmail()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _accountService.GeUserEmailAsync(username);
+
+            if (response == null) throw new Exception("Invalid information.");
+
+            return Ok(ApiResponse<string>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return NotFound(ApiResponse<string>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
 }

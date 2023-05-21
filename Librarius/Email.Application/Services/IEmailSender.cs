@@ -2,5 +2,5 @@
 
 public interface IEmailSender
 {
-    Task SendEmailAsync(int authorId);
+    Task SendEmailAsync(int authorId, string token);
 }

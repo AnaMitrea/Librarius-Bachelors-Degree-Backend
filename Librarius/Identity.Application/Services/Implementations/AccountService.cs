@@ -40,7 +40,14 @@ public class AccountService : IAccountService
     {
         var response = await _accountRepository.GetUserInformationAsync(username);
 
-        return response == null ? null : _mapper.Map<DashboardUserModel>(response);
+        return _mapper.Map<DashboardUserModel>(response);
+    }
+
+    public async Task<string> GeUserEmailAsync(string username)
+    {
+        var response = await _accountRepository.GetUserInformationAsync(username);
+
+        return response.Email;
     }
 
     public async Task<bool> CheckUsernameExistence(string username)

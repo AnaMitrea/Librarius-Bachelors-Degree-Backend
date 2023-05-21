@@ -1,6 +1,6 @@
-using Email.Application.Models;
 using Email.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Email.API.Controllers;
 
@@ -19,7 +19,10 @@ public class EmailController : ControllerBase
     [HttpPost("{authorId:int}/subscription")]
     public async Task<IActionResult> SendEmail(int authorId)
     {
-        await _emailSender.SendEmailAsync(authorId);
+        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        
+        await _emailSender.SendEmailAsync(authorId, authorizationHeaderValue);
         return NoContent();
     }
 }
