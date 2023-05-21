@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Email.Application.Services;
+using Email.Application.Services.Implementations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Email.Application;
@@ -11,7 +13,7 @@ public static class ServiceCollection
         // services.AddAutoMapper(typeof(BookshelfProfile));
 
         // Service Implementations
-        // services.AddScoped<IBookshelfService, BookshelfService>();
+        services.AddTransient<IEmailSender, EmailSender>(); // Transient instead of Scoped
 
         // TODO models validators as:  services.AddScoped<IValidator<DogRequestModel>, DogRequestModelValidator>();
         

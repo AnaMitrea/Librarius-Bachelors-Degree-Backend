@@ -1,3 +1,5 @@
+using Email.Application.Models;
+using Email.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Email.API.Controllers;
@@ -6,17 +8,18 @@ namespace Email.API.Controllers;
 [ApiController]
 public class EmailController : ControllerBase
 {
-    //private readonly IService _Service;
+    private readonly IEmailSender _emailSender;
 
-    public EmailController()
+    public EmailController(IEmailSender emailSender)
     {
-        
+        _emailSender = emailSender;
     }
     
-    // Route: /api/email
-    [HttpGet("")]
-    public async Task<IActionResult> GetAsync()
+    // Route: /api/email/{id}/subscription
+    [HttpPost("{authorId:int}/subscription")]
+    public async Task<IActionResult> SendEmail(int authorId)
     {
-        throw new NotImplementedException();
+        await _emailSender.SendEmailAsync(authorId);
+        return NoContent();
     }
 }

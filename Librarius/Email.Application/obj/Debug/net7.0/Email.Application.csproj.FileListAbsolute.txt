@@ -1,0 +1,12 @@
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\bin\Debug\net7.0\Email.Application.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\bin\Debug\net7.0\Email.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\bin\Debug\net7.0\Email.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\refint\Email.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\Email.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Email.Application\obj\Debug\net7.0\ref\Email.Application.dll
