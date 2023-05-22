@@ -1,7 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Text.Json;
 using Email.Application.Templates;
+using Email.Application.Utils;
 using Microsoft.Extensions.Configuration;
 
 namespace Email.Application.Services.Implementations;
@@ -34,24 +36,50 @@ public class EmailSender : IEmailSender
     private async Task<string> GetAuthorNameAsync(int authorId, string token)
     {
         using var httpClient = new HttpClient();
-        var authorUrl = $"http://localhost:5164/api/library/author/{authorId}";
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        
+        var authorUrl = $"http://localhost:5164/api/library/author/{authorId}";
+
         var authorResponse = await httpClient.GetAsync(authorUrl);
         authorResponse.EnsureSuccessStatusCode();
-        return await authorResponse.Content.ReadAsStringAsync();
+        
+        var jsonResponse = await authorResponse.Content.ReadAsStringAsync();
+        var jsonDocument = JsonDocument.Parse(jsonResponse);
+        var root = jsonDocument.RootElement;
+        var resultProperty = root.GetProperty("result");
+        var nameProperty = resultProperty.GetProperty("name");
+        var name = nameProperty.GetString();
+
+        return name ?? throw new InvalidOperationException();
     }
 
     private async Task<string> GetUserEmailAsync(string token)
     {
         using var httpClient = new HttpClient();
-       
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         
         var userResponse = await httpClient.GetAsync(UserEmailRequestUrl);
         userResponse.EnsureSuccessStatusCode();
-        return await userResponse.Content.ReadAsStringAsync();
+    
+        var jsonResponse = await userResponse.Content.ReadAsStringAsync();
+        var jsonDocument = JsonDocument.Parse(jsonResponse);
+        var root = jsonDocument.RootElement;
+        var resultProp = root.GetProperty("result");
+        var email = resultProp.GetString();
+    
+        return email ?? throw new InvalidOperationException();
     }
+    
+    // private async Task<string> GetUserEmailAsync(string token)
+    // {
+    //     using var httpClient = new HttpClient();
+    //     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    //     
+    //     var userResponse = await httpClient.GetAsync(UserEmailRequestUrl);
+    //     userResponse.EnsureSuccessStatusCode();
+    //     
+    //     var userEmail = await Utilities.GetPropertyValueAsync<string>(userResponse, "result.email");
+    //     return userEmail;
+    // }
 
     private async Task SendSubscriptionConfirmationEmailAsync(string authorName, string userEmail)
     {
@@ -71,4 +99,6 @@ public class EmailSender : IEmailSender
 
         await client.SendMailAsync(message);
     }
+    
+    
 }

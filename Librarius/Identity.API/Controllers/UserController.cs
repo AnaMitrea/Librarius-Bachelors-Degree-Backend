@@ -20,8 +20,8 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-    // Route: /api/user/
-    [HttpGet("")]
+    // Route: /api/user/information
+    [HttpGet("information")]
     public async Task<IActionResult> GetUserInformation()
     {
         try

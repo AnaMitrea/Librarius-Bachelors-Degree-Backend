@@ -1,7 +1,10 @@
+using System.Net.Http.Headers;
 using Library.API.Models;
+using Library.API.Utils;
 using Library.Application.Models.Book.Author;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace Library.API.Controllers;
 
@@ -10,10 +13,12 @@ namespace Library.API.Controllers;
 public class AuthorController : ControllerBase
 {
     private readonly IAuthorService _authorService;
+    private readonly IUserService _userService;
 
-    public AuthorController(IAuthorService authorService)
+    public AuthorController(IAuthorService authorService, IUserService userService)
     {
         _authorService = authorService;
+        _userService = userService;
     }
     
     // Route: /api/library/author/{authorId}
@@ -29,6 +34,76 @@ public class AuthorController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<AuthorResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/author/{authorId}/subscription
+    [HttpPost("{authorId:int}/subscription")]
+    public async Task<IActionResult> SetAuthorSubscription(int authorId)
+    {
+        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+        
+        try
+        {
+            var isUserSubscribed = await _userService.CheckUserIsSubscribedAsync(username, authorId);
+
+            if (isUserSubscribed) 
+            {
+                // Unsubscribe
+                var response = await _userService.SetUserUnsubscribed(username, authorId);
+                return Ok(ApiResponse<bool>.Success(response));
+            }
+            else
+            {
+                // Subscribe
+                var response = await _userService.SetUserSubscribed(username, authorId);
+                
+                var emailApiUrl = $"http://localhost:5164/api/email/{authorId}/subscription";
+                var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = 
+                    new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
+                
+                var emailApiResponse = await httpClient.PostAsync(emailApiUrl, null);
+                emailApiResponse.EnsureSuccessStatusCode();
+                
+                return Ok(ApiResponse<bool>.Success(response));
+            }
+        }
+        catch (Exception e)
+        {
+            // Rollback: Delete the subscription from the table
+            try
+            {
+                await _userService.SetUserUnsubscribed(username, authorId);
+            }
+            catch (Exception rollbackException)
+            {
+                return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, rollbackException.Message) }));
+            }
+
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/library/author/{authorId}/subscription/status
+    [HttpGet("{authorId:int}/subscription/status")]
+    public async Task<IActionResult> GetAuthorSubscriptionStatus(int authorId)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.CheckUserIsSubscribedAsync(username, authorId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

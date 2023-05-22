@@ -8,4 +8,7 @@ public class Author : Entity
     
     // 1 author to * books
     public ICollection<Book> Books { get; set; }
+    
+    // one-to-many user subscribers
+    public ICollection<Subscription> Subscribers { get; set; }
 }
