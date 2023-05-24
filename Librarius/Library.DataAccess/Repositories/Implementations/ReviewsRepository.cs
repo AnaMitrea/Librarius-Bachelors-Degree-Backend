@@ -1,4 +1,5 @@
-﻿using Library.DataAccess.Entities.BookRelated;
+﻿using Library.DataAccess.DTOs;
+using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,7 +39,40 @@ public class ReviewsRepository : IReviewsRepository
             .Take(maxResults)
             .ToListAsync();
     }
-    
+
+    public async Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestDto requestDto, string username)
+    {
+        if (requestDto.ReviewContent.Length is < 50 or > 2000)
+            throw new Exception("Review length is not between 50 and 2000 characters.");
+        
+        if (requestDto.Rating is < 1 or > 10)
+            throw new Exception("Rating must be between 1 and 10.");
+        
+        if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");
+        
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new Exception("User not found.");
+
+        var book = await _dbContext.Books.FindAsync(requestDto.BookId);
+        if (book == null) throw new Exception("Book not found.");
+
+        var newReview = new Review
+        {
+            BookId = book.Id,
+            Book = book,
+            Content = requestDto.ReviewContent,
+            Timestamp = DateTime.Now.ToString("dd/MM/yyyy"),
+            Rating = requestDto.Rating,
+            LikesCount = 0,
+            User = user,
+            UserId = user.Id,
+        };
+        
+        _dbContext.Reviews.Add(newReview);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
     {
         if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");

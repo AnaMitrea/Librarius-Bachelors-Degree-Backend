@@ -4,6 +4,8 @@ using Library.Application.Models.Book;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
 using Library.Application.Models.Reviews;
+using Library.Application.Models.Reviews.Request;
+using Library.Application.Models.Reviews.Response;
 using Library.Application.Services;
 using Library.DataAccess.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +52,7 @@ public class BookController : ControllerBase
                 .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
             
+            // todo put first row with isMyReview=true
             var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel);
             
             return Ok(ApiResponse<RatingReviewsResponseModel>.Success(response));
@@ -57,6 +60,26 @@ public class BookController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<RatingReviewsResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/reviews/submit
+    [HttpPost("reviews/submit")]
+    public async Task<IActionResult> SetUserReviewByBookIdAsync(UserReviewRequestModel requestModel)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _reviewService.SetUserReviewByBookIdAsync(requestModel, username);
+            
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

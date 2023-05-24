@@ -11,7 +11,8 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
         builder.ToTable("bookReviews");
         
         builder.Property(x => x.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .ValueGeneratedOnAdd();
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Content)
@@ -27,7 +28,6 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
         
         builder.Property(review => review.LikesCount)
             .HasColumnName("likes")
-            .HasDefaultValue(0)
             .IsRequired();
 
         // 1 user has * reviews, userId as Foreign Key

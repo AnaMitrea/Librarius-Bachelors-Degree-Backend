@@ -22,7 +22,7 @@ public class EmailController : ControllerBase
         var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
             .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
         
-        await _emailSender.SendEmailAsync(authorId, authorizationHeaderValue);
+        await _emailSender.SendAuthorSubscriptionEmailAsync(authorId, authorizationHeaderValue);
         return NoContent();
     }
 }

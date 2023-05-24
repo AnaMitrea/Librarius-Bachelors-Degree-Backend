@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Reviews;
+using Library.Application.Models.Reviews.Request;
+using Library.Application.Models.Reviews.Response;
 using Library.Application.Utilities;
+using Library.DataAccess.DTOs;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;
@@ -34,10 +37,16 @@ public class ReviewService: IReviewService
         return response;
     }
 
+    public async Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestModel requestModel, string username)
+    {
+        return await _reviewsRepository.SetUserReviewByBookIdAsync(
+            _mapper.Map<UserReviewRequestDto>(requestModel),
+            username
+        );
+    }
+
     public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
     {
-        var isSuccessful = await _reviewsRepository.UpdateLikeStatusAsync(username, reviewId, isLiked);
-        
-        return isSuccessful;
+        return await _reviewsRepository.UpdateLikeStatusAsync(username, reviewId, isLiked);
     }
 }

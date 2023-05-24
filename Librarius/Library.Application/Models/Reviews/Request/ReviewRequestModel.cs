@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.Reviews;
+﻿namespace Library.Application.Models.Reviews.Request;
 
 public class ReviewRequestModel
 {
