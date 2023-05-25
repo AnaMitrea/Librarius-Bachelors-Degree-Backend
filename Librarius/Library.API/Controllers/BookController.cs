@@ -53,7 +53,7 @@ public class BookController : ControllerBase
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
             
             // todo put first row with isMyReview=true
-            var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel);
+            var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel, username);
             
             return Ok(ApiResponse<RatingReviewsResponseModel>.Success(response));
         }

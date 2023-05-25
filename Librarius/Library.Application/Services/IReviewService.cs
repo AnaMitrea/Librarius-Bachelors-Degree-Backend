@@ -5,7 +5,7 @@ namespace Library.Application.Services;
 
 public interface IReviewService
 {
-    Task<RatingReviewsResponseModel> GetReviewsForBookByIdAsync(ReviewRequestModel requestModel);
+    Task<RatingReviewsResponseModel> GetReviewsForBookByIdAsync(ReviewRequestModel requestModel, string username);
     
     Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestModel requestModel, string username);
 

@@ -21,7 +21,14 @@ public class ReviewsProfile : Profile
                 opt =>
                     opt.MapFrom(src => Utils.CalculateTimeValue(src.Timestamp)))
             .ForMember(dest => dest.Liked,
-                opt => opt.MapFrom(src => false));
+                opt => opt.MapFrom(src => false))
+            .ForMember(dest => dest.IsMyReview,
+                opt =>
+                    opt.MapFrom((src, dest, _, context) =>
+                    {
+                        var username = context.Items["Username"] as string;
+                        return src.User.Username == username;
+                    }));
 
         CreateMap<UserReviewRequestModel, UserReviewRequestDto>();
         

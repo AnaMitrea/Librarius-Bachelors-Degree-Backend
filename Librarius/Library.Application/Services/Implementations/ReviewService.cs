@@ -19,7 +19,8 @@ public class ReviewService: IReviewService
         _reviewsRepository = reviewsRepository;
     }
     
-    public async Task<RatingReviewsResponseModel> GetReviewsForBookByIdAsync(ReviewRequestModel reviewRequestModel)
+    public async Task<RatingReviewsResponseModel> GetReviewsForBookByIdAsync(
+        ReviewRequestModel reviewRequestModel, string username)
     {
         var reviews = await _reviewsRepository.GetAllForBookByIdAsync(
             reviewRequestModel.BookId,
@@ -28,10 +29,12 @@ public class ReviewService: IReviewService
             reviewRequestModel.StartIndex
         );
         
+        var reviewModels = _mapper.Map<ICollection<ReviewModel>>(reviews, opts => opts.Items["Username"] = username);
+
         var response = new RatingReviewsResponseModel
         {
             overallRating = Utils.CalculateOverallRating(reviews),
-            reviews = _mapper.Map<ICollection<ReviewModel>>(reviews)
+            reviews = reviewModels
         };
 
         return response;
