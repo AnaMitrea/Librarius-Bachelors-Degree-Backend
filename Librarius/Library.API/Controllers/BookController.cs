@@ -173,9 +173,30 @@ public class BookController : ControllerBase
         }
     }
     
+    // Check is Book finished
+    // Route: /api/library/book/{bookId}/check-reading-completed
+    [HttpGet("{bookId:int}/check-reading-completed")]
+    public async Task<IActionResult> CheckFinishedReadingBookByIdAsync(int bookId)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _bookService.CheckIsBookFinishedReading(bookId, username);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
     // Finish Reading Content
-    // Route: /api/library/book/read
-    [HttpPut("read")]
+    // Route: /api/library/book/complete-reading
+    [HttpPost("complete-reading")]
     public async Task<IActionResult> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel)
     {
         try

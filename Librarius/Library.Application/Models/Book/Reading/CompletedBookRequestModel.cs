@@ -2,7 +2,7 @@
 
 public class CompletedBookRequestModel
 {
-    public int Id { get; set; }
+    public int BookId { get; set; }
     
     public int TimeSpent { get; set; }
 }

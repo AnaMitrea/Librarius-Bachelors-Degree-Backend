@@ -4,7 +4,7 @@ namespace Library.DataAccess.Entities.BookRelated;
 
 public class UserCompletedBooks : Entity
 {
-    public int TimeSpent { get; set; }
+    public int MinutesSpent { get; set; }
     
     // many-to-one User
     public int UserId { get; set; }

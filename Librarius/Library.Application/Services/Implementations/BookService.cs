@@ -63,11 +63,16 @@ public class BookService : IBookService
     {
         return await _bookRepository.GetReadingTimeOfBookContent(id);
     }
+    
+    public async Task<bool> CheckIsBookFinishedReading(int bookId, string username)
+    {
+        return await _bookRepository.CheckIsBookFinishedReading(bookId, username);
+    }
 
     public async Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username)
     {
         var response = await _bookRepository.SetFinishedReadingBookByIdAsync(
-            requestModel.Id,
+            requestModel.BookId,
             username,
             requestModel.TimeSpent
         );

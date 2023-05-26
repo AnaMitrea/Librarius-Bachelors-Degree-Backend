@@ -20,6 +20,8 @@ public interface IBookService
 
     Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int id);
 
+    Task<bool> CheckIsBookFinishedReading(int bookId, string username);
+
     Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username);
 
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync();

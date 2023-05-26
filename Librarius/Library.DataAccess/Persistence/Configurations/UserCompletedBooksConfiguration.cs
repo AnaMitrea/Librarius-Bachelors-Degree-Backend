@@ -23,8 +23,8 @@ public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserComp
             .HasColumnName("user_id")
             .IsRequired();
         
-        builder.Property(x => x.TimeSpent)
-            .HasColumnName("time_spent")
+        builder.Property(x => x.MinutesSpent)
+            .HasColumnName("minutes_spent")
             .HasDefaultValue(0)
             .IsRequired();
         

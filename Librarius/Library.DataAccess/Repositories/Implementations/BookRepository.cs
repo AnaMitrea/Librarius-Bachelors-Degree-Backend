@@ -176,16 +176,28 @@ public partial class BookRepository : IBookRepository
             .SingleOrDefaultAsync(user => user.Username == username);
         if (user == default) throw new Exception("Invalid user.");
 
+        var checkExistence =  await CheckIsBookFinishedReading(bookId, username);
+        if (checkExistence) throw new Exception("Already finished reading this book.");
+
         var newCompletedBook = new UserCompletedBooks
         {
             UserId = user.Id,
             BookId = book.Id,
-            TimeSpent = timeSpent
+            MinutesSpent = timeSpent
         };
 
         _dbContext.CompletedBooks.Add(newCompletedBook);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<bool> CheckIsBookFinishedReading(int bookId, string username)
+    {
+        var checkExistence =
+            await _dbContext.CompletedBooks
+                .SingleOrDefaultAsync(c => c.User.Username == username & c.BookId == bookId);
+        
+        return checkExistence != null;
     }
 
 
