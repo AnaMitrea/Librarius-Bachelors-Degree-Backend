@@ -29,6 +29,7 @@ public class ReviewLikedByConfiguration : IEntityTypeConfiguration<ReviewLikedBy
             .IsRequired();
         builder.HasOne(like => like.Review)
             .WithMany(review => review.Likes)
-            .HasForeignKey(like => like.ReviewId);
+            .HasForeignKey(like => like.ReviewId)
+            .OnDelete(DeleteBehavior.Cascade); // If Review is deleted => All likes are deleted
     }
 }

@@ -52,7 +52,6 @@ public class BookController : ControllerBase
                 .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
             
-            // todo put first row with isMyReview=true
             var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel, username);
             
             return Ok(ApiResponse<RatingReviewsResponseModel>.Success(response));
@@ -98,6 +97,22 @@ public class BookController : ControllerBase
                 requestModel.ReviewId,
                 requestModel.IsLiked
             );
+            
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/reviews/{id}/remove
+    [HttpDelete("reviews/{reviewId:int}/remove")]
+    public async Task<IActionResult> DeleteReviewByIdAsync(int reviewId)
+    {
+        try
+        {
+            var response = await _reviewService.DeleteReviewByIdAsync(reviewId);
             
             return Ok(ApiResponse<bool>.Success(response));
         }

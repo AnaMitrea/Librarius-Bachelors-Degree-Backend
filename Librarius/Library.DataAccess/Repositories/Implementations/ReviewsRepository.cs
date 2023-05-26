@@ -73,6 +73,19 @@ public class ReviewsRepository : IReviewsRepository
         return true;
     }
 
+    public async Task<bool> DeleteReviewByIdAsync(int id)
+    {
+        var review = await _dbContext.Reviews
+            .Include(r => r.Likes)
+            .SingleOrDefaultAsync(r => r.Id == id);
+
+        if (review == null) return false;
+
+        _dbContext.Reviews.Remove(review);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
     {
         if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");

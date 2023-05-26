@@ -9,5 +9,7 @@ public interface IReviewsRepository
 
     Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestDto requestDto, string username);
     
+    Task<bool> DeleteReviewByIdAsync(int id);
+    
     Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked);
 }

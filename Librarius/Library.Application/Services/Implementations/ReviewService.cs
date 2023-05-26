@@ -48,6 +48,11 @@ public class ReviewService: IReviewService
         );
     }
 
+    public async Task<bool> DeleteReviewByIdAsync(int reviewId)
+    {
+        return await _reviewsRepository.DeleteReviewByIdAsync(reviewId);
+    }
+
     public async Task<bool> UpdateLikeStatusAsync(string username, int reviewId, bool isLiked)
     {
         return await _reviewsRepository.UpdateLikeStatusAsync(username, reviewId, isLiked);

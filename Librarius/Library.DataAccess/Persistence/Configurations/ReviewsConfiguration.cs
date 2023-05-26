@@ -36,8 +36,7 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
             .IsRequired();
         builder.HasOne(review => review.User)
             .WithMany(user => user.Reviews)
-            .HasForeignKey(review => review.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(review => review.UserId);
         
         // 1 book has * reviews, bookId as Foreign Key
         builder.Property(x => x.BookId)
@@ -45,7 +44,6 @@ public class ReviewsConfiguration  : IEntityTypeConfiguration<Review>
             .IsRequired();
         builder.HasOne(review => review.Book)
             .WithMany(book => book.Reviews)
-            .HasForeignKey(review => review.BookId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(review => review.BookId);
     }
 }
