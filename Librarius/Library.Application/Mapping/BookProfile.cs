@@ -21,7 +21,7 @@ public class BookProfile : Profile
         CreateMap<BookshelfWithBooksDto, BooksForBookshelfResponseModel>();
         
         CreateMap<Book, BookshelfBookResponseModel>();
-        
+
         CreateMap<Book, BookNoCategoriesResponseModel>();
         
         CreateMap<BookWithContentDto, BookReadingResponseModel>();

@@ -1,8 +1,9 @@
-﻿using Library.DataAccess.Entities.Library;
+﻿using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.Library;
 
 namespace Library.DataAccess.DTOs;
 
-public class BookshelfWithBooksDto
+public class BookshelfWithBooksDto : Entity
 {
     public int TotalBooks { get; set; }
     

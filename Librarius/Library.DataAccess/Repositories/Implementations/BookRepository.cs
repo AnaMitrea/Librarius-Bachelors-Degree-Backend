@@ -82,7 +82,7 @@ public class BookRepository : IBookRepository
         var booksGroupedByBookshelf = await _dbContext.BooksCategories
             .AsNoTracking()
             .Include(bc => bc.Book.Author)
-            .Select(bc => new { BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
+            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
             .ToListAsync();
 
         var groupedBooks = booksGroupedByBookshelf
@@ -91,6 +91,7 @@ public class BookRepository : IBookRepository
                 g => g.Key,
                 g => new BookshelfWithBooksDto
                 {
+                    Id = g.First().BookshelfId,
                     TotalBooks = g.Count(),
                     Books = g.Select(bgbb => bgbb.Book)
                         .OrderBy(x => Guid.NewGuid())
@@ -101,6 +102,7 @@ public class BookRepository : IBookRepository
 
         return groupedBooks;
     }
+
     
     // public async Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf(int maxResults)
     // {    
