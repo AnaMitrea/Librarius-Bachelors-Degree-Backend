@@ -1,6 +1,8 @@
 ﻿using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
+using Library.Application.Models.Book.Explore.Bookshelf;
+using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
 using Library.Application.Models.Reviews.Request;
@@ -269,16 +271,16 @@ public class BookController : ControllerBase
     // }
     
     [HttpGet("bookshelves")]
-    public async Task<IActionResult> GetBooksGroupedByBookshelf()
+    public async Task<IActionResult> GetBooksGroupedByBookshelf([FromQuery] int maxResults)
     {
         try
         {
-            var response = await _bookService.GetBooksGroupedByBookshelf();
-            return Ok(ApiResponse<Dictionary<string, List<BookResponseModel>>>.Success(response));
+            var response = await _bookService.GetBooksGroupedByBookshelf(maxResults);
+            return Ok(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Success(response));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<Dictionary<string, List<BookResponseModel>>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
         
     }

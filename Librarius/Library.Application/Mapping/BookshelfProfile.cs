@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Library.Application.Models.Bookshelf;
+using Library.Application.Models.Bookshelf.Response;
+using Library.DataAccess.DTOs;
 using Library.DataAccess.Entities.Library;
 
 namespace Library.Application.Mapping;

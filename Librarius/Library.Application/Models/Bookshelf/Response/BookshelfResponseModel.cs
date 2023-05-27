@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.Bookshelf;
+﻿namespace Library.Application.Models.Bookshelf.Response;
 
 public class BookshelfResponseModel 
 {

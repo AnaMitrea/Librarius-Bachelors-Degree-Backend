@@ -1,4 +1,5 @@
-﻿using Library.DataAccess.Entities.Library;
+﻿using Library.DataAccess.DTOs;
+using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 

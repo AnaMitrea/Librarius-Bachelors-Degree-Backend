@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Library.Application.Models.Bookshelf;
+using Library.Application.Models.Bookshelf.Response;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;

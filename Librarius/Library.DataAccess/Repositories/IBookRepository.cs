@@ -11,7 +11,7 @@ public interface IBookRepository
 
     Task<IEnumerable<Book>> GetBooksForAllBookshelves();
 
-    Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf();
+    Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int maxResults);
 
     Task<BookWithContentDto> GetReadingBookByIdAsync(int id);
 

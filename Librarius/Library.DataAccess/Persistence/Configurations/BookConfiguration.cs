@@ -38,6 +38,18 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.Property(x => x.HtmlContentUrl)
             .HasColumnName("html_url");
         
+        builder.Property(x => x.HtmlAsSubmittedUrl)
+            .HasColumnName("html_as_submitted_url")
+            .IsRequired(false);
+        
+        builder.Property(x => x.HtmlNoImagesUrl)
+            .HasColumnName("html_no_images_url")
+            .IsRequired(false) ;
+        
+        builder.Property(x => x.PlainTextUrl)
+            .HasColumnName("plain_text_url")
+            .IsRequired(false) ;
+        
         // 1 author has * books, author_id as foreign key
         builder.Property(x => x.AuthorId).IsRequired();
         builder.HasOne(book => book.Author)

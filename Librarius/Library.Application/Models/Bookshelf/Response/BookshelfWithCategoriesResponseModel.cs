@@ -1,6 +1,6 @@
 ﻿using Library.Application.Models.Category;
 
-namespace Library.Application.Models.Bookshelf;
+namespace Library.Application.Models.Bookshelf.Response;
 
 public class BookshelfWithCategoriesResponseModel
 {

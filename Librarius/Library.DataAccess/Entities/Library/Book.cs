@@ -14,7 +14,13 @@ public class Book : Entity
 
     public string CoverImageUrl { get; set; }
 
-    public string HtmlContentUrl { get; set; }
+    public string? HtmlContentUrl { get; set; }
+    
+    public string? HtmlAsSubmittedUrl { get; set; }
+    
+    public string? HtmlNoImagesUrl { get; set; }
+    
+    public string? PlainTextUrl { get; set; }
     
     // many-to-one author
     public int AuthorId { get; set; }
