@@ -17,13 +17,15 @@ public class BookProfile : Profile
 
         CreateMap<Book, BookResponseModel>();
 
+        // Books grouped by bookshelves
+        CreateMap<BookshelfWithBooksDto, BooksForBookshelfResponseModel>();
+        
         CreateMap<Book, BookshelfBookResponseModel>();
         
         CreateMap<Book, BookNoCategoriesResponseModel>();
         
         CreateMap<BookWithContentDto, BookReadingResponseModel>();
-
-        CreateMap<Dictionary<string, BookshelfWithBooksDto>, Dictionary<string, BooksForBookshelfResponseModel>>();
+        
         CreateMap<Book, BookshelfBookResponseModel>();
 
         CreateMap<Book, BookTrendingResponseModel>();
