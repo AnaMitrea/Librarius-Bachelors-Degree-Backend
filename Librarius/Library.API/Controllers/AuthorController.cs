@@ -14,11 +14,13 @@ public class AuthorController : ControllerBase
 {
     private readonly IAuthorService _authorService;
     private readonly IUserService _userService;
+    private readonly HttpClient _httpClient;
 
-    public AuthorController(IAuthorService authorService, IUserService userService)
+    public AuthorController(IAuthorService authorService, IUserService userService, HttpClient httpClient)
     {
         _authorService = authorService;
         _userService = userService;
+        _httpClient = httpClient;
     }
     
     // Route: /api/library/author/{authorId}
@@ -61,11 +63,10 @@ public class AuthorController : ControllerBase
                 var response = await _userService.SetUserSubscribed(username, authorId);
                 
                 var emailApiUrl = $"http://localhost:5164/api/email/{authorId}/subscription";
-                var httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Authorization = 
+                _httpClient.DefaultRequestHeaders.Authorization = 
                     new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
                 
-                var emailApiResponse = await httpClient.PostAsync(emailApiUrl, null);
+                var emailApiResponse = await _httpClient.PostAsync(emailApiUrl, null);
                 emailApiResponse.EnsureSuccessStatusCode();
                 
                 return Ok(ApiResponse<bool>.Success(response));

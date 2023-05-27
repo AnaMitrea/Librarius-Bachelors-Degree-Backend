@@ -14,6 +14,8 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(TrophyProfile));
         
+        services.AddSingleton<HttpClient>();
+        
         services.AddScoped<IJwtTokenHandlerService, JwtTokenHandlerService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IUserService, UserService>();

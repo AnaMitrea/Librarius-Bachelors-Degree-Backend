@@ -1,10 +1,10 @@
-﻿namespace Email.Application.Templates
+﻿namespace Email.Application.Templates;
+
+public static class AccountConfirmationTemplate
 {
-    public static class AccountConfirmationTemplate
+    public static string GetConfirmationEmailBody(string userName)
     {
-        public static string GetConfirmationEmailBody(string userName)
-        {
-            var template = @"<!DOCTYPE html>
+        var template = @"<!DOCTYPE html>
                             <html>
                             <head>
                                 <meta charset='UTF-8'>
@@ -81,7 +81,6 @@
                             </body>
                             </html>";
 
-            return template;
-        }
+        return template;
     }
 }

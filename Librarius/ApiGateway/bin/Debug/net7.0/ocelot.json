@@ -57,6 +57,20 @@
       }
     },
     {
+      "Priority": 1,
+      "DownstreamPathTemplate": "/api/library/user/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5104
+        }
+      ],
+      "UpstreamPathTemplate": "/api/library/user/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+    },
+    {
+      "Priority": 0,
       "DownstreamPathTemplate": "/api/library/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

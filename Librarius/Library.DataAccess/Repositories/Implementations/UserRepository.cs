@@ -13,10 +13,30 @@ public class UserRepository : IUserRepository
     {
         _dbContext = databaseContext;
     }
-    
-    public Task<User> GetUserById(int id)
+
+    public async Task<bool> RegisterAsLibraryUser(int id, string username)
     {
-        throw new NotImplementedException();
+        if (await _dbContext.Users.FindAsync(id) != null) throw new Exception("Id duplicated");
+        if (await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username) != null) throw new Exception("User already registered.");
+
+        var newUser = new User
+        {
+            Id = id,
+            Username = username
+        };
+        
+        _dbContext.Users.Add(newUser);
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<User> GetUserById(int id)
+    {
+        var user = await _dbContext.Users.FindAsync(id);
+        if (user == default) throw new Exception("User not found");
+
+        return user;
     }
 
     public async Task<bool> CheckUserIsSubscribedAsync(string username, int authorId)

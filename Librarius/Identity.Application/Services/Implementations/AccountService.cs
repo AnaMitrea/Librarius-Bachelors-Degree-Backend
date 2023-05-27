@@ -17,7 +17,7 @@ public class AccountService : IAccountService
         _accountRepository = accountRepository;
     }
 
-    public async Task<UserAccountModel> CreateAccountAsync(RegisterRequestModel registerRequest)
+    public async Task<RegisterUserAccountModel> CreateAccountAsync(RegisterRequestModel registerRequest)
     {
         var response = await _accountRepository.CreateAccountAsync(new RegisterUserModel
         {
@@ -26,7 +26,12 @@ public class AccountService : IAccountService
             Password = registerRequest.Password
         });
 
-        return _mapper.Map<UserAccountModel>(response);
+        return _mapper.Map<RegisterUserAccountModel>(response);
+    }
+
+    public async Task<bool> DeleteAccountAsync(int userId)
+    {
+        return await _accountRepository.DeleteAccountAsync(userId);
     }
 
     public async Task<UserAccountModel?> GetAccountAsync(string username, string password)

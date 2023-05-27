@@ -13,6 +13,7 @@ public class JwtAccountProfile : Profile
                 
         // Authentication Only;
         CreateMap<Account, UserAccountModel>(); 
+        CreateMap<Account, RegisterUserAccountModel>();
         CreateMap<Account, AuthenticationResponseModel>();
         CreateMap<Account, AuthJwtResponseModel>();
     }

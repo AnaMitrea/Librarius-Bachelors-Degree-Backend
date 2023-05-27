@@ -4,6 +4,8 @@ namespace Library.DataAccess.Repositories;
 
 public interface IUserRepository
 {
+    Task<bool> RegisterAsLibraryUser(int id, string username);
+    
     public Task<User> GetUserById(int id);
 
     public Task<bool> CheckUserIsSubscribedAsync(string username, int authorId);

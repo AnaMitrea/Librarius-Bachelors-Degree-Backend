@@ -7,7 +7,9 @@ public interface IAccountService
 {
     Task<AuthenticationResponseModel?> UpdateUserActivity(string username);
     
-    Task<UserAccountModel> CreateAccountAsync(RegisterRequestModel registerRequest);
+    Task<RegisterUserAccountModel> CreateAccountAsync(RegisterRequestModel registerRequest);
+
+    Task<bool> DeleteAccountAsync(int userId);
     
     Task<UserAccountModel?> GetAccountAsync(string username, string password);
 
@@ -18,4 +20,5 @@ public interface IAccountService
     Task<bool> CheckUsernameExistence(string username);
 
     Task<bool> CheckEmailExistence(string email);
+    
 }

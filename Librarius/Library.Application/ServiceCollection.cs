@@ -18,6 +18,8 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(ReviewsProfile));
         
+        services.AddSingleton<HttpClient>();
+        
         // Service Implementations
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<ICategoryService, CategoryService>();

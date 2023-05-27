@@ -6,6 +6,8 @@ namespace Identity.DataAccess.Repositories;
 public interface IAccountRepository
 {
     Task<Account> CreateAccountAsync(RegisterUserModel registerUser);
+
+    Task<bool> DeleteAccountAsync(int userId);
     
     Task<bool> CheckUsernameExistence(string username);
 

@@ -1,8 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Identity.Application.Exceptions;
 using Identity.Application.Models.Requests;
+using Identity.Application.Models.User;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.Application.Services.Implementations;
@@ -30,18 +32,21 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
         return userAccount == default ? null : CreateResponseWithToken(authRequest.Username, userAccount.Role);
     }
 
-    public async Task<AuthJwtResponseModel> RegisterAccount(RegisterRequestModel registerRequest)
+    public async Task<RegisterUserAccountModel> RegisterAccount(RegisterRequestModel registerRequest)
     {
         if (string.IsNullOrEmpty(registerRequest.Username) ||
             string.IsNullOrEmpty(registerRequest.Password) ||
+            string.IsNullOrEmpty(registerRequest.RePassword) ||
             string.IsNullOrEmpty(registerRequest.Email))
             throw new InvalidParametersException();
+       
+        if (string.CompareOrdinal(registerRequest.RePassword, registerRequest.Password) != 0)
+            throw new Exception("Passwords don't match.");
         
         await _accountService.CheckUsernameExistence(registerRequest.Username);
         await _accountService.CheckEmailExistence(registerRequest.Email);
-
-        var userAccount = await _accountService.CreateAccountAsync(registerRequest);
-        return CreateJwtOnlyResponse(registerRequest.Username, userAccount.Role);
+        
+        return await _accountService.CreateAccountAsync(registerRequest);
     }
 
     private static AuthenticationResponseModel CreateResponseWithToken(string username, string role)

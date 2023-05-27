@@ -10,12 +10,12 @@ namespace Identity.DataAccess.Repositories.Implementations;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly DatabaseContext _dbContext;
     private readonly string _pepper;
 
-    public AccountRepository(DatabaseContext databaseContext, IConfiguration configuration)
+    public AccountRepository(DatabaseContext dbContext, IConfiguration configuration)
     {
-        _databaseContext = databaseContext;
+        _dbContext = dbContext;
         _pepper = configuration["PepperHash"]!;
     }
 
@@ -35,15 +35,26 @@ public class AccountRepository : IAccountRepository
             Points = 0,
             Role = "User"
         };
-        var addedAccount = (await _databaseContext.Accounts.AddAsync(account)).Entity;
-        await _databaseContext.SaveChangesAsync();
+        var addedAccount = (await _dbContext.Accounts.AddAsync(account)).Entity;
+        await _dbContext.SaveChangesAsync();
         
         return addedAccount;
     }
-    
+
+    public async Task<bool> DeleteAccountAsync(int userId)
+    {
+        var account = await _dbContext.Accounts.FindAsync(userId);
+        if (account == null) throw new Exception("User not found.");
+        
+        _dbContext.Accounts.Remove(account);
+        await _dbContext.SaveChangesAsync();
+        
+        return true;
+    }
+
     public async Task<Account?> UpdateUserInformationAsync(Account userModel)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == userModel.Username);
         
         if (account == default)
@@ -54,14 +65,14 @@ public class AccountRepository : IAccountRepository
         account.LastLogin = userModel.LastLogin;
         account.CurrentStreak = userModel.CurrentStreak;
         account.LongestStreak = userModel.LongestStreak;
-        await _databaseContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
         
         return account;
     }
 
     public async Task<bool> CheckUsernameExistence(string username)
     {
-        var account = await _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Username == username);
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(user => user.Username == username);
         if (account != default)
         {
             throw new UsernameAlreadyExistsException();
@@ -72,7 +83,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<bool> CheckEmailExistence(string email)
     {
-        var account = await _databaseContext.Accounts.SingleOrDefaultAsync(user => user.Email == email);
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(user => user.Email == email);
         if (account != default)
         {
             throw new EmailAlreadyExistsException();
@@ -83,7 +94,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<bool> FindAccountByUsernameAsync(string username)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == username);
         
         return account != default;
@@ -91,7 +102,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<Account?> GetAccountAsync(string username, string password)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == username);
         if (account == default)
         {
@@ -109,7 +120,7 @@ public class AccountRepository : IAccountRepository
     
     public async Task<Account> GetUserInformationAsync(string username)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == username);
         
         if (account == default)

@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mail;
-using System.Text.Json;
 using Email.Application.Templates;
 using Email.Application.Utils;
 using Microsoft.Extensions.Configuration;
