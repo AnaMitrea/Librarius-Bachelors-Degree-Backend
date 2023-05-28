@@ -1,4 +1,5 @@
 ﻿using Library.DataAccess.DTOs;
+using Library.DataAccess.DTOs.Explore;
 using Library.DataAccess.Entities.Library;
 
 namespace Library.DataAccess.Repositories;
@@ -12,6 +13,8 @@ public interface IBookRepository
     Task<IEnumerable<Book>> GetBooksForAllBookshelves();
 
     Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int maxResults);
+    
+    Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int maxResults);
 
     Task<BookWithContentDto> GetReadingBookByIdAsync(int id);
 
@@ -26,5 +29,4 @@ public interface IBookRepository
     Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();
     
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
-    
 }

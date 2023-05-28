@@ -1,7 +1,7 @@
 ﻿using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.Library;
 
-namespace Library.DataAccess.DTOs;
+namespace Library.DataAccess.DTOs.Explore;
 
 public class BookshelfWithBooksDto : Entity
 {

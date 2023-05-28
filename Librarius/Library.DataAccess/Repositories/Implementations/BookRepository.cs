@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Library.DataAccess.DTOs;
+using Library.DataAccess.DTOs.Explore;
 using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Persistence;
@@ -77,6 +78,29 @@ public class BookRepository : IBookRepository
         return books;
     }
 
+    // aprox 300ms
+    // var booksGroupedByBookshelf = await _databaseContext.BooksCategories
+    //     .Include(bc => bc.Book)
+    //     .Include(bc => bc.Category)
+    //     .ThenInclude(c => c.Bookshelf)
+    //     .GroupBy(bc => bc.Category.Bookshelf)
+    //     .Select(g => new { Bookshelf = g.Key, Books = g.Select(bc => bc.Book) })
+    //     .ToListAsync();
+    //
+    // return booksGroupedByBookshelf.ToDictionary(
+    //     bgbb => bgbb.Bookshelf.Title, 
+    //     bgbb => bgbb.Books.ToList());
+         
+         
+    // aprox 250ms
+         
+    /*
+     * In this implementation, the query for retrieving books has been simplified
+     * to only include the Book and Category entities, and uses a projection to
+     * select only the Title and Id of the Bookshelf entity. The AsNoTracking() method
+     * is called to disable change tracking for the entities returned by the query. 
+     */
+    
     public async Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int maxResults)
     {
         var booksGroupedByBookshelf = await _dbContext.BooksCategories
@@ -103,50 +127,32 @@ public class BookRepository : IBookRepository
         return groupedBooks;
     }
 
-    
-    // public async Task<Dictionary<string, List<Book>>> GetBooksGroupedByBookshelf(int maxResults)
-    // {    
-    //     // aprox 300ms
-    //      // var booksGroupedByBookshelf = await _databaseContext.BooksCategories
-    //      //     .Include(bc => bc.Book)
-    //      //     .Include(bc => bc.Category)
-    //      //     .ThenInclude(c => c.Bookshelf)
-    //      //     .GroupBy(bc => bc.Category.Bookshelf)
-    //      //     .Select(g => new { Bookshelf = g.Key, Books = g.Select(bc => bc.Book) })
-    //      //     .ToListAsync();
-    //      //
-    //      // return booksGroupedByBookshelf.ToDictionary(
-    //      //     bgbb => bgbb.Bookshelf.Title, 
-    //      //     bgbb => bgbb.Books.ToList());
-    //          
-    //          
-    //      // aprox 250ms
-    //          
-    //      /*
-    //       * In this implementation, the query for retrieving books has been simplified
-    //       * to only include the Book and Category entities, and uses a projection to
-    //       * select only the Title of the Bookshelf entity. The AsNoTracking() method
-    //       * is called to disable change tracking for the entities returned by the query. 
-    //       */
-    //
-    //      var booksGroupedByBookshelf = await _dbContext.BooksCategories
-    //         .AsNoTracking()
-    //         .Include(bc => bc.Book.Author)
-    //         .Select(bc => new { BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
-    //         .ToListAsync();
-    //
-    //     var groupedBooks = booksGroupedByBookshelf
-    //         .GroupBy(bgbb => bgbb.BookshelfTitle)
-    //         .ToDictionary(
-    //             g => g.Key,
-    //             g => g.Select(bgbb => bgbb.Book)
-    //                 .OrderBy(x => Guid.NewGuid()) // Random order
-    //                 .Take(maxResults) // Maximum 20 books
-    //                 .ToList()
-    //         );
-    //
-    //     return groupedBooks;
-    // }
+    public async Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int maxResults)
+    {
+        var categoriesWithBooks = await _dbContext.Categories
+            .Include(c => c.Bookshelf)
+            .Include(c => c.BookCategories)
+            .ThenInclude(bc => bc.Book)
+            .ToListAsync();
+
+        var groupedCategories = categoriesWithBooks
+            .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
+            .Select(g => new BookshelfCategoryWithBooksDto
+            {
+                Id = g.Key.Id,
+                Title = g.Key.Title,
+                Categories = g.Select(c => new ExploreCategoryDto
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    TotalBooks = c.BookCategories.Count(),
+                    Books = c.BookCategories.Select(bc => bc.Book).ToList()
+                }).ToList()
+            })
+            .ToList();
+
+        return groupedCategories;
+    }
 
     public async Task<BookWithContentDto> GetReadingBookByIdAsync(int bookId)
     {

@@ -1,5 +1,6 @@
 ﻿using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
+using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
@@ -14,6 +15,8 @@ public interface IBookService
     Task<IEnumerable<ExploreBookResponseModel>> GetBooksForAllBookshelves();
 
     Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int maxResults);
+
+    Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int maxResults);
 
     Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id);
 

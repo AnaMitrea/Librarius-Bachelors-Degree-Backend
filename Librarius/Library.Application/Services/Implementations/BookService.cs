@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
+using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
@@ -46,6 +47,13 @@ public class BookService : IBookService
         var response = await _bookRepository.GetBooksGroupedByBookshelf(maxResults);
 
         return _mapper.Map<Dictionary<string, BooksForBookshelfResponseModel>>(response);
+    }
+
+    public async Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int maxResults)
+    {
+        var response = await _bookRepository.GetBooksGroupedByCategoryAndBookshelf(maxResults);
+
+        return _mapper.Map<List<BooksForCategoryResponseModel>>(response);
     }
 
     public async Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id)

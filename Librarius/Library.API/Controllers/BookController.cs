@@ -255,21 +255,7 @@ public class BookController : ControllerBase
         }
     }
 
-    // [HttpGet("bookshelves")]
-    // public async Task<IActionResult> GetBooksForAllBookshelves()
-    // {
-    //     try
-    //     {
-    //         var response = await _bookService.GetBooksForAllBookshelves();
-    //         return Ok(ApiResponse<IEnumerable<ExploreBookResponseModel>>.Success(response));
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return BadRequest(ApiResponse<IEnumerable<ExploreBookResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
-    //     }
-    //     
-    // }
-    
+    // Route: /api/library/book/bookshelves?maxResults=10
     [HttpGet("bookshelves")]
     public async Task<IActionResult> GetBooksGroupedByBookshelf([FromQuery] int maxResults)
     {
@@ -282,6 +268,21 @@ public class BookController : ControllerBase
         {
             return BadRequest(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
-        
+    }
+    
+    // Route: /api/library/book/categories?maxResults=10
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategoriesWithBooks([FromQuery] int maxResults)
+    {
+        try
+        {
+            var response = 
+                await _bookService.GetBooksGroupedByCategoryAndBookshelf(maxResults);
+            return Ok(response);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<object>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
     }
 }
