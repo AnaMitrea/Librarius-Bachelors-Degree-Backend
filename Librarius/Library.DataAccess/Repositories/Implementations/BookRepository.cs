@@ -134,6 +134,7 @@ public class BookRepository : IBookRepository
             .Include(c => c.Bookshelf)
             .Include(c => c.BookCategories)
             .ThenInclude(bc => bc.Book)
+            .ThenInclude(b => b.Author)
             .ToListAsync();
 
         var groupedCategories = categoriesWithBooks
@@ -149,6 +150,7 @@ public class BookRepository : IBookRepository
                     Title = c.Title,
                     TotalBooks = c.BookCategories.Count(),
                     Books = c.BookCategories.Select(bc => bc.Book)
+                        .OrderBy(x => Guid.NewGuid())
                         .Take(maxResults)
                         .ToList()
                 }).ToList()
