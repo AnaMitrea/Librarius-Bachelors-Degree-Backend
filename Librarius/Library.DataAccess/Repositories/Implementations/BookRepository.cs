@@ -130,6 +130,7 @@ public class BookRepository : IBookRepository
     public async Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int maxResults)
     {
         var categoriesWithBooks = await _dbContext.Categories
+            .AsNoTracking()
             .Include(c => c.Bookshelf)
             .Include(c => c.BookCategories)
             .ThenInclude(bc => bc.Book)
@@ -137,6 +138,7 @@ public class BookRepository : IBookRepository
 
         var groupedCategories = categoriesWithBooks
             .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
+            .OrderBy(g => g.Key.Id)
             .Select(g => new BookshelfCategoryWithBooksDto
             {
                 Id = g.Key.Id,
