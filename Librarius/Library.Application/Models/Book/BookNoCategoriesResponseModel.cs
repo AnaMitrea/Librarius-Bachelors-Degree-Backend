@@ -17,6 +17,4 @@ public class BookNoCategoriesResponseModel
     public string ReleaseDate { get; set; }
 
     public string CoverImageUrl { get; set; }
-
-    public string HtmlContentUrl { get; set; }
 }

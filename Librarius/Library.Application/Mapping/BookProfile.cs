@@ -25,9 +25,14 @@ public class BookProfile : Profile
         // Books grouped by bookshelves and categories
         CreateMap<BookshelfCategoryWithBooksDto, BooksForCategoryResponseModel>()
             .ForMember(
-                dest => dest.Categories,
+                dest => dest.BookshelfId,
                 opt => 
-                    opt.MapFrom(src => src.Categories)
+                    opt.MapFrom(src => src.Id)
+            )
+            .ForMember(
+                dest => dest.BookshelfTitle,
+                opt => 
+                    opt.MapFrom(src => src.Title)
             );
 
         CreateMap<Book, BookshelfBookResponseModel>();

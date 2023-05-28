@@ -2,6 +2,7 @@
 using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
+using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Trending;
@@ -278,7 +279,7 @@ public class BookController : ControllerBase
         {
             var response = 
                 await _bookService.GetBooksGroupedByCategoryAndBookshelf(maxResults);
-            return Ok(response);
+            return Ok(ApiResponse<List<BooksForCategoryResponseModel>>.Success(response));
         }
         catch (Exception e)
         {

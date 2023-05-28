@@ -13,7 +13,7 @@ public class CategoryProfile : Profile
         CreateMap<Category, CategoryResponseModel>();
         CreateMap<Category, CategoryWithBookshelfResponseModel>();
 
-        CreateMap<Category, ExploreCategoryResponseModel>();
-        CreateMap<ExploreCategoryResponseModel, ExploreCategoryDto>();
+        CreateMap<Category, ExploreCategoryDto>();
+        CreateMap<ExploreCategoryDto, ExploreCategoryResponseModel>();
     }
 }

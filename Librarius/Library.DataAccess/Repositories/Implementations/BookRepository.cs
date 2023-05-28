@@ -146,7 +146,9 @@ public class BookRepository : IBookRepository
                     Id = c.Id,
                     Title = c.Title,
                     TotalBooks = c.BookCategories.Count(),
-                    Books = c.BookCategories.Select(bc => bc.Book).ToList()
+                    Books = c.BookCategories.Select(bc => bc.Book)
+                        .Take(maxResults)
+                        .ToList()
                 }).ToList()
             })
             .ToList();
