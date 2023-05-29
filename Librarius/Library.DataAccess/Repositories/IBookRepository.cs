@@ -1,5 +1,6 @@
 ﻿using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
+using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
 
 namespace Library.DataAccess.Repositories;
@@ -23,6 +24,10 @@ public interface IBookRepository
     Task<ReadingTimeResponseDto> GetReadingTimeOfBookContent(int bookId);
 
     Task<bool> CheckIsBookFinishedReading(int bookId, string username);
+
+    Task<UserReadingBooks> GetUserReadingTimeSpentAsync(int bookId, string username);
+    
+    Task<bool> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent);
     
     Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 

@@ -33,7 +33,7 @@ public class Book : Entity
     public ICollection<Review> Reviews { get; set; }
     
     // many-to-many user readers
-    public ICollection<UserCompletedBooks> CompletedBooks { get; set; }
+    public ICollection<UserReadingBooks> CompletedBooks { get; set; }
 }
 
 

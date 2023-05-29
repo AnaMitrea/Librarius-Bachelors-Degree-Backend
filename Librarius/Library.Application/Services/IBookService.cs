@@ -3,6 +3,7 @@ using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
 using Library.DataAccess.DTOs;
 
@@ -26,7 +27,11 @@ public interface IBookService
 
     Task<bool> CheckIsBookFinishedReading(int bookId, string username);
 
-    Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username);
+    Task<ReadingTimeSpentResponseModel> GetUserReadingTimeSpentAsync(ReadingRequestModel requestModel, string username);
+    
+    Task<bool> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username);
+
+    Task<bool> SetFinishedReadingBookByIdAsync(UserReadingBookRequestModel requestModel, string username);
 
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync();
     

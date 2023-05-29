@@ -5,6 +5,7 @@ using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
 using Library.Application.Models.Reviews.Request;
 using Library.Application.Models.Reviews.Response;
@@ -196,10 +197,52 @@ public class BookController : ControllerBase
         }
     }
     
+    // User Reading Time
+    // Route: /api/library/book/time-spent
+    [HttpPost("time-spent")]
+    public async Task<IActionResult> GetUserReadingTimeSpent(ReadingRequestModel requestModel)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _bookService.GetUserReadingTimeSpentAsync(requestModel, username);
+
+            return Ok(ApiResponse<ReadingTimeSpentResponseModel>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<ReadingTimeSpentResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Update User Reading Time
+    // Route: /api/library/book/time-spent/update
+    [HttpPut("time-spent/update")]
+    public async Task<IActionResult> UpdateUserReadingTimeSpent(UserReadingBookRequestModel requestModel)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
     // Finish Reading Content
     // Route: /api/library/book/complete-reading
     [HttpPost("complete-reading")]
-    public async Task<IActionResult> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel)
+    public async Task<IActionResult> SetFinishedReadingBookByIdAsync(UserReadingBookRequestModel requestModel)
     {
         try
         {

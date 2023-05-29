@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.DataAccess.Persistence.Configurations;
 
-public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserCompletedBooks>
+public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserReadingBooks>
 {
-    public void Configure(EntityTypeBuilder<UserCompletedBooks> builder)
+    public void Configure(EntityTypeBuilder<UserReadingBooks> builder)
     {
-        builder.ToTable("userCompletedBooks");
+        builder.ToTable("userReadingBooks");
         
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
@@ -25,7 +25,10 @@ public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserComp
         
         builder.Property(x => x.MinutesSpent)
             .HasColumnName("minutes_spent")
-            .HasDefaultValue(0)
+            .IsRequired();
+        
+        builder.Property(x => x.IsBookFinished)
+            .HasColumnName("is_book_finished")
             .IsRequired();
         
         // many-to-many for books - users

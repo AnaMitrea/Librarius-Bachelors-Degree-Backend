@@ -16,5 +16,5 @@ public class User : Entity
     public ICollection<Subscription> Subscriptions { get; set; }
 
     // many-to-many completed books
-    public ICollection<UserCompletedBooks> CompletedBooks { get; set; }
+    public ICollection<UserReadingBooks> CompletedBooks { get; set; }
 }

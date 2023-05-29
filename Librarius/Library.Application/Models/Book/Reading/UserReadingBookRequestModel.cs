@@ -1,6 +1,6 @@
 ﻿namespace Library.Application.Models.Book.Reading;
 
-public class CompletedBookRequestModel
+public class UserReadingBookRequestModel
 {
     public int BookId { get; set; }
     

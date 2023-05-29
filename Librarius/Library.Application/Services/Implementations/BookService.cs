@@ -4,6 +4,7 @@ using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.Repositories;
@@ -78,7 +79,28 @@ public class BookService : IBookService
         return await _bookRepository.CheckIsBookFinishedReading(bookId, username);
     }
 
-    public async Task<bool> SetFinishedReadingBookByIdAsync(CompletedBookRequestModel requestModel, string username)
+    public async Task<ReadingTimeSpentResponseModel> GetUserReadingTimeSpentAsync(ReadingRequestModel requestModel, string username)
+    {
+        var response = await _bookRepository.GetUserReadingTimeSpentAsync(
+            requestModel.BookId,
+            username
+        );
+
+        return _mapper.Map<ReadingTimeSpentResponseModel>(response);
+    }
+    
+    public async Task<bool> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username)
+    {
+        var response = await _bookRepository.UpdateUserReadingTimeSpentAsync(
+            requestModel.BookId,
+            username,
+            requestModel.TimeSpent
+        );
+
+        return response;
+    }
+
+    public async Task<bool> SetFinishedReadingBookByIdAsync(UserReadingBookRequestModel requestModel, string username)
     {
         var response = await _bookRepository.SetFinishedReadingBookByIdAsync(
             requestModel.BookId,

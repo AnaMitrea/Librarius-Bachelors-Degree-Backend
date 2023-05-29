@@ -213,6 +213,63 @@ public class BookRepository : IBookRepository
         return BookContentUtil.CalculateReadingTime(wordCount);
     }
 
+    public async Task<UserReadingBooks> GetUserReadingTimeSpentAsync(int bookId, string username)
+    {
+        var book = await _dbContext.Books
+            .SingleOrDefaultAsync(book => book.Id == bookId);
+        if (book == default) throw new Exception("Invalid book id.");
+
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(user => user.Username == username);
+        if (user == default) throw new Exception("Invalid user.");
+        
+        var userReadingBook = await _dbContext.UserReadingBooks
+            .SingleOrDefaultAsync(c => c.User.Username == username & c.BookId == bookId);
+
+        if (userReadingBook == null) throw new Exception("User have not started to read this book yet.");
+        
+        return userReadingBook;
+    }
+    
+    public async Task<bool> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent)
+    {
+        var book = await _dbContext.Books
+            .SingleOrDefaultAsync(book => book.Id == bookId);
+        if (book == default) throw new Exception("Invalid book id.");
+
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(user => user.Username == username);
+        if (user == default) throw new Exception("Invalid user.");
+        
+        var userReadingBook = await _dbContext.UserReadingBooks
+                .SingleOrDefaultAsync(c => c.User.Username == username & c.BookId == bookId);
+
+        if (userReadingBook == null) // just started reading the book
+        {
+            // add into db the new book
+            var newReadingBook = new UserReadingBooks
+            {
+                UserId = user.Id,
+                BookId = book.Id,
+                MinutesSpent = timeSpent,
+                IsBookFinished = false
+            };
+            
+            _dbContext.UserReadingBooks.Add(newReadingBook);
+            await _dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            // update the timeSpent into db
+            userReadingBook.MinutesSpent = timeSpent;
+            
+            _dbContext.UserReadingBooks.Update(userReadingBook);
+            await _dbContext.SaveChangesAsync();
+        }
+        
+        return true;
+    }
+
     public async Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent)
     {
         var book = await _dbContext.Books
@@ -225,26 +282,32 @@ public class BookRepository : IBookRepository
 
         var checkExistence =  await CheckIsBookFinishedReading(bookId, username);
         if (checkExistence) throw new Exception("Already finished reading this book.");
+        
+        var totalTimeResponse = await GetReadingTimeOfBookContent(bookId);
+        var totalMinutesConverted = TimeConvertor.ConvertResponseMinutes(totalTimeResponse);
 
-        var newCompletedBook = new UserCompletedBooks
+        if (timeSpent < totalMinutesConverted) throw new Exception("Time spent reading is lower than average reading time.");
+
+        var newCompletedBook = new UserReadingBooks
         {
             UserId = user.Id,
             BookId = book.Id,
-            MinutesSpent = timeSpent
+            MinutesSpent = timeSpent,
+            IsBookFinished = true
         };
 
-        _dbContext.CompletedBooks.Add(newCompletedBook);
+        _dbContext.UserReadingBooks.Update(newCompletedBook);
         await _dbContext.SaveChangesAsync();
         return true;
     }
 
     public async Task<bool> CheckIsBookFinishedReading(int bookId, string username)
     {
-        var checkExistence =
-            await _dbContext.CompletedBooks
+        var checkIsFinished =
+            await _dbContext.UserReadingBooks
                 .SingleOrDefaultAsync(c => c.User.Username == username & c.BookId == bookId);
         
-        return checkExistence != null;
+        return checkIsFinished is { IsBookFinished: true };
     }
 
 

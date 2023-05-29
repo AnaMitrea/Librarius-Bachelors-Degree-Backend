@@ -13,14 +13,12 @@ public class DatabaseContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
-    
     public DbSet<Subscription> UserAuthorSubscriptions { get; set; }
-
     public DbSet<BookCategory> BooksCategories { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ReviewLikedBy> ReviewLikedBys { get; set; }
     
-    public DbSet<UserCompletedBooks> CompletedBooks { get; set; }
+    public DbSet<UserReadingBooks> UserReadingBooks { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

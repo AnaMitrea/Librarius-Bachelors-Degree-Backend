@@ -17,6 +17,7 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(BookCategoryProfile));
         services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(ReviewsProfile));
+        services.AddAutoMapper(typeof(UserReadingBooksProfile));
         
         services.AddSingleton<HttpClient>();
         

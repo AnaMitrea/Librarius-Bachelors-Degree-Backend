@@ -2,8 +2,10 @@
 
 namespace Library.DataAccess.Entities.BookRelated;
 
-public class UserCompletedBooks : Entity
+public class UserReadingBooks : Entity
 {
+    public bool IsBookFinished { get; set; }
+    
     public int MinutesSpent { get; set; }
     
     // many-to-one User
