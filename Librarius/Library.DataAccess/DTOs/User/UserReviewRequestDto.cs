@@ -1,4 +1,4 @@
-﻿namespace Library.DataAccess.DTOs;
+﻿namespace Library.DataAccess.DTOs.User;
 
 public class UserReviewRequestDto
 {

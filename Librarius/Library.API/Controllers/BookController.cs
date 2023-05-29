@@ -197,7 +197,7 @@ public class BookController : ControllerBase
         }
     }
     
-    // User Reading Time
+    // User Reading Time for Book
     // Route: /api/library/book/time-spent
     [HttpPost("time-spent")]
     public async Task<IActionResult> GetUserReadingTimeSpent(ReadingRequestModel requestModel)

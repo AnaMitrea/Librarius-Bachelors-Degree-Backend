@@ -85,6 +85,7 @@ public class AccountService : IAccountService
         if (lastLogin == yesterdayFormatted)
         {
             newStreak = ++account.CurrentStreak;
+            account.Points += 10;
         }
         else
         {
@@ -92,9 +93,10 @@ public class AccountService : IAccountService
             account.CurrentStreak = newStreak;
         }
         
-        if (account.LongestStreak < newStreak)
+        if (account.LongestStreak < newStreak) // new streak
         {
             account.LongestStreak = newStreak;
+            account.Points += 50;
         }
 
         account.LastLogin = todayFormatted;

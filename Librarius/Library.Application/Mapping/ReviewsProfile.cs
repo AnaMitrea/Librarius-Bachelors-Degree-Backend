@@ -3,6 +3,7 @@ using Library.Application.Models.Reviews;
 using Library.Application.Models.Reviews.Request;
 using Library.Application.Utilities;
 using Library.DataAccess.DTOs;
+using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities.BookRelated;
 
 namespace Library.Application.Mapping;

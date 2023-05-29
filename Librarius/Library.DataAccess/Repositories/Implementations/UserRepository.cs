@@ -1,4 +1,5 @@
-﻿using Library.DataAccess.Entities;
+﻿using Library.DataAccess.DTOs.User;
+using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -75,5 +76,72 @@ public class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
 
         return false;
+    }
+
+    public async Task<int> GetUserMinutesLoggedAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == default)
+        {
+            throw new Exception("User not found");
+        }
+
+        var totalMinutesLogged = await _dbContext.UserReadingBooks
+            .Where(ur => ur.UserId == user.Id)
+            .SumAsync(ur => ur.MinutesSpent);
+
+        return totalMinutesLogged == 0 ? 0 : totalMinutesLogged;
+    }
+
+    public async Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersMinutesLoggedAsync()
+    {
+        var userLeaderboard = await _dbContext.Users
+            .Join(
+                _dbContext.UserReadingBooks,
+                user => user.Id,
+                userReadingBook => userReadingBook.UserId,
+                (user, userReadingBook) => new { user, userReadingBook })
+            .GroupBy(x => new { x.user.Id, x.user.Username })
+            .Select(x => new UserLeaderboardByMinutesDto
+            {
+                Id = x.Key.Id,
+                Username = x.Key.Username,
+                MinutesLogged = x.Sum(ur => ur.userReadingBook.MinutesSpent)
+            })
+            .OrderByDescending(u => u.MinutesLogged)
+            .ToListAsync();
+
+        for (var i = 0; i < userLeaderboard.Count; i++)
+        {
+            userLeaderboard[i].Position = i + 1;
+        }
+
+        return userLeaderboard;
+    }
+
+    public async Task<IEnumerable<UserLeaderboardByBooksDto>> GetAllUsersByNumberOfBooksDescAsync()
+    {
+        var userLeaderboard = await _dbContext.Users
+            .Join(
+                _dbContext.UserReadingBooks,
+                user => user.Id,
+                userReadingBook => userReadingBook.UserId,
+                (user, userReadingBook) => new { user, userReadingBook })
+            .GroupBy(x => new { x.user.Id, x.user.Username })
+            .Select(x => new UserLeaderboardByBooksDto
+            {
+                Id = x.Key.Id,
+                Username = x.Key.Username,
+                NumberOfBooks = x.Count()
+            })
+            .OrderByDescending(u => u.NumberOfBooks)
+            .ToListAsync();
+
+        for (var i = 0; i < userLeaderboard.Count; i++)
+        {
+            userLeaderboard[i].Position = i + 1;
+        }
+
+        return userLeaderboard;
     }
 }

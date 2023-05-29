@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.LibraryUser;
+﻿namespace Library.Application.Models.LibraryUser.Request;
 
 public class RegisterUserRequestModel
 {

@@ -68,6 +68,10 @@
       ],
       "UpstreamPathTemplate": "/api/library/user/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
       "Priority": 0,

@@ -4,6 +4,7 @@ using Library.Application.Models.Reviews.Request;
 using Library.Application.Models.Reviews.Response;
 using Library.Application.Utilities;
 using Library.DataAccess.DTOs;
+using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;

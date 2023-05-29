@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.LibraryUser;
+﻿namespace Library.Application.Models.LibraryUser.Response;
 
 public class UserResponseModel
 {

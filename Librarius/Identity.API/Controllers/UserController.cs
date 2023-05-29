@@ -63,4 +63,21 @@ public class UserController : ControllerBase
             return NotFound(ApiResponse<string>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
+    
+    // Route: /api/user/all/points
+    [HttpGet("all/points")]
+    public async Task<IActionResult> GetAllUsersByPointsDesc()
+    {
+        try
+        {
+            var response = await _userService.GetAllUsersByPointsDescAsync();
+
+            return Ok(ApiResponse<IEnumerable<UserLeaderboardByPoints>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<UserLeaderboardByPoints>>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
 }

@@ -6,11 +6,11 @@ namespace Identity.DataAccess.Repositories.Implementations;
 
 public class TrophyRepository : ITrophyRepository
 {
-    private readonly DatabaseContext _databaseContext;
+    private readonly DatabaseContext _dbContext;
 
-    public TrophyRepository(DatabaseContext databaseContext)
+    public TrophyRepository(DatabaseContext dbContext)
     {
-        _databaseContext = databaseContext;
+        _dbContext = dbContext;
     }
     
     public async Task<IEnumerable<Trophy>> GetTrophiesByCategoryAsync(string category, bool canTakeMax4 = false)
@@ -18,7 +18,7 @@ public class TrophyRepository : ITrophyRepository
         IEnumerable<Trophy> trophies;
         if (canTakeMax4)
         {
-            trophies = await _databaseContext.Trophies
+            trophies = await _dbContext.Trophies
                         .Where(trophy => trophy.Category == category)
                         .OrderBy(trophy => trophy.Id)
                         .Take(4)
@@ -26,7 +26,7 @@ public class TrophyRepository : ITrophyRepository
         }
         else
         {
-            trophies = await _databaseContext.Trophies
+            trophies = await _dbContext.Trophies
                 .Where(trophy => trophy.Category == category)
                 .OrderBy(trophy => trophy.Id)
                 .ToListAsync();
@@ -37,14 +37,14 @@ public class TrophyRepository : ITrophyRepository
 
     public async Task<IEnumerable<Trophy>> GetUserCompletedTrophiesByCategoryAsync(string username, string category)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == username);
         if (account == default)
         {
             throw new Exception("User not found.");
         }
 
-        await _databaseContext.Entry(account)
+        await _dbContext.Entry(account)
             .Collection(user => user.TrophyAccounts)
             .Query()
             .Include(trophyAccount => trophyAccount.Trophy)
@@ -59,14 +59,14 @@ public class TrophyRepository : ITrophyRepository
 
     public async Task<Dictionary<string, IEnumerable<Trophy>>> GetUserAllCompletedTrophiesAsync(string username)
     {
-        var account = await _databaseContext.Accounts
+        var account = await _dbContext.Accounts
             .SingleOrDefaultAsync(user => user.Username == username);
         if (account == default)
         {
             throw new Exception("User not found.");
         }
 
-        await _databaseContext.Entry(account)
+        await _dbContext.Entry(account)
             .Collection(user => user.TrophyAccounts)
             .Query()
             .Include(trophyAccount => trophyAccount.Trophy)
