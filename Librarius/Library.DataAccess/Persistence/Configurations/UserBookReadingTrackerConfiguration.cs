@@ -1,12 +1,14 @@
-﻿using Library.DataAccess.Entities.BookRelated;
+﻿using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.BookRelated;
+using Library.DataAccess.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Library.DataAccess.Persistence.Configurations;
 
-public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserReadingBooks>
+public class UserBookReadingTrackerConfiguration : IEntityTypeConfiguration<UserBookReadingTracker>
 {
-    public void Configure(EntityTypeBuilder<UserReadingBooks> builder)
+    public void Configure(EntityTypeBuilder<UserBookReadingTracker> builder)
     {
         builder.ToTable("userReadingBooks");
         
@@ -38,12 +40,12 @@ public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserRead
         
         builder
             .HasOne(compl => compl.Book)
-            .WithMany(book => book.CompletedBooks)
+            .WithMany(book => book.ReadingBooksTracker)
             .HasForeignKey(compl => compl.BookId);
         
         builder
             .HasOne(compl => compl.User)
-            .WithMany(user => user.CompletedBooks)
+            .WithMany(user => user.ReadingBooks)
             .HasForeignKey(compl => compl.UserId);
     }
 }

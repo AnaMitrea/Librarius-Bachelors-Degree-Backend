@@ -16,6 +16,11 @@ public interface IUserService
     public Task<int> GetUserMinutesLoggedAsync(string username);
     
     public Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByMinutesLoggedDescAsync();
+    
     public Task<IEnumerable<UserLeaderboardByBooks>> GetAllUsersByNumberOfBooksDescAsync();
+    
     public Task<IEnumerable<UserReadingFeed>> GetUserForReadingFeedAsync();
+    
+    public Task<Dictionary<int, UserBookReadingTimeTrackerResponse>> GetBookTimeReadingTrackersByUserAsync(
+        string username);
 }

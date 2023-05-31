@@ -21,7 +21,7 @@ public class Review : Entity
     // many-to-one User
     public int UserId { get; set; }
     
-    public User User { get; set; }
+    public User.User User { get; set; }
     
     // one-to-many Likes
     public ICollection<ReviewLikedBy> Likes { get; set; }

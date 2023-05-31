@@ -1,8 +1,8 @@
 ﻿using Library.DataAccess.Entities.Library;
 
-namespace Library.DataAccess.Entities.BookRelated;
+namespace Library.DataAccess.Entities.User;
 
-public class UserReadingBooks : Entity
+public class UserBookReadingTracker : Entity
 {
     public bool IsBookFinished { get; set; }
     

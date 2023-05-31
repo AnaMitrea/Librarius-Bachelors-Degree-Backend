@@ -1,8 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
+using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
+using Library.DataAccess.Entities.User;
 using Library.DataAccess.Persistence;
 using Library.DataAccess.Utilities;
 using Microsoft.EntityFrameworkCore;
@@ -213,7 +215,7 @@ public class BookRepository : IBookRepository
         return BookContentUtil.CalculateReadingTime(wordCount);
     }
 
-    public async Task<UserReadingBooks> GetUserReadingTimeSpentAsync(int bookId, string username)
+    public async Task<UserBookReadingTracker> GetUserReadingTimeSpentAsync(int bookId, string username)
     {
         var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
@@ -247,7 +249,7 @@ public class BookRepository : IBookRepository
         if (userReadingBook == null) // just started reading the book
         {
             // add into db the new book
-            var newReadingBook = new UserReadingBooks
+            var newReadingBook = new UserBookReadingTracker
             {
                 UserId = user.Id,
                 BookId = book.Id,
@@ -288,7 +290,7 @@ public class BookRepository : IBookRepository
 
         if (timeSpent < totalMinutesConverted) throw new Exception("Time spent reading is lower than average reading time.");
 
-        var newCompletedBook = new UserReadingBooks
+        var newCompletedBook = new UserBookReadingTracker
         {
             UserId = user.Id,
             BookId = book.Id,

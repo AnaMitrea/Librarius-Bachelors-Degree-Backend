@@ -1,4 +1,5 @@
 ﻿using Library.DataAccess.Entities.BookRelated;
+using Library.DataAccess.Entities.User;
 
 namespace Library.DataAccess.Entities.Library;
 
@@ -33,7 +34,7 @@ public class Book : Entity
     public ICollection<Review> Reviews { get; set; }
     
     // many-to-many user readers
-    public ICollection<UserReadingBooks> CompletedBooks { get; set; }
+    public ICollection<UserBookReadingTracker> ReadingBooksTracker { get; set; }
 }
 
 

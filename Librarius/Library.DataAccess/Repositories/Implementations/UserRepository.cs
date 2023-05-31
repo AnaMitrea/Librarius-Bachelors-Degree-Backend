@@ -1,6 +1,7 @@
 ﻿using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
+using Library.DataAccess.Entities.User;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -147,8 +148,6 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<UserReadingFeedDto>> GetUserForReadingFeedAsync()
     {
-        // get a list desc by UserReadingBooks.Timestamp (text column in db) where timestamp != null and isFinished true
-        
         var users = await _dbContext.UserReadingBooks
             .Where(ur => ur.Timestamp != null & ur.IsBookFinished == true)
             .OrderByDescending(ur => ur.Timestamp)
@@ -162,5 +161,28 @@ public class UserRepository : IUserRepository
             .ToListAsync();
 
         return users;
+    }
+
+    public async Task<Dictionary<int, UserBookReadingTracker>> GetBookTimeReadingTrackersByUserAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new Exception("User not found.");
+        
+        await _dbContext.Entry(user)
+            .Collection(u => u.ReadingBooks)
+            .Query()
+            .Include(rb => rb.Book)
+            .LoadAsync();
+
+        var minutesSpentByBookId = user.ReadingBooks
+            .GroupBy(rb => rb.BookId)
+            .ToDictionary(group => group.Key,
+                group => new UserBookReadingTracker
+                {
+                    BookId = group.Key,
+                    MinutesSpent = group.Sum(rb => rb.MinutesSpent),
+                });
+
+        return minutesSpentByBookId;
     }
 }

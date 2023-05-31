@@ -1,5 +1,6 @@
 ﻿using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.User;
 
 namespace Library.DataAccess.Repositories;
 
@@ -18,4 +19,6 @@ public interface IUserRepository
     public Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersMinutesLoggedAsync();
     public Task<IEnumerable<UserLeaderboardByBooksDto>> GetAllUsersByNumberOfBooksDescAsync();
     public Task<IEnumerable<UserReadingFeedDto>> GetUserForReadingFeedAsync();
+
+    Task<Dictionary<int, UserBookReadingTracker>> GetBookTimeReadingTrackersByUserAsync(string username);
 }

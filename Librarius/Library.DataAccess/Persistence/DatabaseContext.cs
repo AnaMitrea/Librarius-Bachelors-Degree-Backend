@@ -2,6 +2,7 @@
 using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
+using Library.DataAccess.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DataAccess.Persistence;
@@ -18,7 +19,7 @@ public class DatabaseContext : DbContext
     public DbSet<Review> Reviews { get; set; }
     public DbSet<ReviewLikedBy> ReviewLikedBys { get; set; }
     
-    public DbSet<UserReadingBooks> UserReadingBooks { get; set; }
+    public DbSet<UserBookReadingTracker> UserReadingBooks { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

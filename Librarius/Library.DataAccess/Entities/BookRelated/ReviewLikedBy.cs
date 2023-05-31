@@ -10,5 +10,5 @@ public class ReviewLikedBy : Entity
     // many-to-one User
     public int UserId { get; set; }
     
-    public User User { get; set; }
+    public User.User User { get; set; }
 }

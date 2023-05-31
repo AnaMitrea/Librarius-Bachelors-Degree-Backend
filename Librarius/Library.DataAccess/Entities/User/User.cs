@@ -1,6 +1,6 @@
 ﻿using Library.DataAccess.Entities.BookRelated;
 
-namespace Library.DataAccess.Entities;
+namespace Library.DataAccess.Entities.User;
 
 public class User : Entity
 {
@@ -16,5 +16,5 @@ public class User : Entity
     public ICollection<Subscription> Subscriptions { get; set; }
 
     // many-to-many completed books
-    public ICollection<UserReadingBooks> CompletedBooks { get; set; }
+    public ICollection<UserBookReadingTracker> ReadingBooks { get; set; }
 }

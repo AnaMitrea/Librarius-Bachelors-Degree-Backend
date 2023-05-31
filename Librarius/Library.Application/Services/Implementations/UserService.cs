@@ -61,4 +61,12 @@ public class UserService : IUserService
         
         return _mapper.Map<IEnumerable<UserReadingFeed>>(response);
     }
+
+    public async Task<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+        GetBookTimeReadingTrackersByUserAsync(string username)
+    {
+        var response = await _userRepository.GetBookTimeReadingTrackersByUserAsync(username);
+        
+        return _mapper.Map<Dictionary<int, UserBookReadingTimeTrackerResponse>>(response);
+    }
 }

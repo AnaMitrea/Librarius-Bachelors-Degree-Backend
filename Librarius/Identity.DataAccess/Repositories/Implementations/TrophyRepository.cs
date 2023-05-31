@@ -75,7 +75,8 @@ public class TrophyRepository : ITrophyRepository
         var trophiesByCategory = account.TrophyAccounts
             .Select(trophyAccount => trophyAccount.Trophy)
             .GroupBy(trophy => trophy.Category)
-            .ToDictionary(group => group.Key, group => group.AsEnumerable());
+            .ToDictionary(group => group.Key,
+                group => group.AsEnumerable());
 
         return trophiesByCategory;
     }

@@ -107,4 +107,49 @@ public class LibraryUserController : ControllerBase
 
         }
     }
+    
+    // Route: /api/library/user/reading-tracker
+    [HttpGet("reading-tracker")]
+    public async Task<IActionResult> GetBookTimeReadingTrackersByUser()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.GetBookTimeReadingTrackersByUserAsync(username);
+            return Ok(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+                .Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+    
+    // Route: /api/library/user/favorite/books
+    [HttpGet("favorite/books")]
+    public async Task<IActionResult> GetUserFavoriteBooks()
+    {
+        throw new NotImplementedException();
+        // try
+        // {
+        //     var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+        //         .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        //     var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+        //     
+        //     var response = await _userService.GetBookTimeReadingTrackersByUserAsync(username);
+        //     return Ok(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+        //         .Success(response));
+        // }
+        // catch (Exception e)
+        // {
+        //     return BadRequest(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+        //         .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        //
+        // }
+    }
 }

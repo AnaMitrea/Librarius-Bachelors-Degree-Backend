@@ -2,6 +2,7 @@
 using Library.Application.Models.LibraryUser.Response;
 using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities;
+using Library.DataAccess.Entities.User;
 
 namespace Library.Application.Mapping;
 
