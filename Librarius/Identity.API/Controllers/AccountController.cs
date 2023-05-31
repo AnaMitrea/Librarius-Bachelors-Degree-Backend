@@ -2,7 +2,6 @@
 using System.Text.Json;
 using Identity.API.Models;
 using Identity.Application.Models.Requests;
-using Identity.Application.Models.User;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,15 +13,22 @@ public class AccountController : ControllerBase
 {
     private readonly IJwtTokenHandlerService _jwtTokenHandlerService;
     private readonly IAccountService _accountService;
+    private readonly ILoginActivityService _loginActivityService;
     private readonly HttpClient _httpClient;
 
     private const string LibraryUserApiEndpoint = "http://localhost:5164/api/library/user/register";
     
-    public AccountController(IJwtTokenHandlerService jwtTokenHandlerService, IAccountService accountService, HttpClient httpClient)
+    public AccountController(
+        IJwtTokenHandlerService jwtTokenHandlerService,
+        IAccountService accountService,
+        HttpClient httpClient,
+        ILoginActivityService loginActivityService
+        )
     {
         _jwtTokenHandlerService = jwtTokenHandlerService;
         _accountService = accountService;
         _httpClient = httpClient;
+        _loginActivityService = loginActivityService;
     }
 
     // Route: /api/account/login

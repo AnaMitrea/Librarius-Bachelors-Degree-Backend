@@ -34,4 +34,5 @@ public interface IBookRepository
     Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();
     
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
+    Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults);
 }

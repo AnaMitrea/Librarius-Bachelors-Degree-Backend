@@ -1,5 +1,4 @@
-﻿using Library.Application.Models.LibraryUser;
-using Library.Application.Models.LibraryUser.Response;
+﻿using Library.Application.Models.LibraryUser.Response;
 
 namespace Library.Application.Models.Reviews;
 

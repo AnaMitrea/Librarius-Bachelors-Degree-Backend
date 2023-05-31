@@ -10,6 +10,8 @@ public class AuthorProfile : Profile
     public AuthorProfile()
     {
         CreateMap<Author, AuthorResponseModel>();
+        
+        CreateMap<Author, AuthorMinimalResponseModel>();
 
         CreateMap<AuthorMaterialsDto, MaterialsResponseModel>()
             .ForMember(dest => dest.Title,

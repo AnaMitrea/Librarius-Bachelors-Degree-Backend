@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book.Author;
+using Library.Application.Models.SearchBar;
 using Library.DataAccess.Repositories;
 
 namespace Library.Application.Services.Implementations;
@@ -28,5 +29,12 @@ public class AuthorService : IAuthorService
             await _authorRepository.GetAuthorBooksAsync(requestModel.AuthorId, requestModel.SortingOption);
 
         return _mapper.Map<ICollection<MaterialsResponseModel>>(response);
+    }
+
+    public async Task<IEnumerable<AuthorMinimalResponseModel>> SearchAuthorByFilterAsync(SearchBarRequestModel requestModel)
+    {
+        var response = await _authorRepository.SearchBooksByFilterAsync(requestModel.SearchBy, requestModel.MaxResults);
+
+        return _mapper.Map<IEnumerable<AuthorMinimalResponseModel>>(response);
     }
 }

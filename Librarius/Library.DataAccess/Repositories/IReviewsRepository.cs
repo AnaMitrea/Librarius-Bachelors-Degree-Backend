@@ -1,5 +1,4 @@
-﻿using Library.DataAccess.DTOs;
-using Library.DataAccess.DTOs.User;
+﻿using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities.BookRelated;
 
 namespace Library.DataAccess.Repositories;

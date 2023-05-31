@@ -3,7 +3,6 @@ using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
-using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;

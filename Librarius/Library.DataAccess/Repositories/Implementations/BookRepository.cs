@@ -293,7 +293,8 @@ public class BookRepository : IBookRepository
             UserId = user.Id,
             BookId = book.Id,
             MinutesSpent = timeSpent,
-            IsBookFinished = true
+            IsBookFinished = true,
+            Timestamp = DateTime.Now.ToString("dd/MM/yyyy")
         };
 
         _dbContext.UserReadingBooks.Update(newCompletedBook);
@@ -325,5 +326,16 @@ public class BookRepository : IBookRepository
         var result = await _dbContext.Books.Skip(100).Take(10).Include(b => b.Author).ToListAsync();
 
         return result;
+    }
+
+    public async Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults)
+    {
+        var filteredBooks = await _dbContext.Books
+            .Where(book => book.Title.ToUpper().Contains(searchByKey.ToUpper()))
+            .Take(maxResults)
+            .Include(book => book.Author)
+            .ToListAsync();
+
+        return filteredBooks;
     }
 }

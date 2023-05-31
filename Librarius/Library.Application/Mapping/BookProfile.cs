@@ -38,6 +38,8 @@ public class BookProfile : Profile
         CreateMap<Book, BookshelfBookResponseModel>();
 
         CreateMap<Book, BookNoCategoriesResponseModel>();
+
+        CreateMap<Book, BookMinimalResponseModel>();
         
         CreateMap<BookWithContentDto, BookReadingResponseModel>();
         

@@ -19,6 +19,7 @@ public static class ServiceCollection
         
         // add scoped repositories
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ILoginActivityRepository, LoginActivityRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITrophyRepository, TrophyRepository>();
 

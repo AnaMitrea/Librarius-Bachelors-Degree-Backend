@@ -54,4 +54,11 @@ public class UserService : IUserService
         
         return _mapper.Map<IEnumerable<UserLeaderboardByBooks>>(response);
     }
+
+    public async Task<IEnumerable<UserReadingFeed>> GetUserForReadingFeedAsync()
+    {
+        var response = await _userRepository.GetUserForReadingFeedAsync();
+        
+        return _mapper.Map<IEnumerable<UserReadingFeed>>(response);
+    }
 }

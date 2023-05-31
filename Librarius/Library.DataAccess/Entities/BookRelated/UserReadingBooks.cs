@@ -8,6 +8,8 @@ public class UserReadingBooks : Entity
     
     public int MinutesSpent { get; set; }
     
+    public string? Timestamp { get; set; }
+    
     // many-to-one User
     public int UserId { get; set; }
     

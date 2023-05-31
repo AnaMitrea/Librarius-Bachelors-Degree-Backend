@@ -31,6 +31,9 @@ public class UserCompletedBooksConfiguration : IEntityTypeConfiguration<UserRead
             .HasColumnName("is_book_finished")
             .IsRequired();
         
+        builder.Property(x => x.Timestamp)
+            .HasColumnName("timestamp");
+        
         // many-to-many for books - users
         
         builder

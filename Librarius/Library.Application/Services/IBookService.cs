@@ -5,6 +5,7 @@ using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
+using Library.Application.Models.SearchBar;
 using Library.DataAccess.DTOs;
 
 namespace Library.Application.Services;
@@ -36,4 +37,6 @@ public interface IBookService
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingNowBooksAsync();
     
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingWeekBooksAsync();
+    
+    Task<IEnumerable<BookMinimalResponseModel>> SearchBooksByFilterAsync(SearchBarRequestModel requestModelSearchBy);
 }

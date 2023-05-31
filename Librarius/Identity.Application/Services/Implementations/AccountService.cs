@@ -10,10 +10,12 @@ public class AccountService : IAccountService
 {
     private readonly IMapper _mapper;
     private readonly IAccountRepository _accountRepository;
+    private readonly ILoginActivityService _loginActivityService;
 
-    public AccountService(IAccountRepository accountRepository, IMapper mapper)
+    public AccountService(IAccountRepository accountRepository, IMapper mapper, ILoginActivityService loginActivityService)
     {
         _mapper = mapper;
+        _loginActivityService = loginActivityService;
         _accountRepository = accountRepository;
     }
 
@@ -74,8 +76,7 @@ public class AccountService : IAccountService
         var yesterdayFormatted = yesterday.Date.ToString("dd/MM/yyyy");
         
         var account = await _accountRepository.GetUserInformationAsync(username);
-        if (account == null) return null;
-        
+
         var lastLogin = account.LastLogin;
 
         if (todayFormatted == lastLogin)
@@ -100,6 +101,10 @@ public class AccountService : IAccountService
         }
 
         account.LastLogin = todayFormatted;
+        
+        // todo add into loginActivity the account id and lastLogin
+        
+        await _loginActivityService.CreateLoginActivityAsync(account.Id, account.LastLogin);
 
         var updatedAccount = await _accountRepository.UpdateUserInformationAsync(account);
 

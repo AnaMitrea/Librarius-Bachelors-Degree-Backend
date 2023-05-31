@@ -144,4 +144,23 @@ public class UserRepository : IUserRepository
 
         return userLeaderboard;
     }
+
+    public async Task<IEnumerable<UserReadingFeedDto>> GetUserForReadingFeedAsync()
+    {
+        // get a list desc by UserReadingBooks.Timestamp (text column in db) where timestamp != null and isFinished true
+        
+        var users = await _dbContext.UserReadingBooks
+            .Where(ur => ur.Timestamp != null & ur.IsBookFinished == true)
+            .OrderByDescending(ur => ur.Timestamp)
+            .Select(ur => new UserReadingFeedDto
+            {
+                Id = ur.UserId,
+                Username = ur.User.Username,
+                Book = ur.Book
+            })
+            .Take(10)
+            .ToListAsync();
+
+        return users;
+    }
 }

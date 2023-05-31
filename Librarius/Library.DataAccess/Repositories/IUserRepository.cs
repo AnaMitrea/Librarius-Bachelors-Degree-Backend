@@ -17,4 +17,5 @@ public interface IUserRepository
     public Task<int> GetUserMinutesLoggedAsync(string username);
     public Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersMinutesLoggedAsync();
     public Task<IEnumerable<UserLeaderboardByBooksDto>> GetAllUsersByNumberOfBooksDescAsync();
+    public Task<IEnumerable<UserReadingFeedDto>> GetUserForReadingFeedAsync();
 }

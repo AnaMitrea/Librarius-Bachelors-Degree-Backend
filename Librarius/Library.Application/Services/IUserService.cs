@@ -17,4 +17,5 @@ public interface IUserService
     
     public Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByMinutesLoggedDescAsync();
     public Task<IEnumerable<UserLeaderboardByBooks>> GetAllUsersByNumberOfBooksDescAsync();
+    public Task<IEnumerable<UserReadingFeed>> GetUserForReadingFeedAsync();
 }

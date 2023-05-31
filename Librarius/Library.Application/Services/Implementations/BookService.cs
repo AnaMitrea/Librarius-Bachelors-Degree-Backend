@@ -6,6 +6,7 @@ using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
+using Library.Application.Models.SearchBar;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.Repositories;
 
@@ -123,5 +124,12 @@ public class BookService : IBookService
         var response = await _bookRepository.GetTrendingWeekBooksAsync();
 
         return _mapper.Map<IEnumerable<BookTrendingResponseModel>>(response);
+    }
+
+    public async Task<IEnumerable<BookMinimalResponseModel>> SearchBooksByFilterAsync(SearchBarRequestModel requestModel)
+    {
+        var response = await _bookRepository.SearchBooksByFilterAsync(requestModel.SearchBy, requestModel.MaxResults);
+
+        return _mapper.Map<IEnumerable<BookMinimalResponseModel>>(response);
     }
 }

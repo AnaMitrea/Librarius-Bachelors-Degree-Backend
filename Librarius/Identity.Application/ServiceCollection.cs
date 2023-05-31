@@ -11,6 +11,7 @@ public static class ServiceCollection
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(JwtAccountProfile));
+        services.AddAutoMapper(typeof(LoginActivityProfile));
         services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(TrophyProfile));
         
@@ -18,6 +19,7 @@ public static class ServiceCollection
         
         services.AddScoped<IJwtTokenHandlerService, JwtTokenHandlerService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<ILoginActivityService, LoginActivityService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITrophyService, TrophyService>();
 

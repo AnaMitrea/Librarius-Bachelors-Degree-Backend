@@ -69,4 +69,14 @@ public class AuthorRepository : IAuthorRepository
 
         return authorMaterials;
     }
+
+    public async Task<IEnumerable<Author>> SearchBooksByFilterAsync(string searchByKey, int maxResults)
+    {
+        var filteredAuthors = await _dbContext.Authors
+            .Where(author => author.Name.Contains(searchByKey))
+            .Take(maxResults)
+            .ToListAsync();
+
+        return filteredAuthors;
+    }
 }

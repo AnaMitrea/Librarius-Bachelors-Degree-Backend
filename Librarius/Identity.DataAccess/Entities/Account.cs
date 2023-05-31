@@ -22,4 +22,7 @@ public class Account : Entity
     
     // many-to-many: Account -> Trophies
     public IEnumerable<TrophyAccount> TrophyAccounts { get; set; }
+    
+    // one-to-many: Account -> Activity Logins
+    public ICollection<LoginActivity> LoginActivities { get; set; }
 }

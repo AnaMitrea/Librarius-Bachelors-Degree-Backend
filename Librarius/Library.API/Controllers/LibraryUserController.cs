@@ -36,6 +36,23 @@ public class LibraryUserController : ControllerBase
         }
     }
     
+    // Route: /api/library/user/reading-feed
+    [HttpGet("reading-feed")]
+    public async Task<IActionResult> GetUserForReadingFeed()
+    {
+        try
+        {
+            var response = await _userService.GetUserForReadingFeedAsync();
+
+            return Ok(ApiResponse<IEnumerable<UserReadingFeed>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<UserReadingFeed>>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+    
     // Route: /api/library/user/minutes-logged
     [HttpGet("minutes-logged")]
     public async Task<IActionResult> GetUserMinutesLogged()
