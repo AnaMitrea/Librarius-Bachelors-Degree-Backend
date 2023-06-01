@@ -1,4 +1,5 @@
-﻿using Library.Application.Models.LibraryUser.Request;
+﻿using Library.Application.Models.Book;
+using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 
 namespace Library.Application.Services;
@@ -23,4 +24,6 @@ public interface IUserService
     
     public Task<Dictionary<int, UserBookReadingTimeTrackerResponse>> GetBookTimeReadingTrackersByUserAsync(
         string username);
+
+    Task<IEnumerable<BookMinimalResponseModel>> GetReadingBooksInProgressUserAsync(string username);
 }

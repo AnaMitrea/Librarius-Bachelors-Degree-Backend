@@ -4,6 +4,7 @@ using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
@@ -39,6 +40,7 @@ public class BookProfile : Profile
 
         CreateMap<Book, BookNoCategoriesResponseModel>();
 
+        // Used for display
         CreateMap<Book, BookMinimalResponseModel>();
         
         CreateMap<BookWithContentDto, BookReadingResponseModel>();

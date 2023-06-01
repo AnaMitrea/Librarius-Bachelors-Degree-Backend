@@ -1,5 +1,7 @@
 using Library.API.Models;
 using Library.API.Utils;
+using Library.Application.Models.Book;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.Application.Services;
@@ -125,6 +127,28 @@ public class LibraryUserController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+    
+    // Route: /api/library/user/reading/in-progress
+    [HttpGet("reading/in-progress")]
+    public async Task<IActionResult> GetReadingBooksInProgressUser()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.GetReadingBooksInProgressUserAsync(username);
+            return Ok(ApiResponse<IEnumerable<BookMinimalResponseModel>>
+                .Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
 
         }

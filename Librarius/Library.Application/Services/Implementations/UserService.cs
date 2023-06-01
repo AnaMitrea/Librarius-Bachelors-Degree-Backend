@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Library.Application.Models.Book;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.DataAccess.Repositories;
@@ -68,5 +70,12 @@ public class UserService : IUserService
         var response = await _userRepository.GetBookTimeReadingTrackersByUserAsync(username);
         
         return _mapper.Map<Dictionary<int, UserBookReadingTimeTrackerResponse>>(response);
+    }
+
+    public async Task<IEnumerable<BookMinimalResponseModel>> GetReadingBooksInProgressUserAsync(string username)
+    {
+        var response = await _userRepository.GetReadingBooksInProgressUserAsync(username);
+        
+        return _mapper.Map<IEnumerable<BookMinimalResponseModel>>(response);
     }
 }

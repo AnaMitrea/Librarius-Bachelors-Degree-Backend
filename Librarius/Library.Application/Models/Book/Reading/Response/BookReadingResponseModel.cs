@@ -1,4 +1,4 @@
-﻿namespace Library.Application.Models.Book.Reading;
+﻿namespace Library.Application.Models.Book.Reading.Response;
 
 public class BookReadingResponseModel
 {

@@ -1,6 +1,7 @@
 ﻿using Library.DataAccess.DTOs.User;
 using Library.DataAccess.Entities;
 using Library.DataAccess.Entities.BookRelated;
+using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Entities.User;
 using Library.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -184,5 +185,24 @@ public class UserRepository : IUserRepository
                 });
 
         return minutesSpentByBookId;
+    }
+
+    public async Task<IEnumerable<Book>> GetReadingBooksInProgressUserAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new Exception("User not found.");
+        
+        await _dbContext.Entry(user)
+            .Collection(u => u.ReadingBooks)
+            .Query()
+            .Include(rb => rb.Book)
+            .ThenInclude(b => b.Author)
+            .LoadAsync();
+        
+        var inProgressBooks = user.ReadingBooks
+            .Where(rb => !rb.IsBookFinished)
+            .Select(rb => rb.Book);
+    
+        return inProgressBooks;
     }
 }
