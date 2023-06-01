@@ -38,9 +38,9 @@ public class TrophyController : ControllerBase
         }
     }
     
-    // Route: /api/trophy/user for all completed trophies
-    // Route: /api/trophy/user?category=... for all completed trophies for certain category
-    [HttpGet("user")]
+    // Route: /api/trophy/user/completed for all completed trophies
+    // Route: /api/trophy/user/completed?category=... for all completed trophies for certain category
+    [HttpGet("user/completed")]
     public async Task<IActionResult> GetUserCompletedTrophiesAsync([FromQuery] string? category)
     {
         try
@@ -53,11 +53,42 @@ public class TrophyController : ControllerBase
             {
                 var response = await _trophyService.GetUserAllCompletedTrophiesAsync(username);
             
-                return Ok(ApiResponse<ICollection<KeyValuePair<string,IEnumerable<TrophyModel>>>>.Success(response));
+                return Ok(ApiResponse<Dictionary<string, IEnumerable<TrophyModel>>>.Success(response));
             }
             else
             {
                 var response = await _trophyService.GetUserCompletedTrophiesByCategoryAsync(username, category);
+            
+                return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
+            }
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<TrophyModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/trophy/user/in-progress
+    // all user IN PROGRESS trophies
+    [HttpGet("user/in-progress")]
+    public async Task<IActionResult> GetUserInProgressTrophiesAsync([FromQuery] string? category)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+
+            if (string.IsNullOrEmpty(category) || string.IsNullOrWhiteSpace(category))
+            {
+                var response = await _trophyService.GetUserInProgressTrophiesAsync(username);
+            
+                return Ok(ApiResponse<Dictionary<string, IEnumerable<TrophyModel>>>.Success(response));
+            }
+            else
+            {
+                var response = await _trophyService.GetUserInProgressTrophiesByCategoryAsync(username, category);
             
                 return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
             }

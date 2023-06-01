@@ -21,4 +21,11 @@ public class UserService : IUserService
         
         return _mapper.Map<IEnumerable<UserLeaderboardByPoints>>(response);
     }
+
+    public async Task<IEnumerable<string>> GetUserDashboardActivityAsync(string username)
+    {
+        var response = await _userRepository.GetUserDashboardActivityAsync(username);
+        
+        return _mapper.Map<IEnumerable<string>>(response);
+    }
 }

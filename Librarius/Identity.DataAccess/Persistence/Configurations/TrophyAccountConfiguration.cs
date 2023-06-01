@@ -17,6 +17,11 @@ public class TrophyAccountConfiguration : IEntityTypeConfiguration<TrophyAccount
         builder.Property(x => x.TrophyId)
             .HasColumnName("trophy_id")
             .IsRequired();
+        
+        builder.Property(x => x.IsWon)
+            .HasColumnName("isWon")
+            .IsRequired();
+        
         builder.Property(x => x.AccountId)
             .HasColumnName("account_id")
             .IsRequired();

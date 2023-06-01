@@ -11,4 +11,6 @@ public class TrophyModel
     public string Instructions { get; set; }
     
     public string ImageSrcPath { get; set; }
+    
+    public bool IsWon { get; set; }
 }

@@ -8,6 +8,7 @@ public class TrophyProfile : Profile
 {
     public TrophyProfile()
     {
-        CreateMap<Trophy, TrophyModel>();
+        CreateMap<Trophy, TrophyModel>()
+            .ForMember(dest => dest.IsWon, opt => opt.MapFrom(src => src.TrophyAccounts.Any(ta => ta.IsWon)));
     }
 }

@@ -1,6 +1,7 @@
 using Identity.API.Models;
 using Identity.API.Utils;
 using Identity.Application.Models.User;
+using Identity.Application.Models.User.Activity;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -77,6 +78,28 @@ public class UserController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<IEnumerable<UserLeaderboardByPoints>>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+    
+    
+    // Route: /api/user/dashboard/activity
+    [HttpGet("dashboard/activity")]
+    public async Task<IActionResult> GetUserDashboardActivity()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.GetUserDashboardActivityAsync(username);
+
+            return Ok(ApiResponse<IEnumerable<string>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<string>>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
 
         }
     }

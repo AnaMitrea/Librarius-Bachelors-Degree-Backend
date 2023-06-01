@@ -1,4 +1,6 @@
-﻿using Identity.DataAccess.DTOs;
+﻿using System.Globalization;
+using Identity.DataAccess.DTOs;
+using Identity.DataAccess.Entities;
 using Identity.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,4 +33,18 @@ public class UserRepository : IUserRepository
         ).ToList();
     }
 
+    public async Task<IEnumerable<string>> GetUserDashboardActivityAsync(string username)
+    {
+        var user = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
+        if (user == null) throw new Exception("User not found.");
+
+        var activities = await _dbContext.LoginActivities
+            .Where(ac => ac.AccountId == user.Id)
+            .Select(ac 
+                => DateTime.ParseExact(ac.DateTimestamp, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                .ToString("yyyy-MM-dd"))
+            .ToListAsync();
+
+        return activities;
+    }
 }

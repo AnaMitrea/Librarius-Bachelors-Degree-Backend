@@ -4,6 +4,8 @@ public class TrophyAccount : Entity
 {
     public int TrophyId { get; set; }
     
+    public bool IsWon { get; set; }
+    
     public Trophy Trophy { get; set; }
     
     public int AccountId { get; set; }
