@@ -18,6 +18,48 @@ public class TrophyController : ControllerBase
         _trophyService = trophyService;
     }
     
+    // Route: /api/trophy/join/{:trophyId}
+    [HttpGet("join/{trophyId:int}")]
+    public async Task<IActionResult> JoinTrophyChallengeById([FromRoute] int trophyId)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+
+            var response = await _trophyService.JoinTrophyChallengeByIdAsync(username, trophyId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/trophy/leave/{:trophyId}
+    [HttpGet("leave/{trophyId:int}")]
+    public async Task<IActionResult> LeaveTrophyChallengeById([FromRoute] int trophyId)
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+
+            var response = await _trophyService.LeaveTrophyChallengeByIdAsync(username, trophyId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
     // Route: /api/trophy/challenges?category=...&limit=...
     [HttpGet("challenges")]
     public async Task<IActionResult> GetTrophiesByCategory([FromQuery] string category,[FromQuery] bool limit)

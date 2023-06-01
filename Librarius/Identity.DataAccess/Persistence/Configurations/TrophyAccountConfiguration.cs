@@ -9,9 +9,10 @@ public class TrophyAccountConfiguration : IEntityTypeConfiguration<TrophyAccount
     public void Configure(EntityTypeBuilder<TrophyAccount> builder)
     {
         builder.ToTable("trophyAccounts");
-        
+
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd()
             .HasColumnName("id");
         
         builder.Property(x => x.TrophyId)

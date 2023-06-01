@@ -13,4 +13,6 @@ public interface ITrophyRepository
     Task<Dictionary<string, IEnumerable<Trophy>>> GetUserInProgressTrophiesAsync(string username);
     
     Task<IEnumerable<Trophy>> GetUserInProgressTrophiesByCategoryAsync(string username, string category);
+    Task<bool> JoinTrophyChallengeByIdAsync(string username, int trophyId);
+    Task<bool> LeaveTrophyChallengeByIdAsync(string username, int trophyId);
 }
