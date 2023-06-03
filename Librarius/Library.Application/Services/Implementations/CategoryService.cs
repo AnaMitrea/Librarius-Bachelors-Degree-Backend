@@ -17,7 +17,7 @@ public class CategoryService : ICategoryService
     
     public async Task<List<CategoryWithBookshelfResponseModel>> GetAllAsync()
     {
-        var categories = await this._categoryRepository.GetAllAsync();
+        var categories = await _categoryRepository.GetAllAsync();
 
         return _mapper.Map<List<CategoryWithBookshelfResponseModel>>(categories);
     }

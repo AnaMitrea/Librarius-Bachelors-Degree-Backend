@@ -1,8 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
-using Library.DataAccess.Entities;
-using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Entities.User;
 using Library.DataAccess.Persistence;
@@ -108,7 +106,7 @@ public class BookRepository : IBookRepository
         var booksGroupedByBookshelf = await _dbContext.BooksCategories
             .AsNoTracking()
             .Include(bc => bc.Book.Author)
-            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, Book = bc.Book })
+            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, bc.Book })
             .ToListAsync();
 
         var groupedBooks = booksGroupedByBookshelf

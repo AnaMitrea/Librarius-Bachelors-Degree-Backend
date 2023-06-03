@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using Identity.DataAccess.DTOs;
-using Identity.DataAccess.Entities;
 using Identity.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,7 +3,7 @@ using Library.DataAccess.DTOs;
 
 namespace Library.DataAccess.Utilities;
 
-public partial class BookContentUtil
+public class BookContentUtil
 {
     public static async Task<string> GetContentBetweenSectionsAsync(string html)
     {

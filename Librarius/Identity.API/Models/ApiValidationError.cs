@@ -4,8 +4,8 @@ public class ApiValidationError
 {
     public ApiValidationError(string? field, string message)
     {
-        this.Field = field != string.Empty ? field : null;
-        this.Message = message;
+        Field = field != string.Empty ? field : null;
+        Message = message;
     }
 
     public string? Field { get; }

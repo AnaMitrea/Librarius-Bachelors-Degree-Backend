@@ -13,7 +13,6 @@ public static class ServiceCollection
         services.AddAutoMapper(typeof(JwtAccountProfile));
         services.AddAutoMapper(typeof(LoginActivityProfile));
         services.AddAutoMapper(typeof(UserProfile));
-        services.AddAutoMapper(typeof(TrophyProfile));
         
         services.AddSingleton<HttpClient>();
         
@@ -21,7 +20,6 @@ public static class ServiceCollection
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ILoginActivityService, LoginActivityService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ITrophyService, TrophyService>();
 
         return services;
     }

@@ -1,0 +1,14 @@
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\bin\Debug\net7.0\Trophy.DataAccess.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\bin\Debug\net7.0\Trophy.DataAccess.runtimeconfig.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\bin\Debug\net7.0\Trophy.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\bin\Debug\net7.0\Trophy.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\refint\Trophy.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\Trophy.DataAccess.genruntimeconfig.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.DataAccess\obj\Debug\net7.0\ref\Trophy.DataAccess.dll

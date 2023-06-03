@@ -21,7 +21,6 @@ public static class ServiceCollection
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ILoginActivityRepository, LoginActivityRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ITrophyRepository, TrophyRepository>();
 
         return services;
     }

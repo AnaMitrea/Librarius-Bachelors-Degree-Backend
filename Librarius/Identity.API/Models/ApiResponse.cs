@@ -5,9 +5,9 @@ public class ApiResponse<T>
 {
     private ApiResponse(bool succeeded, T result, IEnumerable<ApiValidationError> errors)
     {
-        this.Succeeded = succeeded;
-        this.Result = result;
-        this.Errors = errors;
+        Succeeded = succeeded;
+        Result = result;
+        Errors = errors;
     }
 
     public bool Succeeded { get; }

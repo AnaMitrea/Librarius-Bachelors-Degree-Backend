@@ -35,7 +35,7 @@ public class AuthorRepository : IAuthorRepository
             .ToListAsync();
 
         var groupedBooksByCategory = authorBooks
-            .SelectMany(b => b.BookCategories.Select(bc => new { Book = b, Category = bc.Category }))
+            .SelectMany(b => b.BookCategories.Select(bc => new { Book = b, bc.Category }))
             .GroupBy(x => x.Category);
 
         var authorMaterials = new List<AuthorMaterialsDto>();

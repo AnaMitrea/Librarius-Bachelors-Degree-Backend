@@ -1,5 +1,6 @@
-using FluentValidation.AspNetCore;
 using Email.Application;
+using FluentValidation.AspNetCore;
+
 // using Email.DataAccess;
 
 const string myAllowAnyOrigin = "_myAllowAnyOrigin";
