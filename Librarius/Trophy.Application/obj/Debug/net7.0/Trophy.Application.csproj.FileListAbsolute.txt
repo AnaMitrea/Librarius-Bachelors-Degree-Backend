@@ -1,0 +1,15 @@
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\bin\Debug\net7.0\Trophy.Application.deps.json
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\bin\Debug\net7.0\Trophy.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\bin\Debug\net7.0\Trophy.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\bin\Debug\net7.0\Trophy.DataAccess.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\bin\Debug\net7.0\Trophy.DataAccess.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.csproj.AssemblyReference.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.AssemblyInfoInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.AssemblyInfo.cs
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.csproj.CoreCompileInputs.cache
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.csproj.CopyComplete
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\refint\Trophy.Application.dll
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\Trophy.Application.pdb
+C:\Users\anstoian\Source\Facultate\Licenta-Backend\Librarius\Trophy.Application\obj\Debug\net7.0\ref\Trophy.Application.dll

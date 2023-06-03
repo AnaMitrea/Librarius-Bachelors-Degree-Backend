@@ -1,7 +1,6 @@
 using Identity.API.Models;
 using Identity.API.Utils;
 using Identity.Application.Models.User;
-using Identity.Application.Models.User.Activity;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;

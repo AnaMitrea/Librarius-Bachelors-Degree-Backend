@@ -1,4 +1,5 @@
-﻿using Library.DataAccess.Entities.BookRelated;
+﻿using System.Globalization;
+using Library.DataAccess.Entities.BookRelated;
 
 namespace Library.Application.Utilities;
 
@@ -6,7 +7,7 @@ public static class Utils
 {
     public static string CalculateTimeUnit(string timestamp)
     {
-        if (DateTime.TryParseExact(timestamp, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out var timestampDate))
+        if (DateTime.TryParseExact(timestamp, "dd/MM/yyyy", null, DateTimeStyles.None, out var timestampDate))
         {
             var timePassed = DateTime.Now - timestampDate;
             return timePassed.TotalDays switch
@@ -22,7 +23,7 @@ public static class Utils
     
     public static string CalculateTimeValue(string timestamp)
     {
-        if (DateTime.TryParseExact(timestamp, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out var timestampDate))
+        if (DateTime.TryParseExact(timestamp, "dd/MM/yyyy", null, DateTimeStyles.None, out var timestampDate))
         {
             var timePassed = DateTime.Now - timestampDate;
             switch (timePassed.TotalDays)

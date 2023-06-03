@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Response;
-using Library.DataAccess.Entities;
-using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.User;
 
 namespace Library.Application.Mapping;

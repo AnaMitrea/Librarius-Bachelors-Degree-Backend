@@ -1,7 +1,5 @@
 ﻿using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
-using Library.DataAccess.Entities;
-using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Entities.User;
 

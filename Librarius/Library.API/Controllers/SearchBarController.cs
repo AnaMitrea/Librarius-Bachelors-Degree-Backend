@@ -1,5 +1,3 @@
-using Library.API.Models;
-using Library.Application.Models.Book;
 using Library.Application.Models.SearchBar;
 using Library.Application.Services;
 using Microsoft.AspNetCore.Mvc;

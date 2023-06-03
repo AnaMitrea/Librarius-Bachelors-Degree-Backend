@@ -1,7 +1,6 @@
 using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
-using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.Application.Services;

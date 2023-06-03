@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book;
-using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.DataAccess.Repositories;

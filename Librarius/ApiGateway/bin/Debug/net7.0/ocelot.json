@@ -47,7 +47,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5257
+          "Port": 5298
         }
       ],
       "UpstreamPathTemplate": "/api/trophy/{everything}",
