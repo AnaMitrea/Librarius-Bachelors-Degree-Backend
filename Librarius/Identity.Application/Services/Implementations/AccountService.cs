@@ -101,9 +101,7 @@ public class AccountService : IAccountService
         }
 
         account.LastLogin = todayFormatted;
-        
-        // todo add into loginActivity the account id and lastLogin
-        
+
         await _loginActivityService.CreateLoginActivityAsync(account.Id, account.LastLogin);
 
         var updatedAccount = await _accountRepository.UpdateUserInformationAsync(account);

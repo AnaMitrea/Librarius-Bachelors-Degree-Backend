@@ -13,7 +13,6 @@ public class AccountController : ControllerBase
 {
     private readonly IJwtTokenHandlerService _jwtTokenHandlerService;
     private readonly IAccountService _accountService;
-    private readonly ILoginActivityService _loginActivityService;
     private readonly HttpClient _httpClient;
 
     private const string LibraryUserApiEndpoint = "http://localhost:5164/api/library/user/register";
@@ -21,14 +20,12 @@ public class AccountController : ControllerBase
     public AccountController(
         IJwtTokenHandlerService jwtTokenHandlerService,
         IAccountService accountService,
-        HttpClient httpClient,
-        ILoginActivityService loginActivityService
+        HttpClient httpClient
         )
     {
         _jwtTokenHandlerService = jwtTokenHandlerService;
         _accountService = accountService;
         _httpClient = httpClient;
-        _loginActivityService = loginActivityService;
     }
 
     // Route: /api/account/login
