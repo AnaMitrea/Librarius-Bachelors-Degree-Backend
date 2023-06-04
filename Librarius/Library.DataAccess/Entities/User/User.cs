@@ -17,4 +17,7 @@ public class User : Entity
 
     // many-to-many completed books
     public ICollection<UserBookReadingTracker> ReadingBooks { get; set; }
+    
+    // many-to-many completed books
+    public ICollection<UserFavoriteBook> FavoriteBooks { get; set; }
 }

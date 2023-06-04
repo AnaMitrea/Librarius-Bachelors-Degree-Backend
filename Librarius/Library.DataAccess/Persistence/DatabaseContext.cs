@@ -19,6 +19,8 @@ public class DatabaseContext : DbContext
     public DbSet<ReviewLikedBy> ReviewLikedBys { get; set; }
     
     public DbSet<UserBookReadingTracker> UserReadingBooks { get; set; }
+    
+    public DbSet<UserFavoriteBook> UserFavoriteBooks { get; set; }
     public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

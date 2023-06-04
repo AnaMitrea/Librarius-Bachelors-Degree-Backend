@@ -1,4 +1,5 @@
-﻿using Library.DataAccess.Entities.Library;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Library.DataAccess.Entities.Library;
 
 namespace Library.DataAccess.Entities.BookRelated;
 
@@ -12,6 +13,9 @@ public class Review : Entity
     
     // !!! Denormalized the data in order to remove the need to calculate the likes count dynamically each time
     public int LikesCount { get; set; }
+    
+    [NotMapped]
+    public bool Liked { get; set; }
     
     // many-to-one Book
     public int BookId { get; set; }

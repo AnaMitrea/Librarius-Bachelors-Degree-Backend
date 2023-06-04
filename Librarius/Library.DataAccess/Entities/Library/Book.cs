@@ -35,6 +35,9 @@ public class Book : Entity
     
     // many-to-many user readers
     public ICollection<UserBookReadingTracker> ReadingBooksTracker { get; set; }
+    
+    // many-to-many user favorite
+    public ICollection<UserFavoriteBook> UserFavoriteBooks { get; set; }
 }
 
 

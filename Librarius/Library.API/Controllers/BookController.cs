@@ -3,6 +3,7 @@ using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
+using Library.Application.Models.Book.Favorite;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
@@ -50,9 +51,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _reviewService.GetReviewsForBookByIdAsync(reviewRequestModel, username);
             
@@ -70,9 +69,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _reviewService.SetUserReviewByBookIdAsync(requestModel, username);
             
@@ -90,9 +87,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _reviewService.UpdateLikeStatusAsync(
                 username,
@@ -182,9 +177,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _bookService.CheckIsBookFinishedReading(bookId, username);
 
@@ -203,9 +196,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _bookService.GetUserReadingTimeSpentAsync(requestModel, username);
 
@@ -224,9 +215,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
 
@@ -245,9 +234,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
             
@@ -329,5 +316,35 @@ public class BookController : ControllerBase
         {
             return BadRequest(ApiResponse<object>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
+    }
+    
+    // Route: /api/library/book/favorite/toggle
+    [HttpPost("favorite/toggle")]
+    public async Task<IActionResult> SetOrRemoveFavoriteBook([FromBody] BookFavoriteRequestModel requestModel)
+    {
+        try
+        {
+            var response = await _bookService.SetOrRemoveFavoriteBookAsync(
+                requestModel,
+                GetUsernameFromToken()
+            );
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+
+    public string GetUsernameFromToken()
+    {
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
+        return Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+    }
+    
+    public string GetAuthorizationHeaderValue()
+    {
+        return HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
     }
 }

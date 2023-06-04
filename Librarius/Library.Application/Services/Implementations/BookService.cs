@@ -2,6 +2,7 @@
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
+using Library.Application.Models.Book.Favorite;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
@@ -131,5 +132,10 @@ public class BookService : IBookService
         var response = await _bookRepository.SearchBooksByFilterAsync(requestModel.SearchBy, requestModel.MaxResults);
 
         return _mapper.Map<IEnumerable<BookMinimalResponseModel>>(response);
+    }
+
+    public async Task<bool> SetOrRemoveFavoriteBookAsync(BookFavoriteRequestModel requestModel, string username)
+    {
+        return await _bookRepository.SetOrRemoveFavoriteBookAsync(username, requestModel.BookId);
     }
 }

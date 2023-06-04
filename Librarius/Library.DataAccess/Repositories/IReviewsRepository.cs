@@ -5,7 +5,7 @@ namespace Library.DataAccess.Repositories;
 
 public interface IReviewsRepository
 {
-    Task<ICollection<Review>> GetAllForBookByIdAsync(int id, int maxResults, string sortBy, int startIndex);
+    Task<ICollection<Review>> GetAllForBookByIdAsync(string username, int id, int maxResults, string sortBy, int startIndex);
 
     Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestDto requestDto, string username);
     

@@ -1,6 +1,7 @@
 ﻿using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
+using Library.Application.Models.Book.Favorite;
 using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
@@ -39,4 +40,6 @@ public interface IBookService
     Task<IEnumerable<BookTrendingResponseModel>> GetTrendingWeekBooksAsync();
     
     Task<IEnumerable<BookMinimalResponseModel>> SearchBooksByFilterAsync(SearchBarRequestModel requestModelSearchBy);
+
+    Task<bool> SetOrRemoveFavoriteBookAsync(BookFavoriteRequestModel requestModel, string username);
 }

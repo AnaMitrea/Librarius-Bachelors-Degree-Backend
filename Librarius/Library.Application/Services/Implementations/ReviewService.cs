@@ -23,6 +23,7 @@ public class ReviewService: IReviewService
         ReviewRequestModel reviewRequestModel, string username)
     {
         var reviews = await _reviewsRepository.GetAllForBookByIdAsync(
+            username,
             reviewRequestModel.BookId,
             reviewRequestModel.MaxResults,
             reviewRequestModel.SortBy,

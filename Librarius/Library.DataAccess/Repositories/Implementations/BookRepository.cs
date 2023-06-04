@@ -338,4 +338,36 @@ public class BookRepository : IBookRepository
 
         return filteredBooks;
     }
+
+    public async Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(user => user.Username == username);
+        if (user == null) throw new Exception("User not found");
+        
+        var book = await _dbContext.Books.FindAsync(bookId);
+        if (book == null) throw new Exception("Book not found");
+        
+        var checkExistsEntity = await _dbContext.UserFavoriteBooks.SingleOrDefaultAsync(
+            fav => fav.User.Username == username & fav.BookId == bookId
+        );
+
+        if (checkExistsEntity == null) 
+        {
+            // add
+            var newFavorite = new UserFavoriteBook
+            {
+                UserId = user.Id,
+                BookId = book.Id
+            };
+
+            await _dbContext.UserFavoriteBooks.AddAsync(newFavorite);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        // remove
+        _dbContext.UserFavoriteBooks.Remove(checkExistsEntity);
+        await _dbContext.SaveChangesAsync();
+        return false;
+    }
 }

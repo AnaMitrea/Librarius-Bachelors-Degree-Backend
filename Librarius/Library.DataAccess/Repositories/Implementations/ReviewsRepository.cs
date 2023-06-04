@@ -14,30 +14,38 @@ public class ReviewsRepository : IReviewsRepository
         _dbContext = databaseContext;
     }
     
-    public async Task<ICollection<Review>> GetAllForBookByIdAsync(int id, int maxResults, string sortBy, int startIndex)
+    public async Task<ICollection<Review>> GetAllForBookByIdAsync(string username, int id, int maxResults, string sortBy, int startIndex)
     {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new Exception("User not found");
+
+        var reviews = await _dbContext.Reviews
+            .Include(r => r.User)
+            .Where(r => r.BookId == id)
+            .ToListAsync();
+
+        foreach (var review in reviews)
+        {
+            var likedByUser = await _dbContext.ReviewLikedBys
+                .AnyAsync(rl => rl.UserId == user.Id && rl.ReviewId == review.Id);
+
+            review.Liked = likedByUser;
+        }
+
         if (sortBy == "MostRecent")
         {
-            var reviews = await _dbContext.Reviews
-                .Include(r => r.User)
-                .Where(r => r.BookId == id)
-                .ToListAsync();
-
             return reviews
-                .OrderByDescending(r 
-                    => DateTime.ParseExact(r.Timestamp, "dd/MM/yyyy", null))
+                .OrderByDescending(r => DateTime.ParseExact(r.Timestamp, "dd/MM/yyyy", null))
                 .Skip(startIndex)
                 .Take(maxResults)
                 .ToList();
         }
 
-        return await _dbContext.Reviews
-            .Include(r => r.User)
-            .Where(r => r.BookId == id)
+        return reviews
             .OrderByDescending(r => r.LikesCount)
             .Skip(startIndex)
             .Take(maxResults)
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<bool> SetUserReviewByBookIdAsync(UserReviewRequestDto requestDto, string username)
@@ -91,15 +99,16 @@ public class ReviewsRepository : IReviewsRepository
         if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");
         
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-
         if (user == null) throw new Exception("User not found.");
 
         var review = await _dbContext.Reviews.FindAsync(reviewId);
-
         if (review == null) throw new Exception("Review not found.");
 
         var existingLike = await _dbContext.ReviewLikedBys
             .SingleOrDefaultAsync(l => l.UserId == user.Id && l.ReviewId == reviewId);
+
+        // isLiked = true -> user just pressed on Like => likesCount++ and new likeReview in table
+        // isLiked = false -> user wants to delete his like
 
         if (isLiked)
         {

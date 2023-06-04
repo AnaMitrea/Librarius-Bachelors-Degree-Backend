@@ -35,4 +35,5 @@ public interface IBookRepository
     
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
     Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults);
+    Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId);
 }
