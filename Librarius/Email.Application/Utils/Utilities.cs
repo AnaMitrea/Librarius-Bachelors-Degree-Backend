@@ -16,8 +16,7 @@ public static class Utilities
                 throw new Exception("Json Result property not found.");
             }
         }
-
+        
         return property.GetString();
     }
-
 }

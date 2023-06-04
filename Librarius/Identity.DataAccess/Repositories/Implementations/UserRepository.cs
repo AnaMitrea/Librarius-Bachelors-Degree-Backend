@@ -46,4 +46,12 @@ public class UserRepository : IUserRepository
 
         return activities;
     }
+
+    public async Task<int> FindUserIdByUsernameAsync(string username)
+    {
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
+        if (account == null) throw new Exception("User not found.");
+
+        return account.Id;
+    }
 }

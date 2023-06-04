@@ -102,4 +102,25 @@ public class UserController : ControllerBase
 
         }
     }
+    
+    // Route: /api/user/id
+    [HttpGet("id")]
+    public async Task<IActionResult> FindUserIdByUsername()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.FindUserIdByUsernameAsync(username);
+
+            return Ok(ApiResponse<int>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
 }

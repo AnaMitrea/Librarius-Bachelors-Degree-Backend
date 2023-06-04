@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Trophy.API.Models;
 using Trophy.API.Utils;
 using Trophy.Application.Services;
@@ -12,10 +13,14 @@ namespace Trophy.API.Controllers;
 public class TrophyController : ControllerBase
 {
     private readonly ITrophyService _trophyService;
+    private readonly HttpClient _httpClient;
 
-    public TrophyController(ITrophyService trophyService)
+    private const string UserIdApiUrl = "http://localhost:5164/api/user/id";
+
+    public TrophyController(ITrophyService trophyService, HttpClient httpClient)
     {
         _trophyService = trophyService;
+        _httpClient = httpClient;
     }
     
     // Route: /api/trophy/join/{:trophyId}
@@ -24,11 +29,18 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            // var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+            //     .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            //
+            // _httpClient.DefaultRequestHeaders.Authorization = 
+            //     new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
+            // var userIdResponse = await _httpClient.GetAsync(UserIdApiUrl);
+            // userIdResponse.EnsureSuccessStatusCode();
+            // var userId = ExtractUserIdFromResponse(userIdResponse).Result;
 
-            var response = await _trophyService.JoinTrophyChallengeByIdAsync(username, trophyId);
+            var userId = await GetUserIdFromIdentity();
+            
+            var response = await _trophyService.JoinTrophyChallengeByIdAsync(userId, trophyId);
 
             return Ok(ApiResponse<bool>.Success(response));
         }
@@ -45,11 +57,9 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
-
-            var response = await _trophyService.LeaveTrophyChallengeByIdAsync(username, trophyId);
+            var userId = await GetUserIdFromIdentity();
+            
+            var response = await _trophyService.LeaveTrophyChallengeByIdAsync(userId, trophyId);
 
             return Ok(ApiResponse<bool>.Success(response));
         }
@@ -87,19 +97,17 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
-
+            var userId = await GetUserIdFromIdentity();
+            
             if (string.IsNullOrEmpty(category) || string.IsNullOrWhiteSpace(category))
             {
-                var response = await _trophyService.GetUserAllCompletedTrophiesAsync(username);
+                var response = await _trophyService.GetUserAllCompletedTrophiesAsync(userId);
             
                 return Ok(ApiResponse<Dictionary<string, IEnumerable<TrophyModel>>>.Success(response));
             }
             else
             {
-                var response = await _trophyService.GetUserCompletedTrophiesByCategoryAsync(username, category);
+                var response = await _trophyService.GetUserCompletedTrophiesByCategoryAsync(userId, category);
             
                 return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
             }
@@ -118,19 +126,17 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var userId = await GetUserIdFromIdentity();
 
             if (string.IsNullOrEmpty(category) || string.IsNullOrWhiteSpace(category))
             {
-                var response = await _trophyService.GetUserInProgressTrophiesAsync(username);
+                var response = await _trophyService.GetUserInProgressTrophiesAsync(userId);
             
                 return Ok(ApiResponse<Dictionary<string, IEnumerable<TrophyModel>>>.Success(response));
             }
             else
             {
-                var response = await _trophyService.GetUserInProgressTrophiesByCategoryAsync(username, category);
+                var response = await _trophyService.GetUserInProgressTrophiesByCategoryAsync(userId, category);
             
                 return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
             }
@@ -140,5 +146,20 @@ public class TrophyController : ControllerBase
             return BadRequest(ApiResponse<IEnumerable<TrophyModel>>
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
+    }
+
+    private async Task<int> GetUserIdFromIdentity()
+    {
+        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+
+        _httpClient.DefaultRequestHeaders.Authorization = 
+            new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
+        var userIdResponse = await _httpClient.GetAsync(UserIdApiUrl);
+        userIdResponse.EnsureSuccessStatusCode();
+        
+        var jsonResponse = await userIdResponse.Content.ReadAsStringAsync();
+        var userId = Utilities.GetJsonPropertyAsInteger(jsonResponse, new[] { "result" });
+        return userId;
     }
 }

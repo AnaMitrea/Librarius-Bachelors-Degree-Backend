@@ -28,4 +28,9 @@ public class UserService : IUserService
         
         return _mapper.Map<IEnumerable<string>>(response);
     }
+
+    public async Task<int> FindUserIdByUsernameAsync(string username)
+    {
+        return await _userRepository.FindUserIdByUsernameAsync(username);
+    }
 }

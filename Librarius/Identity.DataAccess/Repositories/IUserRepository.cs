@@ -6,4 +6,5 @@ public interface IUserRepository
 {
     public Task<IEnumerable<UserLeaderboardByPointsDto>> GetAllUsersByPointsDescAsync();
     Task<IEnumerable<string>> GetUserDashboardActivityAsync(string username);
+    Task<int> FindUserIdByUsernameAsync(string username);
 }
