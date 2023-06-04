@@ -250,6 +250,8 @@ public class BookController : ControllerBase
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
             
             var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
+            
+            // check in trophy microservice based on trophy rules if user can get a trophy
 
             return Ok(ApiResponse<bool>.Success(response));
         }

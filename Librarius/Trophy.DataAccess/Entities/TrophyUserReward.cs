@@ -9,6 +9,4 @@ public class TrophyUserReward : Entity
     public Trophy Trophy { get; set; }
     
     public int UserId { get; set; }
-
-    public TrophyUser User { get; set; }
 }

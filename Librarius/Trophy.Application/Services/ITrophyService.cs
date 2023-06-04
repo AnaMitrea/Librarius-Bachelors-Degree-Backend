@@ -6,15 +6,15 @@ public interface ITrophyService
 {
     Task<IEnumerable<TrophyModel>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit);
     
-    Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(string username);
+    Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(int userId);
     
-    Task<IEnumerable<TrophyModel>> GetUserCompletedTrophiesByCategoryAsync(string username, string category);
+    Task<IEnumerable<TrophyModel>> GetUserCompletedTrophiesByCategoryAsync(int userId, string category);
     
-    Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserInProgressTrophiesAsync(string username);
+    Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserInProgressTrophiesAsync(int userId);
     
-    Task<IEnumerable<TrophyModel>> GetUserInProgressTrophiesByCategoryAsync(string username, string category);
+    Task<IEnumerable<TrophyModel>> GetUserInProgressTrophiesByCategoryAsync(int userId, string category);
     
-    Task<bool> JoinTrophyChallengeByIdAsync(string username, int trophyId);
+    Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId);
     
-    Task<bool> LeaveTrophyChallengeByIdAsync(string username, int trophyId);
+    Task<bool> LeaveTrophyChallengeByIdAsync(int userId, int trophyId);
 }

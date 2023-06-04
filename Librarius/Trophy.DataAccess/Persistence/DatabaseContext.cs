@@ -10,10 +10,8 @@ public class DatabaseContext : DbContext
 
     public DbSet<Entities.Trophy> Trophies { get; set; }
     
-    public DbSet<TrophyUserReward> TrophyAccounts { get; set; }
+    public DbSet<TrophyUserReward> TrophyUserReward { get; set; }
     
-    public DbSet<TrophyUser> Users { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -13,13 +13,10 @@ public class TrophyRepository : ITrophyRepository
         _dbContext = dbContext;
     }
     
-    public async Task<bool> JoinTrophyChallengeByIdAsync(string username, int trophyId)
+    public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {
-        var account = await _dbContext.Users.SingleOrDefaultAsync(ac => ac.Username == username);
-        if (account == null) throw new Exception("User not found.");
-
-        var checkTrophy = await _dbContext.TrophyAccounts.SingleOrDefaultAsync(
-            ta => ta.TrophyId == trophyId & ta.UserId == account.Id);
+        var checkTrophy = await _dbContext.TrophyUserReward.SingleOrDefaultAsync(
+            ta => ta.TrophyId == trophyId & ta.UserId == userId);
         
         switch (checkTrophy)
         {
@@ -33,23 +30,20 @@ public class TrophyRepository : ITrophyRepository
         var newTrophyChallenge = new TrophyUserReward
         {
             TrophyId = trophyId,
-            UserId = account.Id,
+            UserId = userId,
             IsWon = false
         };
 
-        _dbContext.TrophyAccounts.Add(newTrophyChallenge);
+        _dbContext.TrophyUserReward.Add(newTrophyChallenge);
         await _dbContext.SaveChangesAsync();
 
         return true;
     }
 
-    public async Task<bool> LeaveTrophyChallengeByIdAsync(string username, int trophyId)
+    public async Task<bool> LeaveTrophyChallengeByIdAsync(int userId, int trophyId)
     {
-        var account = await _dbContext.Users.SingleOrDefaultAsync(ac => ac.Username == username);
-        if (account == null) throw new Exception("User not found.");
-
-        var checkTrophy = await _dbContext.TrophyAccounts.SingleOrDefaultAsync(
-            ta => ta.TrophyId == trophyId & ta.UserId == account.Id);
+        var checkTrophy = await _dbContext.TrophyUserReward.SingleOrDefaultAsync(
+            ta => ta.TrophyId == trophyId & ta.UserId == userId);
 
         switch (checkTrophy)
         {
@@ -59,7 +53,7 @@ public class TrophyRepository : ITrophyRepository
                 throw new Exception("Cannot leave a won challenge.");
         }
 
-        _dbContext.TrophyAccounts.Remove(checkTrophy);
+        _dbContext.TrophyUserReward.Remove(checkTrophy);
 
         await _dbContext.SaveChangesAsync();
 
@@ -89,102 +83,56 @@ public class TrophyRepository : ITrophyRepository
     }
 
     // all user completed trophies
-    public async Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserAllCompletedTrophiesAsync(string username)
+    public async Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserAllCompletedTrophiesAsync(int userId)
     {
-        var account = await _dbContext.Users
-            .SingleOrDefaultAsync(user => user.Username == username);
-        if (account == default)
-        {
-            throw new Exception("User not found.");
-        }
+        var completedTrophies = await _dbContext.TrophyUserReward
+            .Where(trophyUserReward => trophyUserReward.UserId == userId && trophyUserReward.IsWon)
+            .Select(trophyUserReward => trophyUserReward.Trophy)
+            .ToListAsync();
 
-        await _dbContext.Entry(account)
-            .Collection(user => user.Trophies)
-            .Query()
-            .Where(trophyAccount => trophyAccount.IsWon == true)
-            .Include(trophyAccount => trophyAccount.Trophy)
-            .LoadAsync();
-        
-        var trophiesByCategory = account.Trophies
-            .Select(trophyAccount => trophyAccount.Trophy)
+        var trophiesByCategory = completedTrophies
             .GroupBy(trophy => trophy.Category)
-            .ToDictionary(group => group.Key,
-                group => group.AsEnumerable());
+            .ToDictionary(group => group.Key, group => group.AsEnumerable());
 
         return trophiesByCategory;
     }
     
     // all user completed trophies by category
-    public async Task<IEnumerable<Entities.Trophy>> GetUserCompletedTrophiesByCategoryAsync(string username, string category)
+    public async Task<IEnumerable<Entities.Trophy>> GetUserCompletedTrophiesByCategoryAsync(int userId, string category)
     {
-        var account = await _dbContext.Users
-            .SingleOrDefaultAsync(user => user.Username == username);
-        if (account == default)
-        {
-            throw new Exception("User not found.");
-        }
-
-        await _dbContext.Entry(account)
-            .Collection(user => user.Trophies)
-            .Query()
-            .Where(trophyAccount => trophyAccount.IsWon == true)
-            .Include(trophyAccount => trophyAccount.Trophy)
-            .LoadAsync();
+        var completedTrophies = await _dbContext.TrophyUserReward
+            .Where(trophyUserReward => trophyUserReward.UserId == userId && trophyUserReward.IsWon)
+            .Select(trophyUserReward => trophyUserReward.Trophy)
+            .Where(trophy => trophy.Category == category)
+            .ToListAsync();
         
-        var completedTrophies = account.Trophies
-            .Where(trophyAccount => trophyAccount.Trophy.Category == category)
-            .Select(trophyAccount => trophyAccount.Trophy);
-
         return completedTrophies;
     }
     
     // all user in progress trophies
-    public async Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserInProgressTrophiesAsync(string username)
+    public async Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserInProgressTrophiesAsync(int userId)
     {
-        var account = await _dbContext.Users
-            .SingleOrDefaultAsync(user => user.Username == username);
-        if (account == default)
-        {
-            throw new Exception("User not found.");
-        }
+        var inProgressTrophies = await _dbContext.TrophyUserReward
+            .Where(trophyUserReward => trophyUserReward.UserId == userId && !trophyUserReward.IsWon)
+            .Select(trophyUserReward => trophyUserReward.Trophy)
+            .ToListAsync();
 
-        await _dbContext.Entry(account)
-            .Collection(user => user.Trophies)
-            .Query()
-            .Where(trophyAccount => trophyAccount.IsWon == false)
-            .Include(trophyAccount => trophyAccount.Trophy)
-            .LoadAsync();
-        
-        var trophiesByCategory = account.Trophies
-            .Select(trophyAccount => trophyAccount.Trophy)
+        var trophiesByCategory = inProgressTrophies
             .GroupBy(trophy => trophy.Category)
-            .ToDictionary(group => group.Key,
-                group => group.AsEnumerable());
+            .ToDictionary(group => group.Key, group => group.AsEnumerable());
 
         return trophiesByCategory;
     }
 
     // all user in progress trophies by category
-    public async Task<IEnumerable<Entities.Trophy>> GetUserInProgressTrophiesByCategoryAsync(string username, string category)
+    public async Task<IEnumerable<Entities.Trophy>> GetUserInProgressTrophiesByCategoryAsync(int userId, string category)
     {
-        var account = await _dbContext.Users
-            .SingleOrDefaultAsync(user => user.Username == username);
-        if (account == default)
-        {
-            throw new Exception("User not found.");
-        }
+        var inProgressTrophies = await _dbContext.TrophyUserReward
+            .Where(trophyUserReward => trophyUserReward.UserId == userId && !trophyUserReward.IsWon)
+            .Select(trophyUserReward => trophyUserReward.Trophy)
+            .Where(trophy => trophy.Category == category)
+            .ToListAsync();
 
-        await _dbContext.Entry(account)
-            .Collection(user => user.Trophies)
-            .Query()
-            .Where(trophyAccount => trophyAccount.IsWon == false)
-            .Include(trophyAccount => trophyAccount.Trophy)
-            .LoadAsync();
-        
-        var completedTrophies = account.Trophies
-            .Where(trophyAccount => trophyAccount.Trophy.Category == category)
-            .Select(trophyAccount => trophyAccount.Trophy);
-
-        return completedTrophies;
+        return inProgressTrophies;
     }
 }

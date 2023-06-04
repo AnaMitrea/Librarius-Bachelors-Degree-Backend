@@ -4,7 +4,7 @@ using Trophy.DataAccess.Entities;
 
 namespace Trophy.DataAccess.Persistence.Configurations;
 
-public class TrophyAccountConfiguration : IEntityTypeConfiguration<TrophyUserReward>
+public class TrophyUserRewardConfiguration : IEntityTypeConfiguration<TrophyUserReward>
 {
     public void Configure(EntityTypeBuilder<TrophyUserReward> builder)
     {
@@ -35,8 +35,8 @@ public class TrophyAccountConfiguration : IEntityTypeConfiguration<TrophyUserRew
             .HasForeignKey(trophyAcc => trophyAcc.TrophyId);
         
         builder
-            .HasOne(trophyAcc => trophyAcc.User)
-            .WithMany(account => account.Trophies)
+            .HasOne<TrophyUserReward>()
+            .WithMany()
             .HasForeignKey(trophyAcc => trophyAcc.UserId);
     }
 }

@@ -4,13 +4,13 @@ public interface ITrophyRepository
 {
     Task<IEnumerable<Entities.Trophy>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit = false);
 
-    Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserAllCompletedTrophiesAsync(string username);
+    Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserAllCompletedTrophiesAsync(int userId);
     
-    Task<IEnumerable<Entities.Trophy>> GetUserCompletedTrophiesByCategoryAsync(string username, string category);
+    Task<IEnumerable<Entities.Trophy>> GetUserCompletedTrophiesByCategoryAsync(int userId, string category);
     
-    Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserInProgressTrophiesAsync(string username);
+    Task<Dictionary<string, IEnumerable<Entities.Trophy>>> GetUserInProgressTrophiesAsync(int userId);
     
-    Task<IEnumerable<Entities.Trophy>> GetUserInProgressTrophiesByCategoryAsync(string username, string category);
-    Task<bool> JoinTrophyChallengeByIdAsync(string username, int trophyId);
-    Task<bool> LeaveTrophyChallengeByIdAsync(string username, int trophyId);
+    Task<IEnumerable<Entities.Trophy>> GetUserInProgressTrophiesByCategoryAsync(int userId, string category);
+    Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId);
+    Task<bool> LeaveTrophyChallengeByIdAsync(int userId, int trophyId);
 }

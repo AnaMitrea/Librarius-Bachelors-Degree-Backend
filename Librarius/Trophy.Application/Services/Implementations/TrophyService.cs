@@ -15,14 +15,14 @@ public class TrophyService : ITrophyService
         _trophyRepository = trophyRepository;
     }
     
-    public async Task<bool> JoinTrophyChallengeByIdAsync(string username, int trophyId)
+    public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {
-        return await _trophyRepository.JoinTrophyChallengeByIdAsync(username, trophyId);
+        return await _trophyRepository.JoinTrophyChallengeByIdAsync(userId, trophyId);
     }
     
-    public async Task<bool> LeaveTrophyChallengeByIdAsync(string username, int trophyId)
+    public async Task<bool> LeaveTrophyChallengeByIdAsync(int userId, int trophyId)
     {
-        return await _trophyRepository.LeaveTrophyChallengeByIdAsync(username, trophyId);
+        return await _trophyRepository.LeaveTrophyChallengeByIdAsync(userId, trophyId);
     }
     
     public async Task<IEnumerable<TrophyModel>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit)
@@ -34,33 +34,33 @@ public class TrophyService : ITrophyService
     }
     
     // all user completed trophies
-    public async Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(string username)
+    public async Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(int userId)
     {
-        var trophies = await _trophyRepository.GetUserAllCompletedTrophiesAsync(username);
+        var trophies = await _trophyRepository.GetUserAllCompletedTrophiesAsync(userId);
         
         return _mapper.Map<Dictionary<string, IEnumerable<TrophyModel>>>(trophies);
     }
 
     // all user completed trophies by category
-    public async Task<IEnumerable<TrophyModel>> GetUserCompletedTrophiesByCategoryAsync(string username, string category)
+    public async Task<IEnumerable<TrophyModel>> GetUserCompletedTrophiesByCategoryAsync(int userId, string category)
     {
-        var trophies = await _trophyRepository.GetUserCompletedTrophiesByCategoryAsync(username, category);
+        var trophies = await _trophyRepository.GetUserCompletedTrophiesByCategoryAsync(userId, category);
         
         return _mapper.Map<IEnumerable<TrophyModel>>(trophies);
     }
 
     // all user in progress trophies
-    public async Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserInProgressTrophiesAsync(string username)
+    public async Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserInProgressTrophiesAsync(int userId)
     {
-        var trophies = await _trophyRepository.GetUserInProgressTrophiesAsync(username);
+        var trophies = await _trophyRepository.GetUserInProgressTrophiesAsync(userId);
         
         return _mapper.Map<Dictionary<string, IEnumerable<TrophyModel>>>(trophies);
     }
 
     // all user in progress trophies by category
-    public async Task<IEnumerable<TrophyModel>> GetUserInProgressTrophiesByCategoryAsync(string username, string category)
+    public async Task<IEnumerable<TrophyModel>> GetUserInProgressTrophiesByCategoryAsync(int userId, string category)
     {
-        var trophies = await _trophyRepository.GetUserInProgressTrophiesByCategoryAsync(username, category);
+        var trophies = await _trophyRepository.GetUserInProgressTrophiesByCategoryAsync(userId, category);
         
         return _mapper.Map<IEnumerable<TrophyModel>>(trophies);
     }
