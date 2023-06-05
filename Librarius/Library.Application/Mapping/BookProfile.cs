@@ -22,6 +22,9 @@ public class BookProfile : Profile
         // Books grouped by bookshelves
         CreateMap<BookshelfWithBooksDto, BooksForBookshelfResponseModel>();
         
+        // Books grouped by bookshelves
+        CreateMap<OrderedBookshelfWithBooksDto, OrderedBooksForBookshelfResponseModel>();
+        
         // Books grouped by bookshelves and categories
         CreateMap<BookshelfCategoryWithBooksDto, BooksForCategoryResponseModel>()
             .ForMember(
@@ -34,7 +37,21 @@ public class BookProfile : Profile
                 opt => 
                     opt.MapFrom(src => src.Title)
             );
-
+        
+        // Ordered Books grouped by bookshelves and categories
+        CreateMap<OrderedExploreCategoryDto, OrderedExploreCategoryResponseModel>(); // Category Dto -> Category Model
+        CreateMap<OrderedBookshelfCategoryWithBooksDto, OrderedBookshelfCategoryBooksResponseModel>() //entire dto -> entire model
+            .ForMember(
+                dest => dest.BookshelfId,
+                opt =>
+                    opt.MapFrom(src => src.Id)
+            )
+            .ForMember(
+                dest => dest.BookshelfTitle,
+                opt =>
+                    opt.MapFrom(src => src.Title)
+            );
+        
         CreateMap<Book, BookshelfBookResponseModel>();
 
         CreateMap<Book, BookNoCategoriesResponseModel>();

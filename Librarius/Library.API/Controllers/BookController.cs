@@ -287,14 +287,26 @@ public class BookController : ControllerBase
         }
     }
 
-    // Route: /api/library/book/bookshelves?maxResults=10
+    // Route: /api/library/book/bookshelves?maxResults=...?title=...?books=true
     [HttpGet("bookshelves")]
-    public async Task<IActionResult> GetBooksGroupedByBookshelf([FromQuery] int maxResults)
+    public async Task<IActionResult> GetBooksGroupedByBookshelf(
+        [FromQuery] bool books,
+        [FromQuery] int? maxResults = null,
+        [FromQuery] string? title = null
+    )
     {
         try
         {
-            var response = await _bookService.GetBooksGroupedByBookshelf(maxResults);
-            return Ok(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Success(response));
+            if (books)
+            {
+                var response = await _bookService.GetBooksGroupedByBookshelf(maxResults, title);
+                return Ok(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Success(response));
+            }
+            else
+            {
+                var response = await _bookService.GetGroupedBookshelves(title);
+                return Ok(ApiResponse<Dictionary<string, BooksForBookshelfResponseModel>>.Success(response));
+            }
         }
         catch (Exception e)
         {
@@ -302,19 +314,70 @@ public class BookController : ControllerBase
         }
     }
     
-    // Route: /api/library/book/categories?maxResults=10
-    [HttpGet("categories")]
-    public async Task<IActionResult> GetCategoriesWithBooks([FromQuery] int maxResults)
+    // Route: /api/library/book/ordered/bookshelves?maxResults=...?title=...
+    [HttpGet("ordered/bookshelves")]
+    public async Task<IActionResult> GetOrderedBooksGroupedByBookshelf(
+        [FromQuery] int? maxResults = null,
+        [FromQuery] string? title = null
+    )
     {
         try
         {
-            var response = 
-                await _bookService.GetBooksGroupedByCategoryAndBookshelf(maxResults);
-            return Ok(ApiResponse<List<BooksForCategoryResponseModel>>.Success(response));
+            var response = await _bookService.GetOrderedBooksGroupedByBookshelf(maxResults, title);
+            return Ok(ApiResponse<Dictionary<string, OrderedBooksForBookshelfResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<Dictionary<string, OrderedBooksForBookshelfResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/categories?maxResults=...&books=...&title=...
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetBooksGroupedByCategories(
+        [FromQuery] bool books,
+        [FromQuery] int? maxResults = null,
+        [FromQuery] string? title = null
+    )
+    {
+        try
+        {
+            if (books)
+            {
+                var response = 
+                    await _bookService.GetBooksGroupedByCategoryAndBookshelf(maxResults, title);
+                return Ok(ApiResponse<List<BooksForCategoryResponseModel>>.Success(response));
+            }
+            else
+            {
+                var response = 
+                    await _bookService.GetGroupedCategoryAndBookshelf(title);
+                return Ok(ApiResponse<List<BooksForCategoryResponseModel>>.Success(response));
+            }
+           
         }
         catch (Exception e)
         {
             return BadRequest(ApiResponse<object>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/library/book/ordered/categories?startFrom=...&maxResults=...?title=...
+    [HttpGet("ordered/categories")]
+    public async Task<IActionResult> GetOrderedBooksGroupedByCategories(
+        [FromQuery] string startFrom,
+        [FromQuery] int? maxResults = null,
+        [FromQuery] string? title = null
+    )
+    {
+        try
+        {
+            var response = await _bookService.GetOrderedBooksGroupedByCategories(startFrom, maxResults, title);
+            return Ok(ApiResponse<List<OrderedBookshelfCategoryBooksResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<List<OrderedBookshelfCategoryBooksResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

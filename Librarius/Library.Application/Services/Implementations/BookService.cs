@@ -45,16 +45,45 @@ public class BookService : IBookService
         return _mapper.Map<IEnumerable<ExploreBookResponseModel>>(response);
     }
     
-    public async Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int maxResults)
+    public async Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int? maxResults, string? title)
     {
-        var response = await _bookRepository.GetBooksGroupedByBookshelf(maxResults);
+        var response = await _bookRepository.GetBooksGroupedByBookshelf(maxResults, title);
+
+        return _mapper.Map<Dictionary<string, BooksForBookshelfResponseModel>>(response);
+    }
+    
+    public async Task<Dictionary<string, BooksForBookshelfResponseModel>> GetGroupedBookshelves(string? title)
+    {
+        var response = await _bookRepository.GetGroupedBookshelves(title);
 
         return _mapper.Map<Dictionary<string, BooksForBookshelfResponseModel>>(response);
     }
 
-    public async Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int maxResults)
+    public async Task<Dictionary<string, OrderedBooksForBookshelfResponseModel>> GetOrderedBooksGroupedByBookshelf(int? maxResults,
+        string? title)
     {
-        var response = await _bookRepository.GetBooksGroupedByCategoryAndBookshelf(maxResults);
+        var response = await _bookRepository.GetOrderedBooksGroupedByBookshelf(maxResults, title);
+
+        return _mapper.Map<Dictionary<string, OrderedBooksForBookshelfResponseModel>>(response);
+    }
+
+    public async Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int? maxResults, string? title)
+    {
+        var response = await _bookRepository.GetBooksGroupedByCategoryAndBookshelf(maxResults, title);
+
+        return _mapper.Map<List<BooksForCategoryResponseModel>>(response);
+    }
+
+    public async Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title)
+    {
+        var response = await _bookRepository.GetOrderedBooksGroupedByCategories(startFrom, maxResults, title);
+
+        return _mapper.Map<List<OrderedBookshelfCategoryBooksResponseModel>>(response);
+    }
+
+    public async Task<List<BooksForCategoryResponseModel>> GetGroupedCategoryAndBookshelf(string? title)
+    {
+        var response = await _bookRepository.GetGroupedCategoryAndBookshelf(title);
 
         return _mapper.Map<List<BooksForCategoryResponseModel>>(response);
     }

@@ -13,10 +13,19 @@ public interface IBookRepository
 
     Task<IEnumerable<Book>> GetBooksForAllBookshelves();
 
-    Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int maxResults);
+    Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int? maxResults, string? title);
     
-    Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int maxResults);
+    Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int? maxResults, string? title);
 
+    Task<List<BookshelfCategoryWithBooksDto>> GetGroupedCategoryAndBookshelf(string? title);
+
+    Task<Dictionary<string, BookshelfWithBooksDto>> GetGroupedBookshelves(string? title);
+
+    Task<Dictionary<string, OrderedBookshelfWithBooksDto>> GetOrderedBooksGroupedByBookshelf(int? maxResults,
+        string? title);
+
+    Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title);
+    
     Task<BookWithContentDto> GetReadingBookByIdAsync(int id);
 
     Task<int> CountWordsInResponseAsync(int bookId);
@@ -36,4 +45,5 @@ public interface IBookRepository
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
     Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults);
     Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId);
+
 }

@@ -17,9 +17,19 @@ public interface IBookService
 
     Task<IEnumerable<ExploreBookResponseModel>> GetBooksForAllBookshelves();
 
-    Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int maxResults);
+    Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int? maxResults, string? title);
 
-    Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int maxResults);
+    Task<Dictionary<string, BooksForBookshelfResponseModel>> GetGroupedBookshelves(string? title);
+    
+    Task<Dictionary<string, OrderedBooksForBookshelfResponseModel>> GetOrderedBooksGroupedByBookshelf(int? maxResults,
+        string? title);
+
+    Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int? maxResults, string? title);
+    
+    
+    Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title);
+
+    Task<List<BooksForCategoryResponseModel>> GetGroupedCategoryAndBookshelf(string? title);
 
     Task<BookReadingResponseModel> GetReadingBookByIdAsync(int id);
 

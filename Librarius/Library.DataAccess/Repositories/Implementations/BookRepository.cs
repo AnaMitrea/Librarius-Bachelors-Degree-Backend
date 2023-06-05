@@ -101,13 +101,19 @@ public class BookRepository : IBookRepository
      * is called to disable change tracking for the entities returned by the query. 
      */
     
-    public async Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int maxResults)
+    public async Task<Dictionary<string, BookshelfWithBooksDto>> GetBooksGroupedByBookshelf(int? maxResults, string? title)
     {
-        var booksGroupedByBookshelf = await _dbContext.BooksCategories
+        var query = _dbContext.BooksCategories
             .AsNoTracking()
             .Include(bc => bc.Book.Author)
-            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, bc.Book })
-            .ToListAsync();
+            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, bc.Book });
+
+        if (title != null)
+        {
+            query = query.Where(bc => bc.BookshelfTitle.Contains(title));
+        }
+
+        var booksGroupedByBookshelf = await query.ToListAsync();
 
         var groupedBooks = booksGroupedByBookshelf
             .GroupBy(bgbb => bgbb.BookshelfTitle)
@@ -119,15 +125,83 @@ public class BookRepository : IBookRepository
                     TotalBooks = g.Count(),
                     Books = g.Select(bgbb => bgbb.Book)
                         .OrderBy(x => Guid.NewGuid())
-                        .Take(maxResults)
+                        .Take(maxResults ?? g.Count())
                         .ToList()
                 }
             );
 
         return groupedBooks;
     }
+    
+    // Ordered books from A to Z -> by BOOKSHELF only
+    public async Task<Dictionary<string, OrderedBookshelfWithBooksDto>> GetOrderedBooksGroupedByBookshelf(int? maxResults, string? title)
+    {
+        var query = _dbContext.BooksCategories
+            .AsNoTracking()
+            .Include(bc => bc.Book.Author)
+            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title, bc.Book });
 
-    public async Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int maxResults)
+        if (title != null)
+        {
+            query = query.Where(bc => bc.BookshelfTitle.Contains(title));
+        }
+
+        var booksGroupedByBookshelf = await query.ToListAsync();
+
+        var groupedBooks = booksGroupedByBookshelf
+            .GroupBy(bgbb => bgbb.BookshelfTitle)
+            .OrderBy(g => g.Key)
+            .ToDictionary(
+                g => g.Key,
+                g => new OrderedBookshelfWithBooksDto
+                {
+                    Id = g.First().BookshelfId,
+                    TotalBooks = g.Count(),
+                    Books = g.Where(bgbb => char.IsLetter(GetFirstValidCharacter(bgbb.Book.Title)))
+                        .GroupBy(bgbb => GetFirstValidCharacter(bgbb.Book.Title).ToString().ToUpper())
+                        .OrderBy(bg => bg.Key)
+                        .ToDictionary(
+                            bg => bg.Key,
+                            bg => bg.Select(book => book.Book)
+                                .OrderBy(book => book.Title)
+                                .Take(maxResults ?? int.MaxValue)
+                                .ToList()
+                        )
+                }
+            );
+
+        return groupedBooks;
+    }
+
+    
+    public async Task<Dictionary<string, BookshelfWithBooksDto>> GetGroupedBookshelves(string? title)
+    {
+        var query = _dbContext.BooksCategories
+            .AsNoTracking()
+            .Select(bc => new { BookshelfId = bc.Category.Bookshelf.Id, BookshelfTitle = bc.Category.Bookshelf.Title});
+
+        if (title != null)
+        {
+            query = query.Where(bc => bc.BookshelfTitle.Contains(title));
+        }
+
+        var booksGroupedByBookshelf = await query.ToListAsync();
+
+        var groupedBooks = booksGroupedByBookshelf
+            .GroupBy(bgbb => bgbb.BookshelfTitle)
+            .ToDictionary(
+                g => g.Key,
+                g => new BookshelfWithBooksDto
+                {
+                    Id = g.First().BookshelfId,
+                    TotalBooks = g.Count()
+                }
+            );
+
+        return groupedBooks;
+    }
+
+    public async Task<List<BookshelfCategoryWithBooksDto>> GetBooksGroupedByCategoryAndBookshelf(int? maxResults, string? title)
     {
         var categoriesWithBooks = await _dbContext.Categories
             .AsNoTracking()
@@ -149,10 +223,104 @@ public class BookRepository : IBookRepository
                     Id = c.Id,
                     Title = c.Title,
                     TotalBooks = c.BookCategories.Count(),
-                    Books = c.BookCategories.Select(bc => bc.Book)
-                        .OrderBy(x => Guid.NewGuid())
-                        .Take(maxResults)
-                        .ToList()
+                    Books = maxResults is > 0
+                        
+                        ? c.BookCategories.Select(bc => bc.Book)
+                            .OrderBy(x => Guid.NewGuid())
+                            .Take(maxResults.Value)
+                            .ToList()
+                        
+                        : c.BookCategories.Select(bc => bc.Book)
+                            .OrderBy(x => Guid.NewGuid())
+                            .ToList()
+                        
+                }).ToList()
+            })
+            .ToList();
+
+        return groupedCategories;
+    }
+    
+    public async Task<List<BookshelfCategoryWithBooksDto>> GetGroupedCategoryAndBookshelf(string? title)
+    {
+        var query = _dbContext.Categories
+            .AsNoTracking()
+            .Include(c => c.Bookshelf)
+            .Include(c => c.BookCategories)
+            .Select(c => new
+            {
+                Category = c,
+                BookshelfId = c.Bookshelf.Id,
+                BookshelfTitle = c.Bookshelf.Title,
+                CategoryTitle = c.Title,
+                TotalBooks = c.BookCategories.Count()
+            });
+
+        if (title != null)
+        {
+            query = query.Where(c => c.CategoryTitle.Contains(title));
+        }
+
+        var categoriesWithBooks = await query.ToListAsync();
+
+        var groupedCategories = categoriesWithBooks
+            .GroupBy(c => new { c.BookshelfId, c.BookshelfTitle })
+            .OrderBy(g => g.Key.BookshelfId)
+            .Select(g => new BookshelfCategoryWithBooksDto
+            {
+                Id = g.Key.BookshelfId,
+                Title = g.Key.BookshelfTitle,
+                Categories = g.Select(c => new ExploreCategoryDto
+                {
+                    Id = c.Category.Id,
+                    Title = c.CategoryTitle,
+                    TotalBooks = c.TotalBooks
+                }).ToList()
+            })
+            .ToList();
+
+        return groupedCategories;
+    }
+
+    // Ordered books starting from a specific letter -> by BOOKSHELF & CATEGORY
+    public async Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title)
+    {
+        var categoriesWithBooks = await _dbContext.Categories
+            .AsNoTracking()
+            .Include(c => c.Bookshelf)
+            .Include(c => c.BookCategories)
+            .ThenInclude(bc => bc.Book)
+            .ThenInclude(b => b.Author)
+            .ToListAsync();
+
+        var alphabetRange = GetAlphabetRange(startFrom, 4);
+
+        var groupedCategories = categoriesWithBooks
+            .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
+            .OrderBy(g => g.Key.Id)
+            .Select(g => new OrderedBookshelfCategoryWithBooksDto
+            {
+                Id = g.Key.Id,
+                Title = g.Key.Title,
+                Categories = g.Select(c => new OrderedExploreCategoryDto
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    TotalBooks = c.BookCategories.Count(),
+                    Books = c.BookCategories
+                        .Select(bc => bc.Book)
+                        .Where(book => char.IsLetter(GetFirstValidCharacter(book.Title)))
+                        .GroupBy(book => GetFirstValidCharacter(book.Title).ToString().ToUpper())
+                        .Where(group => alphabetRange.Contains(group.Key[0]))
+                        .OrderBy(group => group.Key)
+                        .ToDictionary(
+                            group => group.Key,
+                            group => group
+                                .Where(book => book.Title.Contains(group.Key[0], StringComparison.OrdinalIgnoreCase))
+                                .OrderBy(book => book.Title)
+                                .Take(maxResults ?? int.MaxValue)
+                                .ToList()
+                        )
                 }).ToList()
             })
             .ToList();
@@ -369,5 +537,25 @@ public class BookRepository : IBookRepository
         _dbContext.UserFavoriteBooks.Remove(checkExistsEntity);
         await _dbContext.SaveChangesAsync();
         return false;
+    }
+
+    private char GetFirstValidCharacter(string title)
+    {
+        var regex = new Regex("[^a-zA-Z0-9]");
+        var replacedTitle = regex.Replace(title, string.Empty);
+
+        if (string.IsNullOrEmpty(replacedTitle))
+        {
+            return title[0];
+        }
+
+        return replacedTitle[0];
+    }
+
+    private static List<char> GetAlphabetRange(string startFrom, int rangeSize)
+    {
+        var startChar = char.ToUpper(startFrom[0]);
+        var endChar = (char)Math.Min(startChar + rangeSize, 'Z');
+        return Enumerable.Range(startChar, endChar - startChar + 1).Select(c => (char)c).ToList();
     }
 }

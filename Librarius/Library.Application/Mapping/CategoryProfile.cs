@@ -15,5 +15,8 @@ public class CategoryProfile : Profile
 
         CreateMap<Category, ExploreCategoryDto>();
         CreateMap<ExploreCategoryDto, ExploreCategoryResponseModel>();
+        
+        CreateMap<Category, OrderedExploreCategoryDto>();
+        CreateMap<OrderedExploreCategoryDto, ExploreCategoryResponseModel>();
     }
 }
