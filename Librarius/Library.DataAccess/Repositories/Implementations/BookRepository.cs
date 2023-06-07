@@ -283,50 +283,61 @@ public class BookRepository : IBookRepository
     }
 
     // Ordered books starting from a specific letter -> by BOOKSHELF & CATEGORY
-    public async Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title)
-    {
-        var categoriesWithBooks = await _dbContext.Categories
-            .AsNoTracking()
-            .Include(c => c.Bookshelf)
-            .Include(c => c.BookCategories)
-            .ThenInclude(bc => bc.Book)
-            .ThenInclude(b => b.Author)
-            .ToListAsync();
+    public async Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(
+    string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults)
+{
+    var categoriesQuery = _dbContext.Categories
+        .Include(c => c.Bookshelf)
+        .Where(c => c.Bookshelf.Title == bookshelfTitle && c.Title == categoryTitle);
 
-        var alphabetRange = GetAlphabetRange(startFrom, 4);
+    var categories = await categoriesQuery.ToListAsync();
 
-        var groupedCategories = categoriesWithBooks
-            .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
-            .OrderBy(g => g.Key.Id)
-            .Select(g => new OrderedBookshelfCategoryWithBooksDto
+    var categoryIds = categories.Select(c => c.Id).ToList();
+
+    var booksQuery = _dbContext.BooksCategories
+        .AsNoTracking()
+        .Where(bc => categoryIds.Contains(bc.CategoryId))
+        .Include(bc => bc.Book)
+            .ThenInclude(b => b.Author);
+
+    var books = await booksQuery.ToListAsync();
+
+    var alphabetRange = GetAlphabetRange(startFrom, 4);
+
+    var groupedCategories = categories
+        .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
+        .OrderBy(g => g.Key.Id)
+        .Select(g => new OrderedBookshelfCategoryWithBooksDto
+        {
+            Id = g.Key.Id,
+            Title = g.Key.Title,
+            Categories = g.Select(c => new OrderedExploreCategoryDto
             {
-                Id = g.Key.Id,
-                Title = g.Key.Title,
-                Categories = g.Select(c => new OrderedExploreCategoryDto
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    TotalBooks = c.BookCategories.Count(),
-                    Books = c.BookCategories
-                        .Select(bc => bc.Book)
-                        .Where(book => char.IsLetter(GetFirstValidCharacter(book.Title)))
-                        .GroupBy(book => GetFirstValidCharacter(book.Title).ToString().ToUpper())
-                        .Where(group => alphabetRange.Contains(group.Key[0]))
-                        .OrderBy(group => group.Key)
-                        .ToDictionary(
-                            group => group.Key,
-                            group => group
-                                .Where(book => book.Title.Contains(group.Key[0], StringComparison.OrdinalIgnoreCase))
-                                .OrderBy(book => book.Title)
-                                .Take(maxResults ?? int.MaxValue)
-                                .ToList()
-                        )
-                }).ToList()
-            })
-            .ToList();
+                Id = c.Id,
+                Title = c.Title,
+                TotalBooks = books.Count(bc => bc.CategoryId == c.Id),
+                Books = books
+                    .Where(bc => bc.CategoryId == c.Id)
+                    .Select(bc => bc.Book)
+                    .Where(book => char.IsLetter(GetFirstValidCharacter(book.Title)))
+                    .GroupBy(book => GetFirstValidCharacter(book.Title).ToString().ToUpper())
+                    .Where(group => alphabetRange.Contains(group.Key[0]))
+                    .OrderBy(group => group.Key)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group
+                            .Where(book => book.Title.Contains(group.Key[0], StringComparison.OrdinalIgnoreCase))
+                            .OrderBy(book => book.Title)
+                            .Take(maxResults ?? int.MaxValue)
+                            .ToList()
+                    )
+            }).ToList()
+        })
+        .ToList();
 
-        return groupedCategories;
-    }
+    return groupedCategories;
+}
+
 
     public async Task<BookWithContentDto> GetReadingBookByIdAsync(int bookId)
     {
@@ -447,25 +458,25 @@ public class BookRepository : IBookRepository
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(user => user.Username == username);
         if (user == default) throw new Exception("Invalid user.");
-
-        var checkExistence =  await CheckIsBookFinishedReading(bookId, username);
-        if (checkExistence) throw new Exception("Already finished reading this book.");
         
+        var existingEntity =
+            await _dbContext.UserReadingBooks
+                .SingleOrDefaultAsync(c => c.User.Username == username & c.BookId == bookId);
+        if (existingEntity is { IsBookFinished: true })
+        {
+            throw new Exception("Already finished reading this book.");
+        }
+
         var totalTimeResponse = await GetReadingTimeOfBookContent(bookId);
         var totalMinutesConverted = TimeConvertor.ConvertResponseMinutes(totalTimeResponse);
 
         if (timeSpent < totalMinutesConverted) throw new Exception("Time spent reading is lower than average reading time.");
 
-        var newCompletedBook = new UserBookReadingTracker
-        {
-            UserId = user.Id,
-            BookId = book.Id,
-            MinutesSpent = timeSpent,
-            IsBookFinished = true,
-            Timestamp = DateTime.Now.ToString("dd/MM/yyyy")
-        };
+        existingEntity.MinutesSpent = timeSpent;
+        existingEntity.IsBookFinished = true;
+        existingEntity.Timestamp = DateTime.Now.ToString("dd/MM/yyyy");
 
-        _dbContext.UserReadingBooks.Update(newCompletedBook);
+        _dbContext.UserReadingBooks.Update(existingEntity);
         await _dbContext.SaveChangesAsync();
         return true;
     }
@@ -510,7 +521,7 @@ public class BookRepository : IBookRepository
     public async Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(user => user.Username == username);
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedAccessException();
         
         var book = await _dbContext.Books.FindAsync(bookId);
         if (book == null) throw new Exception("Book not found");

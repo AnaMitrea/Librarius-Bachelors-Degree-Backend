@@ -10,13 +10,13 @@ public static class ServiceCollection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        // services.AddAutoMapper(typeof(UserProfile));
         services.AddAutoMapper(typeof(TrophyProfile));
+        services.AddAutoMapper(typeof(LevelAssignProfile));
         
         services.AddSingleton<HttpClient>();
         
-        // services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITrophyService, TrophyService>();
+        services.AddScoped<ILevelAssignService, LevelAssignService>();
 
         return services;
     }

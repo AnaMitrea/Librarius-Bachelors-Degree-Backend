@@ -24,7 +24,7 @@ public interface IBookRepository
     Task<Dictionary<string, OrderedBookshelfWithBooksDto>> GetOrderedBooksGroupedByBookshelf(int? maxResults,
         string? title);
 
-    Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title);
+    Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults);
     
     Task<BookWithContentDto> GetReadingBookByIdAsync(int id);
 

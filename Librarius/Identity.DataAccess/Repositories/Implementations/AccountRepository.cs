@@ -44,7 +44,7 @@ public class AccountRepository : IAccountRepository
     public async Task<bool> DeleteAccountAsync(int userId)
     {
         var account = await _dbContext.Accounts.FindAsync(userId);
-        if (account == null) throw new Exception("User not found.");
+        if (account == null) throw new UnauthorizedAccessException();
         
         _dbContext.Accounts.Remove(account);
         await _dbContext.SaveChangesAsync();

@@ -36,7 +36,7 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserById(int id)
     {
         var user = await _dbContext.Users.FindAsync(id);
-        if (user == default) throw new Exception("User not found");
+        if (user == default) throw new UnauthorizedAccessException();
 
         return user;
     }
@@ -52,7 +52,7 @@ public class UserRepository : IUserRepository
     public async Task<bool> SetUserSubscribed(string username, int authorId)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == default) throw new Exception("User not found");
+        if (user == default) throw new UnauthorizedAccessException();
         
         var subscription = new Subscription
         {
@@ -82,11 +82,8 @@ public class UserRepository : IUserRepository
     public async Task<int> GetUserMinutesLoggedAsync(string username)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == default)
-        {
-            throw new Exception("User not found");
-        }
-
+        if (user == default) throw new UnauthorizedAccessException();
+        
         var totalMinutesLogged = await _dbContext.UserReadingBooks
             .Where(ur => ur.UserId == user.Id)
             .SumAsync(ur => ur.MinutesSpent);
@@ -166,7 +163,7 @@ public class UserRepository : IUserRepository
     public async Task<Dictionary<int, UserBookReadingTracker>> GetBookTimeReadingTrackersByUserAsync(string username)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == null) throw new Exception("User not found.");
+        if (user == null) throw new UnauthorizedAccessException();
         
         await _dbContext.Entry(user)
             .Collection(u => u.ReadingBooks)
@@ -189,7 +186,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<Book>> GetReadingBooksInProgressUserAsync(string username)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == null) throw new Exception("User not found.");
+        if (user == null) throw new UnauthorizedAccessException();
         
         await _dbContext.Entry(user)
             .Collection(u => u.ReadingBooks)

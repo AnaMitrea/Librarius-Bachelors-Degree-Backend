@@ -362,17 +362,19 @@ public class BookController : ControllerBase
         }
     }
     
-    // Route: /api/library/book/ordered/categories?startFrom=...&maxResults=...?title=...
+    // Route: /api/library/book/ordered/categories?startFrom=...&bookshelfTitle=...&categoryTitle=...&maxResults=...
     [HttpGet("ordered/categories")]
     public async Task<IActionResult> GetOrderedBooksGroupedByCategories(
         [FromQuery] string startFrom,
-        [FromQuery] int? maxResults = null,
-        [FromQuery] string? title = null
+        [FromQuery] string bookshelfTitle,
+        [FromQuery] string categoryTitle,
+        [FromQuery] int? maxResults = null
     )
     {
         try
         {
-            var response = await _bookService.GetOrderedBooksGroupedByCategories(startFrom, maxResults, title);
+            var response = await _bookService.GetOrderedBooksGroupedByCategories
+                (startFrom, bookshelfTitle, categoryTitle, maxResults);
             return Ok(ApiResponse<List<OrderedBookshelfCategoryBooksResponseModel>>.Success(response));
         }
         catch (Exception e)

@@ -25,9 +25,9 @@ public interface IBookService
         string? title);
 
     Task<List<BooksForCategoryResponseModel>> GetBooksGroupedByCategoryAndBookshelf(int? maxResults, string? title);
-    
-    
-    Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title);
+
+    Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(
+        string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults);
 
     Task<List<BooksForCategoryResponseModel>> GetGroupedCategoryAndBookshelf(string? title);
 

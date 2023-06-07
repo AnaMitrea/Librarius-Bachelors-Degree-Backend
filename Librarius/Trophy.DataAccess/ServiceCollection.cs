@@ -18,6 +18,7 @@ public static class ServiceCollection
         
         // add scoped repositories
         services.AddScoped<ITrophyRepository, TrophyRepository>();
+        services.AddScoped<ILevelAssignRepository, LevelAssignRepository>();
 
         return services;
     }

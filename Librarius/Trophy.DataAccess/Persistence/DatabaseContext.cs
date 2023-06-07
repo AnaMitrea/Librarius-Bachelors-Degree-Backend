@@ -12,6 +12,8 @@ public class DatabaseContext : DbContext
     
     public DbSet<TrophyUserReward> TrophyUserReward { get; set; }
     
+    public DbSet<Level> Levels { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

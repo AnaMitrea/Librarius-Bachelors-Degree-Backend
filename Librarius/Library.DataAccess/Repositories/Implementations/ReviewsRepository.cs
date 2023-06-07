@@ -17,7 +17,7 @@ public class ReviewsRepository : IReviewsRepository
     public async Task<ICollection<Review>> GetAllForBookByIdAsync(string username, int id, int maxResults, string sortBy, int startIndex)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new UnauthorizedAccessException();
 
         var reviews = await _dbContext.Reviews
             .Include(r => r.User)
@@ -59,7 +59,7 @@ public class ReviewsRepository : IReviewsRepository
         if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");
         
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == null) throw new Exception("User not found.");
+        if (user == null) throw new UnauthorizedAccessException();
 
         var book = await _dbContext.Books.FindAsync(requestDto.BookId);
         if (book == null) throw new Exception("Book not found.");
@@ -99,7 +99,7 @@ public class ReviewsRepository : IReviewsRepository
         if (string.IsNullOrEmpty(username)) throw new Exception("Authorization failed.");
         
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-        if (user == null) throw new Exception("User not found.");
+        if (user == null) throw new UnauthorizedAccessException();
 
         var review = await _dbContext.Reviews.FindAsync(reviewId);
         if (review == null) throw new Exception("Review not found.");

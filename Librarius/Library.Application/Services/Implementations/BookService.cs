@@ -74,9 +74,11 @@ public class BookService : IBookService
         return _mapper.Map<List<BooksForCategoryResponseModel>>(response);
     }
 
-    public async Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(string startFrom, int? maxResults, string? title)
+    public async Task<List<OrderedBookshelfCategoryBooksResponseModel>> GetOrderedBooksGroupedByCategories(
+        string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults)
     {
-        var response = await _bookRepository.GetOrderedBooksGroupedByCategories(startFrom, maxResults, title);
+        var response = await _bookRepository.GetOrderedBooksGroupedByCategories(
+            startFrom, bookshelfTitle, categoryTitle, maxResults);
 
         return _mapper.Map<List<OrderedBookshelfCategoryBooksResponseModel>>(response);
     }

@@ -35,7 +35,7 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<string>> GetUserDashboardActivityAsync(string username)
     {
         var user = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
-        if (user == null) throw new Exception("User not found.");
+        if (user == null) throw new UnauthorizedAccessException();
 
         var activities = await _dbContext.LoginActivities
             .Where(ac => ac.AccountId == user.Id)
@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
     public async Task<int> FindUserIdByUsernameAsync(string username)
     {
         var account = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
-        if (account == null) throw new Exception("User not found.");
+        if (account == null) throw new UnauthorizedAccessException();
 
         return account.Id;
     }
