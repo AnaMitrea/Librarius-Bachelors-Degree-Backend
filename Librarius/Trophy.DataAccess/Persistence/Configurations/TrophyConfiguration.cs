@@ -28,5 +28,13 @@ public class TrophyConfiguration : IEntityTypeConfiguration<Entities.Trophy>
         builder.Property(x => x.ImageSrcPath)
             .HasColumnName("image_src_path")
             .IsRequired();
+        
+        builder.Property(x => x.MinimumCriterionNumber)
+            .HasColumnName("minimum_criterion_number")
+            .IsRequired(false);
+        
+        builder.Property(x => x.MinimumCriterionText)
+            .HasColumnName("minimum_criterion_text")
+            .IsRequired(false);
     }
 }

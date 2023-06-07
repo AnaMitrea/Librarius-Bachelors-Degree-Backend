@@ -74,25 +74,6 @@ public class LevelAssignController : ControllerBase
         }
     }
     
-    // // Route: /api/level/points
-    // [HttpGet("points")]
-    // public async Task<IActionResult> GetLevelByPoints([FromBody] LevelRequestModel requestModel)
-    // {
-    //     try
-    //     {
-    //         var userId = await GetUserIdFromIdentity();
-    //         
-    //         // var response = await _trophyService.JoinTrophyChallengeByIdAsync(userId, trophyId);
-    //
-    //         return Ok(ApiResponse<bool>.Success(response));
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return BadRequest(ApiResponse<bool>
-    //             .Fail(new List<ApiValidationError> { new(null, e.Message) }));
-    //     }
-    // }
-    
     private async Task<int> GetUserIdFromIdentity()
     {
         var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]

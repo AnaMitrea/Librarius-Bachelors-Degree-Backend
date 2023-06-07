@@ -12,6 +12,14 @@ public class DatabaseContext : DbContext
     
     public DbSet<TrophyUserReward> TrophyUserReward { get; set; }
     
+    public DbSet<TrophyRewardReadingTime> TrophyRewardReadingTime { get; set; }
+    
+    public DbSet<TrophyRewardReadingBooks> TrophyRewardReadingBooks { get; set; }
+    
+    public DbSet<TrophyRewardCategoryReader> TrophyRewardCategoryReader { get; set; }
+    
+    public DbSet<TrophyRewardActivities> TrophyRewardActivities { get; set; }
+    
     public DbSet<Level> Levels { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

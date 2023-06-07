@@ -29,15 +29,6 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            // var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            //     .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            //
-            // _httpClient.DefaultRequestHeaders.Authorization = 
-            //     new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
-            // var userIdResponse = await _httpClient.GetAsync(UserIdApiUrl);
-            // userIdResponse.EnsureSuccessStatusCode();
-            // var userId = ExtractUserIdFromResponse(userIdResponse).Result;
-
             var userId = await GetUserIdFromIdentity();
             
             var response = await _trophyService.JoinTrophyChallengeByIdAsync(userId, trophyId);
