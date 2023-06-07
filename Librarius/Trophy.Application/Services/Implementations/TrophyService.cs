@@ -15,6 +15,11 @@ public class TrophyService : ITrophyService
         _trophyRepository = trophyRepository;
     }
     
+    public async Task<bool> CheckUserIfCanWinAsync(int userId)
+    {
+        return await _trophyRepository.CheckUserIfCanWinAsync(userId);
+    }
+    
     public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {
         return await _trophyRepository.JoinTrophyChallengeByIdAsync(userId, trophyId);
@@ -24,10 +29,9 @@ public class TrophyService : ITrophyService
     {
         return await _trophyRepository.LeaveTrophyChallengeByIdAsync(userId, trophyId);
     }
-    
+
     public async Task<IEnumerable<TrophyModel>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit)
     {
-        // todo check if category is ok
         var trophies = await _trophyRepository.GetTrophiesByCategoryAsync(category, canTakeLimit);
 
         return _mapper.Map<IEnumerable<TrophyModel>>(trophies);

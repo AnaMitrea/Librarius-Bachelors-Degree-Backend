@@ -4,6 +4,8 @@ namespace Trophy.Application.Services;
 
 public interface ITrophyService
 {
+    Task<bool> CheckUserIfCanWinAsync(int userId);
+    
     Task<IEnumerable<TrophyModel>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit);
     
     Task<Dictionary<string, IEnumerable<TrophyModel>>> GetUserAllCompletedTrophiesAsync(int userId);

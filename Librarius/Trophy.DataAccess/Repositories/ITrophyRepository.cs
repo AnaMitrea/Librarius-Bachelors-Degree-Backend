@@ -13,6 +13,8 @@ public interface ITrophyRepository
     Task<IEnumerable<Entities.Trophy>> GetUserInProgressTrophiesByCategoryAsync(int userId, string category);
     
     // TROPHY REWARDS
+    // -- CHECK --
+    Task<bool> CheckUserIfCanWinAsync(int userId);
     
     // -- JOIN --
     Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId);

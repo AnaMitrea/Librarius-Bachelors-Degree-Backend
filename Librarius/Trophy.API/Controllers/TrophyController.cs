@@ -23,6 +23,25 @@ public class TrophyController : ControllerBase
         _httpClient = httpClient;
     }
     
+    // Route: /api/trophy/check-win
+    [HttpGet("check-win")]
+    public async Task<IActionResult> CheckUserIfCanWin()
+    {
+        try
+        {
+            var userId = await GetUserIdFromIdentity();
+            
+            var response = await _trophyService.CheckUserIfCanWinAsync(userId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
     // Route: /api/trophy/join/{:trophyId}
     [HttpGet("join/{trophyId:int}")]
     public async Task<IActionResult> JoinTrophyChallengeById([FromRoute] int trophyId)

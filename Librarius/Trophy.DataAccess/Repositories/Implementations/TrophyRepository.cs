@@ -20,7 +20,55 @@ public class TrophyRepository : ITrophyRepository
             .Distinct()
             .ToListAsync();
     }
-    
+
+    public async Task<bool> CheckUserIfCanWinAsync(int userId)
+    {
+        // TODO
+        
+        var inProgressReadingTimeChallenges = await GetUserInProgressChallengesForReadingTimeAsync(userId);
+        var inProgressReadingBooksChallenges = await GetUserInProgressChallengesForReadingBooksAsync(userId);
+        var inProgressCategoryReaderChallenges = await GetUserInProgressChallengesForCategoryReaderAsync(userId);
+        var inProgressActivitiesChallenges = await GetUserInProgressChallengesForActivitiesAsync(userId);
+
+        var anyChallengeCompleted = false;
+
+        foreach (var challenge in inProgressReadingTimeChallenges)
+        {
+            if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
+            
+            challenge.IsWon = true; // Update IsWon property to true
+            anyChallengeCompleted = true;
+        }
+
+        foreach (var challenge in inProgressReadingBooksChallenges)
+        {
+            if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
+            
+            challenge.IsWon = true; // Update IsWon property to true
+            anyChallengeCompleted = true;
+        }
+
+        foreach (var challenge in inProgressCategoryReaderChallenges)
+        {
+            // Implement the validation logic for category reader challenges
+            // Set challenge.IsWon to true if the conditions are met
+        }
+
+        foreach (var challenge in inProgressActivitiesChallenges)
+        {
+            // Implement the validation logic for activities challenges
+            // Set challenge.IsWon to true if the conditions are met
+        }
+
+        if (anyChallengeCompleted)
+        {
+            await _dbContext.SaveChangesAsync(); // Save the changes to the database
+        }
+
+        return anyChallengeCompleted;
+    }
+
+
     public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {
         var trophy = await _dbContext.Trophies.FindAsync(trophyId);
@@ -420,5 +468,45 @@ public class TrophyRepository : ITrophyRepository
                 .ToListAsync(),
             _ => Enumerable.Empty<Entities.Trophy>()
         };
+    }
+    
+    // all user in progress challenges READING TIME
+    public async Task<IEnumerable<TrophyRewardReadingTime>> GetUserInProgressChallengesForReadingTimeAsync(int userId)
+    {
+        var inProgressChallenges = await _dbContext.TrophyRewardReadingTime
+            .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .ToListAsync();
+
+        return inProgressChallenges;
+    }
+    
+    // all user in progress challenges READING BOOKS
+    public async Task<IEnumerable<TrophyRewardReadingBooks>> GetUserInProgressChallengesForReadingBooksAsync(int userId)
+    {
+        var inProgressChallenges = await _dbContext.TrophyRewardReadingBooks
+            .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .ToListAsync();
+
+        return inProgressChallenges;
+    }
+    
+    // all user in progress challenges CATEGORY READER
+    public async Task<IEnumerable<TrophyRewardCategoryReader>> GetUserInProgressChallengesForCategoryReaderAsync(int userId)
+    {
+        var inProgressChallenges = await _dbContext.TrophyRewardCategoryReader
+            .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .ToListAsync();
+
+        return inProgressChallenges;
+    }
+    
+    // all user in progress challenges ACTIVITIES
+    public async Task<IEnumerable<TrophyRewardActivities>> GetUserInProgressChallengesForActivitiesAsync(int userId)
+    {
+        var inProgressChallenges = await _dbContext.TrophyRewardActivities
+            .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .ToListAsync();
+
+        return inProgressChallenges;
     }
 }
