@@ -282,61 +282,60 @@ public class BookRepository : IBookRepository
 
     // Ordered books starting from a specific letter -> by BOOKSHELF & CATEGORY
     public async Task<List<OrderedBookshelfCategoryWithBooksDto>> GetOrderedBooksGroupedByCategories(
-    string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults)
-{
-    var categoriesQuery = _dbContext.Categories
-        .Include(c => c.Bookshelf)
-        .Where(c => c.Bookshelf.Title == bookshelfTitle && c.Title == categoryTitle);
+        string startFrom, string bookshelfTitle, string categoryTitle, int? maxResults)
+    {
+        var categoriesQuery = _dbContext.Categories
+            .Include(c => c.Bookshelf)
+            .Where(c => c.Bookshelf.Title == bookshelfTitle && c.Title == categoryTitle);
 
-    var categories = await categoriesQuery.ToListAsync();
+        var categories = await categoriesQuery.ToListAsync();
 
-    var categoryIds = categories.Select(c => c.Id).ToList();
+        var categoryIds = categories.Select(c => c.Id).ToList();
 
-    var booksQuery = _dbContext.BooksCategories
-        .AsNoTracking()
-        .Where(bc => categoryIds.Contains(bc.CategoryId))
-        .Include(bc => bc.Book)
-            .ThenInclude(b => b.Author);
+        var booksQuery = _dbContext.BooksCategories
+            .AsNoTracking()
+            .Where(bc => categoryIds.Contains(bc.CategoryId))
+            .Include(bc => bc.Book)
+                .ThenInclude(b => b.Author);
 
-    var books = await booksQuery.ToListAsync();
+        var books = await booksQuery.ToListAsync();
 
-    var alphabetRange = GetAlphabetRange(startFrom, 4);
+        var alphabetRange = GetAlphabetRange(startFrom, 4);
 
-    var groupedCategories = categories
-        .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
-        .OrderBy(g => g.Key.Id)
-        .Select(g => new OrderedBookshelfCategoryWithBooksDto
-        {
-            Id = g.Key.Id,
-            Title = g.Key.Title,
-            Categories = g.Select(c => new OrderedExploreCategoryDto
+        var groupedCategories = categories
+            .GroupBy(c => new { c.Bookshelf.Id, c.Bookshelf.Title })
+            .OrderBy(g => g.Key.Id)
+            .Select(g => new OrderedBookshelfCategoryWithBooksDto
             {
-                Id = c.Id,
-                Title = c.Title,
-                TotalBooks = books.Count(bc => bc.CategoryId == c.Id),
-                Books = books
-                    .Where(bc => bc.CategoryId == c.Id)
-                    .Select(bc => bc.Book)
-                    .Where(book => char.IsLetter(GetFirstValidCharacter(book.Title)))
-                    .GroupBy(book => GetFirstValidCharacter(book.Title).ToString().ToUpper())
-                    .Where(group => alphabetRange.Contains(group.Key[0]))
-                    .OrderBy(group => group.Key)
-                    .ToDictionary(
-                        group => group.Key,
-                        group => group
-                            .Where(book => book.Title.Contains(group.Key[0], StringComparison.OrdinalIgnoreCase))
-                            .OrderBy(book => book.Title)
-                            .Take(maxResults ?? int.MaxValue)
-                            .ToList()
-                    )
-            }).ToList()
-        })
-        .ToList();
+                Id = g.Key.Id,
+                Title = g.Key.Title,
+                Categories = g.Select(c => new OrderedExploreCategoryDto
+                {
+                    Id = c.Id,
+                    Title = c.Title,
+                    TotalBooks = books.Count(bc => bc.CategoryId == c.Id),
+                    Books = books
+                        .Where(bc => bc.CategoryId == c.Id)
+                        .Select(bc => bc.Book)
+                        .Where(book => char.IsLetter(GetFirstValidCharacter(book.Title)))
+                        .GroupBy(book => GetFirstValidCharacter(book.Title).ToString().ToUpper())
+                        .Where(group => alphabetRange.Contains(group.Key[0]))
+                        .OrderBy(group => group.Key)
+                        .ToDictionary(
+                            group => group.Key,
+                            group => group
+                                .Where(book => book.Title.Contains(group.Key[0], StringComparison.OrdinalIgnoreCase))
+                                .OrderBy(book => book.Title)
+                                .Take(maxResults ?? int.MaxValue)
+                                .ToList()
+                        )
+                }).ToList()
+            })
+            .ToList();
 
-    return groupedCategories;
-}
-
-
+        return groupedCategories;
+    }
+    
     public async Task<BookWithContentDto> GetReadingBookByIdAsync(int bookId)
     {
         var book = await _dbContext.Books
@@ -351,23 +350,36 @@ public class BookRepository : IBookRepository
         {
             Id = book.Id
         };
-    
+
+        var url = "";
         if (!string.IsNullOrEmpty(book.HtmlContentUrl))
         {
-            var url = $"https://www.gutenberg.org{book.HtmlContentUrl}";
-            
-            var client = new HttpClient();
-            var response = await client.GetAsync(url);
-            var html = await response.Content.ReadAsStringAsync();
-
-            // extract the content between the pg-header and pg-footer sections
-            var content = await BookContentUtil.GetContentBetweenSectionsAsync(html);
-
-            // remove any images from the content
-            content = new Regex("<img[^>]+>").Replace(content, "");
-
-            bookWithContent.Content = content;
+            url = $"https://www.gutenberg.org{book.HtmlContentUrl}";
         }
+        else if (!string.IsNullOrEmpty(book.HtmlAsSubmittedUrl))
+        {
+            url = $"https://www.gutenberg.org{book.HtmlAsSubmittedUrl}";
+        }
+        else if (!string.IsNullOrEmpty(book.HtmlNoImagesUrl))
+        {
+            url = $"https://www.gutenberg.org{book.HtmlNoImagesUrl}";
+        }
+        else
+        {
+            url = $"https://www.gutenberg.org{book.PlainTextUrl}";
+        }
+        
+        var client = new HttpClient();
+        var response = await client.GetAsync(url);
+        var html = await response.Content.ReadAsStringAsync();
+
+        // extract the content between the pg-header and pg-footer sections
+        var content = await BookContentUtil.GetContentBetweenSectionsAsync(html);
+
+        // remove any images from the content
+        content = new Regex("<img[^>]+>").Replace(content, "");
+
+        bookWithContent.Content = content;
 
         return bookWithContent;
     }
