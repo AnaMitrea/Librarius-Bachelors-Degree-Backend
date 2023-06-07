@@ -241,18 +241,16 @@ public class BookRepository : IBookRepository
         return groupedCategories;
     }
     
+    // Categories by Bookshelves NO BOOKS
     public async Task<List<BookshelfCategoryWithBooksDto>> GetGroupedCategoryAndBookshelf(string? title)
     {
         var query = _dbContext.Categories
-            .AsNoTracking()
-            .Include(c => c.Bookshelf)
-            .Include(c => c.BookCategories)
             .Select(c => new
             {
-                Category = c,
+                CategoryId = c.Id,
+                CategoryTitle = c.Title,
                 BookshelfId = c.Bookshelf.Id,
                 BookshelfTitle = c.Bookshelf.Title,
-                CategoryTitle = c.Title,
                 TotalBooks = c.BookCategories.Count()
             });
 
@@ -272,7 +270,7 @@ public class BookRepository : IBookRepository
                 Title = g.Key.BookshelfTitle,
                 Categories = g.Select(c => new ExploreCategoryDto
                 {
-                    Id = c.Category.Id,
+                    Id = c.CategoryId,
                     Title = c.CategoryTitle,
                     TotalBooks = c.TotalBooks
                 }).ToList()
