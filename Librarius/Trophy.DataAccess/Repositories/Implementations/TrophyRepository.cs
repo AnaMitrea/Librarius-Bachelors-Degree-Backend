@@ -21,51 +21,83 @@ public class TrophyRepository : ITrophyRepository
             .ToListAsync();
     }
 
-    public async Task<bool> CheckUserIfCanWinAsync(int userId)
+    public async Task<IEnumerable<Entities.Trophy>> CheckUserIfCanWinAsync(int userId)
     {
-        // TODO
-        
         var inProgressReadingTimeChallenges = await GetUserInProgressChallengesForReadingTimeAsync(userId);
         var inProgressReadingBooksChallenges = await GetUserInProgressChallengesForReadingBooksAsync(userId);
         var inProgressCategoryReaderChallenges = await GetUserInProgressChallengesForCategoryReaderAsync(userId);
         var inProgressActivitiesChallenges = await GetUserInProgressChallengesForActivitiesAsync(userId);
 
-        var anyChallengeCompleted = false;
+        var trophies = new List<Entities.Trophy>();
 
+        // Reading Time Challenges
         foreach (var challenge in inProgressReadingTimeChallenges)
         {
             if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
             
-            challenge.IsWon = true; // Update IsWon property to true
-            anyChallengeCompleted = true;
+            challenge.IsWon = true;
+            trophies.Add(challenge.Trophy);
         }
 
+        // Reading Books Challenges
         foreach (var challenge in inProgressReadingBooksChallenges)
         {
             if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
-            
-            challenge.IsWon = true; // Update IsWon property to true
-            anyChallengeCompleted = true;
+
+            challenge.IsWon = true;
+            trophies.Add(challenge.Trophy);
         }
 
+        // Category Reader Challenges
         foreach (var challenge in inProgressCategoryReaderChallenges)
         {
-            // Implement the validation logic for category reader challenges
-            // Set challenge.IsWon to true if the conditions are met
+            if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
+            
+            challenge.IsWon = true;
+            trophies.Add(challenge.Trophy);
         }
 
-        foreach (var challenge in inProgressActivitiesChallenges)
+        // Activities Challenges
+        // foreach (var challenge in inProgressActivitiesChallenges)
+        // {
+        //     // ----TODO FIND A WAY OF IMPLEMENTATION----
+        //     
+        //     
+        //     if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
+        //     
+        //     challenge.IsWon = true;
+        //     trophies.Add(challenge.Trophy);
+        // }
+
+        if (trophies.Any())
         {
-            // Implement the validation logic for activities challenges
-            // Set challenge.IsWon to true if the conditions are met
+            await _dbContext.SaveChangesAsync();
         }
 
-        if (anyChallengeCompleted)
+        return trophies;
+    }
+
+    public async Task<bool> UpdateReadingTimeRewardActivityAsync(int userId, int readingHoursCounter)
+    {
+        var inProgressTrophies = await GetUserInProgressChallengesForReadingTimeAsync(userId);
+
+        foreach (var trophy in inProgressTrophies)
         {
-            await _dbContext.SaveChangesAsync(); // Save the changes to the database
+            trophy.UserProgress = readingHoursCounter;
         }
+        await _dbContext.SaveChangesAsync();
 
-        return anyChallengeCompleted;
+        return true;
+    }
+
+    public async Task<bool> UpdateReadingBooksRewardActivityAsync(int userId, int readingBooksCounter)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter)
+    {
+        throw new NotImplementedException();
     }
 
 
@@ -100,12 +132,12 @@ public class TrophyRepository : ITrophyRepository
 
                 break;
             case "Category Reader":
-                if (trophy.MinimumCriterionNumber != null)
+                if (trophy is { MinimumCriterionNumber: not null, BookCategoryId: not null })
                 {
                     await JoinTrophyCategoryReaderAsync(
                         userId,
                         trophyId,
-                        trophy.Category,
+                        (int)trophy.BookCategoryId,
                         (int)trophy.MinimumCriterionNumber
                     );
                 }
@@ -184,10 +216,10 @@ public class TrophyRepository : ITrophyRepository
     }
     
     public async Task<bool> JoinTrophyCategoryReaderAsync(
-        int userId, int trophyId, string category, int minimumCriterionNumber)
+        int userId, int trophyId, int categoryId, int minimumCriterionNumber)
     {
         var checkTrophy = await _dbContext.TrophyRewardCategoryReader.SingleOrDefaultAsync(ta => 
-            ta.TrophyId == trophyId && ta.Category == category && ta.UserId == userId);
+            ta.TrophyId == trophyId && ta.UserId == userId);
         
         switch (checkTrophy)
         {
@@ -201,7 +233,7 @@ public class TrophyRepository : ITrophyRepository
         {
             TrophyId = trophyId,
             UserId = userId,
-            Category = category,
+            CategoryId = categoryId,
             IsWon = false,
             UserProgress = 0,
             MinimumCriterionNumber = minimumCriterionNumber
@@ -475,6 +507,7 @@ public class TrophyRepository : ITrophyRepository
     {
         var inProgressChallenges = await _dbContext.TrophyRewardReadingTime
             .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .Include(c => c.Trophy)
             .ToListAsync();
 
         return inProgressChallenges;
@@ -485,6 +518,7 @@ public class TrophyRepository : ITrophyRepository
     {
         var inProgressChallenges = await _dbContext.TrophyRewardReadingBooks
             .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .Include(c => c.Trophy)
             .ToListAsync();
 
         return inProgressChallenges;
@@ -495,6 +529,7 @@ public class TrophyRepository : ITrophyRepository
     {
         var inProgressChallenges = await _dbContext.TrophyRewardCategoryReader
             .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .Include(c => c.Trophy)
             .ToListAsync();
 
         return inProgressChallenges;
@@ -505,6 +540,7 @@ public class TrophyRepository : ITrophyRepository
     {
         var inProgressChallenges = await _dbContext.TrophyRewardActivities
             .Where(challenge => challenge.UserId == userId && !challenge.IsWon)
+            .Include(c => c.Trophy)
             .ToListAsync();
 
         return inProgressChallenges;

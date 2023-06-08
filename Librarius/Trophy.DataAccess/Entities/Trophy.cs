@@ -13,6 +13,8 @@ public class Trophy : Entity
     public int? MinimumCriterionNumber { get; set; }
     
     public string? MinimumCriterionText { get; set; }
+    
+    public int? BookCategoryId { get; set; }
 
     // many-to-many: trophies -> accounts
     public IEnumerable<TrophyUserReward> TrophyAccounts { get; set; }
@@ -22,6 +24,6 @@ public class Trophy : Entity
     public IEnumerable<TrophyRewardReadingTime> TrophiesRewardReadingTime { get; set; }
     
     public IEnumerable<TrophyRewardCategoryReader> TrophiesRewardCategoryReaders { get; set; }
-    
+
     public IEnumerable<TrophyRewardActivities> TrophiesRewardActivities { get; set; }
 }

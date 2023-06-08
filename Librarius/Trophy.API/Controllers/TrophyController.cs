@@ -5,6 +5,8 @@ using Trophy.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using Trophy.Application.Models;
+using Trophy.Application.Models.Trophy.Request.UserRewardActivity;
+using Trophy.Application.Models.Trophy.Response;
 
 namespace Trophy.API.Controllers;
 
@@ -23,8 +25,8 @@ public class TrophyController : ControllerBase
         _httpClient = httpClient;
     }
     
-    // Route: /api/trophy/check-win
-    [HttpGet("check-win")]
+    // Route: /api/trophy/reward/check-win
+    [HttpGet("reward/check-win")]
     public async Task<IActionResult> CheckUserIfCanWin()
     {
         try
@@ -32,6 +34,34 @@ public class TrophyController : ControllerBase
             var userId = await GetUserIdFromIdentity();
             
             var response = await _trophyService.CheckUserIfCanWinAsync(userId);
+
+            return Ok(ApiResponse<IEnumerable<TrophyModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<TrophyModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/trophy/reading-time/reward/update-activity
+    [HttpPut("reading-time/reward/update-activity")]
+    public async Task<IActionResult> UpdateReadingTimeRewardActivity(
+        ReadingTimeUpdateActivityRequestModel requestModel)
+    {
+        try
+        {
+            int userId;
+            if (requestModel.UserId == null)
+            {
+                userId = await GetUserIdFromIdentity();
+            }
+            else
+            {
+                userId = (int)requestModel.UserId;
+            }
+
+            var response = await _trophyService.UpdateReadingTimeRewardActivityAsync(requestModel, userId);
 
             return Ok(ApiResponse<bool>.Success(response));
         }
@@ -41,6 +71,66 @@ public class TrophyController : ControllerBase
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
     }
+    
+    // Route: /api/trophy/reading-books/reward/update-activity
+    [HttpPut("reading-books/reward/update-activity")]
+    public async Task<IActionResult> UpdateReadingBooksRewardActivity(
+        ReadingBooksUpdateActivityRequestModel requestModel)
+    {
+        try
+        {
+            var userId = await GetUserIdFromIdentity();
+            
+            var response = await _trophyService.UpdateReadingBooksRewardActivityAsync(requestModel, userId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/trophy/category-reader/reward/update-activity
+    [HttpPut("category-reader/reward/update-activity")]
+    public async Task<IActionResult> UpdateCategoryReaderRewardActivity(
+        CategoryReaderUpdateActivityRequestModel requestModel)
+    {
+        try
+        {
+            var userId = await GetUserIdFromIdentity();
+            
+            var response = await _trophyService.UpdateCategoryReaderRewardActivityAsync(requestModel, userId);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/trophy/activities/reward/update-activity
+    [HttpPut("activities/reward/update-activity")]
+    public async Task<IActionResult> UpdateActivitiesRewardActivity(ActivitiesUpdateActivityRequestModel requestModel)
+    {
+        try
+        {
+            var userId = await GetUserIdFromIdentity();
+
+            // var response = await _trophyService.UpdateActivitiesRewardActivityAsync(requestModel, userId);
+
+            return Ok(ApiResponse<bool>.Success(false));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
     
     // Route: /api/trophy/join/{:trophyId}
     [HttpGet("join/{trophyId:int}")]

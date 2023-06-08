@@ -42,13 +42,8 @@ public class EmailSender : IEmailSender
         authorResponse.EnsureSuccessStatusCode();
         
         var jsonResponse = await authorResponse.Content.ReadAsStringAsync();
-        // var jsonDocument = JsonDocument.Parse(jsonResponse);
-        // var root = jsonDocument.RootElement;
-        // var resultProperty = root.GetProperty("result");
-        // var nameProperty = resultProperty.GetProperty("name");
-        // var name = nameProperty.GetString();
-        
-        var name = Utilities.GetJsonProperty(jsonResponse, new[] { "result", "name" });
+
+        var name = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result", "name" });
 
         return name ?? throw new InvalidOperationException();
     }
@@ -62,11 +57,7 @@ public class EmailSender : IEmailSender
         userResponse.EnsureSuccessStatusCode();
     
         var jsonResponse = await userResponse.Content.ReadAsStringAsync();
-        // var jsonDocument = JsonDocument.Parse(jsonResponse);
-        // var root = jsonDocument.RootElement;
-        // var resultProp = root.GetProperty("result");
-        // var email = resultProp.GetString();
-        var email = Utilities.GetJsonProperty(jsonResponse, new[] { "result" });
+        var email = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result" });
     
         return email ?? throw new InvalidOperationException();
     }

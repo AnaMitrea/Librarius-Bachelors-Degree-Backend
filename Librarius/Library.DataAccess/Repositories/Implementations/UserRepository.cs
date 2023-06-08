@@ -79,6 +79,7 @@ public class UserRepository : IUserRepository
         return false;
     }
 
+    // Get total reading time
     public async Task<int> GetUserMinutesLoggedAsync(string username)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);

@@ -28,6 +28,8 @@ public static class ServiceCollection
         services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ITriggerRewardService, TriggerRewardService>();
+
 
         // TODO models validators as:  services.AddScoped<IValidator<DogRequestModel>, DogRequestModelValidator>();
         

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Trophy.Application.Models;
+using Trophy.Application.Models.Trophy.Response;
 
 namespace Trophy.Application.Mapping;
 

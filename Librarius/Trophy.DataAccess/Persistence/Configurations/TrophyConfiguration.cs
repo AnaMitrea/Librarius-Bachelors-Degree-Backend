@@ -35,6 +35,10 @@ public class TrophyConfiguration : IEntityTypeConfiguration<Entities.Trophy>
         
         builder.Property(x => x.MinimumCriterionText)
             .HasColumnName("minimum_criterion_text")
+            .IsRequired(false); 
+        
+        builder.Property(x => x.BookCategoryId)
+            .HasColumnName("book_category_id")
             .IsRequired(false);
     }
 }

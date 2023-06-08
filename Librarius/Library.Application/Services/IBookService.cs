@@ -40,8 +40,10 @@ public interface IBookService
     Task<bool> CheckIsBookFinishedReading(int bookId, string username);
 
     Task<ReadingTimeSpentResponseModel> GetUserReadingTimeSpentAsync(ReadingRequestModel requestModel, string username);
+
+    Task<int> GetUserTotalReadingTimeSpentByIdAsync(int userId);
     
-    Task<bool> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username);
+    Task<int> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username);
 
     Task<bool> SetFinishedReadingBookByIdAsync(UserReadingBookRequestModel requestModel, string username);
 

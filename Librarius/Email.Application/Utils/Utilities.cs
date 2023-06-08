@@ -4,7 +4,7 @@ namespace Email.Application.Utils;
 
 public static class Utilities
 {
-    public static string? GetJsonProperty(string jsonResponse, IEnumerable<string> propertyPath)
+    public static string GetJsonPropertyAsString(string jsonResponse, IEnumerable<string> propertyPath)
     {
         var jsonDocument = JsonDocument.Parse(jsonResponse);
         var property = jsonDocument.RootElement;
@@ -16,7 +16,38 @@ public static class Utilities
                 throw new Exception("Json Result property not found.");
             }
         }
-        
-        return property.GetString();
+
+        return property.GetString() ?? string.Empty;
+    }
+    
+    public static bool GetJsonPropertyAsBool(string jsonResponse, IEnumerable<string> propertyPath)
+    {
+        var jsonDocument = JsonDocument.Parse(jsonResponse);
+        var property = jsonDocument.RootElement;
+
+        foreach (var propertyName in propertyPath)
+        {
+            if (property.ValueKind != JsonValueKind.Object || !property.TryGetProperty(propertyName, out property))
+            {
+                throw new Exception("Json Result property not found.");
+            }
+        }
+
+        return property.GetBoolean();
+    }
+    
+    public static int GetJsonPropertyAsInteger(string jsonResponse, IEnumerable<string> propertyPath)
+    {
+        var jsonDocument = JsonDocument.Parse(jsonResponse);
+        var property = jsonDocument.RootElement;
+
+        foreach (var propertyName in propertyPath)
+        {
+            if (property.ValueKind != JsonValueKind.Object || !property.TryGetProperty(propertyName, out property))
+            {
+                throw new Exception("Json Result property not found.");
+            }
+        }
+        return property.GetInt32();
     }
 }

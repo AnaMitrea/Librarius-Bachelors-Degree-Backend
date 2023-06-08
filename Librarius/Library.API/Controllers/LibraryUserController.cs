@@ -14,10 +14,12 @@ namespace Library.API.Controllers;
 public class LibraryUserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly ITriggerRewardService _triggerRewardService;
 
-    public LibraryUserController(IUserService userService)
+    public LibraryUserController(IUserService userService, ITriggerRewardService triggerRewardService)
     {
         _userService = userService;
+        _triggerRewardService = triggerRewardService;
     }
 
     // Route: /api/library/user/register

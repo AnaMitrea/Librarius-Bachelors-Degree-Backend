@@ -2,7 +2,7 @@
 
 public class TrophyRewardCategoryReader : BaseTrophyReward
 {
-    public string Category { get; set; }
+    public int CategoryId { get; set; }
     
     public int MinimumCriterionNumber { get; set; }
 }

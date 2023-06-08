@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Trophy.Application.Models;
+using Trophy.Application.Models.Trophy.Request.UserRewardActivity;
+using Trophy.Application.Models.Trophy.Response;
 using Trophy.DataAccess.Repositories;
 
 namespace Trophy.Application.Services.Implementations;
@@ -15,11 +16,56 @@ public class TrophyService : ITrophyService
         _trophyRepository = trophyRepository;
     }
     
-    public async Task<bool> CheckUserIfCanWinAsync(int userId)
+    public async Task<IEnumerable<TrophyModel>> CheckUserIfCanWinAsync(int userId)
     {
-        return await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        var response = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        
+        return _mapper.Map<IEnumerable<TrophyModel>>(response);
     }
-    
+
+    public async Task<bool> UpdateReadingTimeRewardActivityAsync(
+        ReadingTimeUpdateActivityRequestModel requestModel, int userId)
+    {
+        var response = await _trophyRepository.UpdateReadingTimeRewardActivityAsync(
+            userId, requestModel.MinutesReadCounter);
+
+        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        
+        return response;
+    }
+
+    public async Task<bool> UpdateReadingBooksRewardActivityAsync(
+        ReadingBooksUpdateActivityRequestModel requestModel, int userId)
+    {
+        var response = await _trophyRepository.UpdateReadingBooksRewardActivityAsync(
+            userId, requestModel.ReadingBooksCounter);
+        
+        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        
+        return response;
+    }
+
+    public async Task<bool> UpdateCategoryReaderRewardActivityAsync(
+        CategoryReaderUpdateActivityRequestModel requestModel, int userId)
+    {
+        var response = await _trophyRepository.UpdateCategoryReaderRewardActivityAsync(
+            userId, requestModel.ReadingBooksCounter);
+        
+        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        
+        return response;
+    }
+
+    // public async Task<bool> UpdateActivitiesRewardActivityAsync(
+    //     ActivitiesUpdateActivityRequestModel requestModel, int userId)
+    // {
+    //     var response = await _trophyRepository.UpdateActivitiesRewardActivityAsync(
+    //         userId, requestModel.MinutesReadCounter);
+    //     
+    //     var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+    // return response;
+    // }
+
     public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {
         return await _trophyRepository.JoinTrophyChallengeByIdAsync(userId, trophyId);

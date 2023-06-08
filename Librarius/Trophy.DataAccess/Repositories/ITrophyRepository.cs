@@ -14,7 +14,15 @@ public interface ITrophyRepository
     
     // TROPHY REWARDS
     // -- CHECK --
-    Task<bool> CheckUserIfCanWinAsync(int userId);
+    Task<IEnumerable<Entities.Trophy>> CheckUserIfCanWinAsync(int userId);
+    
+    Task<bool> UpdateReadingTimeRewardActivityAsync(int userId, int readingHoursCounter); 
+    Task<bool> UpdateReadingBooksRewardActivityAsync(int userId, int readingBooksCounter);
+    Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter);
+    
+    
+    // Task<bool> UpdateActivitiesRewardActivityAsync(int userId, int readingHoursCounter);
+    
     
     // -- JOIN --
     Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId);
@@ -23,10 +31,9 @@ public interface ITrophyRepository
 
     Task<bool> JoinTrophyReadingBooksAsync(int userId, int trophyId, int minimumCriterionNumber);
 
-    Task<bool> JoinTrophyCategoryReaderAsync(int userId, int trophyId, string category, int minimumCriterionNumber);
+    Task<bool> JoinTrophyCategoryReaderAsync(int userId, int trophyId, int categoryId, int minimumCriterionNumber);
 
     Task<bool> JoinTrophyActivitiesAsync(int userId, int trophyId, string minimumCriterionText);
-    
     
     // -- LEAVE --
     Task<bool> LeaveTrophyChallengeByIdAsync(int userId, int trophyId);

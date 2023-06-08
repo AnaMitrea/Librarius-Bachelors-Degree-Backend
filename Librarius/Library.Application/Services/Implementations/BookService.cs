@@ -16,12 +16,14 @@ namespace Library.Application.Services.Implementations;
 public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
+    private readonly ITriggerRewardService _triggerRewardService;
     private readonly IMapper _mapper;
 
-    public BookService(IBookRepository bookRepository, IMapper mapper)
+    public BookService(IBookRepository bookRepository, IMapper mapper, ITriggerRewardService triggerRewardService)
     {
         _bookRepository = bookRepository;
         _mapper = mapper;
+        _triggerRewardService = triggerRewardService;
     }
     
     public async Task<BookResponseModel> GetBookByIdAsync(int id)
@@ -121,8 +123,22 @@ public class BookService : IBookService
 
         return _mapper.Map<ReadingTimeSpentResponseModel>(response);
     }
+
+    public async Task<int> GetUserTotalReadingTimeSpentByIdAsync(int userId)
+    {
+        var response = await _bookRepository.GetUserTotalReadingTimeSpentAsync(userId);
+
+        return response;
+    }
     
-    public async Task<bool> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username)
+    public async Task<int> GetUserTotalReadingTimeSpentByUsernameAsync(string username)
+    {
+        var response = await _bookRepository.GetUserTotalReadingTimeSpentByUsernameAsync(username);
+
+        return response;
+    }
+
+    public async Task<int> UpdateUserReadingTimeSpentAsync(UserReadingBookRequestModel requestModel, string username)
     {
         var response = await _bookRepository.UpdateUserReadingTimeSpentAsync(
             requestModel.BookId,

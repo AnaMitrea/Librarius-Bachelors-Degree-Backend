@@ -1,4 +1,5 @@
-﻿using Library.API.Models;
+﻿using System.Net.Http.Headers;
+using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
@@ -22,11 +23,15 @@ public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
     private readonly IReviewService _reviewService;
+    private readonly ITriggerRewardService _triggerRewardService;
+    private readonly HttpClient _httpClient;
 
-    public BookController(IBookService bookService, IReviewService reviewService)
+    public BookController(IBookService bookService, IReviewService reviewService, HttpClient httpClient, ITriggerRewardService triggerRewardService)
     {
         _bookService = bookService;
         _reviewService = reviewService;
+        _httpClient = httpClient;
+        _triggerRewardService = triggerRewardService;
     }
     
     // Route: /api/library/book/{bookId}
@@ -208,6 +213,9 @@ public class BookController : ControllerBase
         }
     }
     
+    // TODO move to library user
+    
+    
     // Update User Reading Time
     // Route: /api/library/book/time-spent/update
     [HttpPut("time-spent/update")]
@@ -217,9 +225,9 @@ public class BookController : ControllerBase
         {
             var username = GetUsernameFromToken();
             
-            var response = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
+            var totalMinutesForBookId = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
 
-            return Ok(ApiResponse<bool>.Success(response));
+            return Ok(ApiResponse<bool>.Success(true));
         }
         catch (Exception e)
         {
@@ -238,7 +246,8 @@ public class BookController : ControllerBase
             
             var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
             
-            // check in trophy microservice based on trophy rules if user can get a trophy
+            // TODO check in trophy microservice based on trophy rules if user can get a trophy
+            
 
             return Ok(ApiResponse<bool>.Success(response));
         }

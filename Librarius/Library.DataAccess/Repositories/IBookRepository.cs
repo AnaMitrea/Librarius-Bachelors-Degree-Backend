@@ -35,8 +35,12 @@ public interface IBookRepository
     Task<bool> CheckIsBookFinishedReading(int bookId, string username);
 
     Task<UserBookReadingTracker> GetUserReadingTimeSpentAsync(int bookId, string username);
+
+    Task<int> GetUserTotalReadingTimeSpentAsync(int userId);
     
-    Task<bool> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent);
+    Task<int> GetUserTotalReadingTimeSpentByUsernameAsync(string username);
+    
+    Task<int> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent);
     
     Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 
@@ -45,5 +49,4 @@ public interface IBookRepository
     Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
     Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults);
     Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId);
-
 }

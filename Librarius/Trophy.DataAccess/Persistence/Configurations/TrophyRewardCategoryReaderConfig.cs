@@ -23,8 +23,8 @@ public class TrophyRewardCategoryReaderConfig : IEntityTypeConfiguration<TrophyR
             .HasColumnName("user_id")
             .IsRequired();
         
-        builder.Property(x => x.Category)
-            .HasColumnName("category")
+        builder.Property(x => x.CategoryId)
+            .HasColumnName("category_id")
             .IsRequired();
         
         builder.Property(x => x.IsWon)
@@ -52,5 +52,10 @@ public class TrophyRewardCategoryReaderConfig : IEntityTypeConfiguration<TrophyR
             .HasOne<TrophyRewardCategoryReader>()
             .WithMany()
             .HasForeignKey(trophyAcc => trophyAcc.UserId);
+        
+        builder
+            .HasOne<TrophyRewardCategoryReader>()
+            .WithOne()
+            .HasForeignKey<TrophyRewardCategoryReader>(t => t.CategoryId);
     }
 }

@@ -419,8 +419,36 @@ public class BookRepository : IBookRepository
         
         return userReadingBook;
     }
-    
-    public async Task<bool> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent)
+
+    // TODO de mutat in library user
+    public async Task<int> GetUserTotalReadingTimeSpentAsync(int userId)
+    {
+        var user = await _dbContext.Users
+            .FindAsync(userId);
+        if (user == default) throw new Exception("Invalid user.");
+        
+        var userReadingBook = await _dbContext.UserReadingBooks
+            .Where(c => c.User.Id == userId)
+            .SumAsync(b => b.MinutesSpent);
+
+        return userReadingBook;
+    }
+
+    // TODO de mutat in library user
+    public async Task<int> GetUserTotalReadingTimeSpentByUsernameAsync(string username)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(u => u .Username == username);
+        if (user == default) throw new Exception("Invalid user.");
+        
+        var userReadingBook = await _dbContext.UserReadingBooks
+            .Where(c => c.User.Username == username)
+            .SumAsync(b => b.MinutesSpent);
+
+        return userReadingBook;
+    }
+
+    public async Task<int> UpdateUserReadingTimeSpentAsync(int bookId, string username, int timeSpent)
     {
         var book = await _dbContext.Books
             .SingleOrDefaultAsync(book => book.Id == bookId);
@@ -456,7 +484,7 @@ public class BookRepository : IBookRepository
             await _dbContext.SaveChangesAsync();
         }
         
-        return true;
+        return userReadingBook.MinutesSpent;
     }
 
     public async Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent)
