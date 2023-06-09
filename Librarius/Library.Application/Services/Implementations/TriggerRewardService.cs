@@ -10,14 +10,16 @@ public class TriggerRewardService : ITriggerRewardService
     
     private const string TrophyRewardUrl = "http://localhost:5164/api/trophy/reward/check-win";
     private const string UpdateReadingTimeUrl = "http://localhost:5164/api/trophy/reading-time/reward/update-activity";
+    private const string UpdateReadingBookUrl = "http://localhost:5164/api/trophy/reading-books/reward/update-activity";
     
     public TriggerRewardService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
     
-    public async Task TriggerRequestToTrophyChecker()
+    public async Task TriggerRequestToTrophyChecker(string token)
     {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await _httpClient.GetAsync(TrophyRewardUrl);
 
         if (response.IsSuccessStatusCode)
@@ -26,19 +28,31 @@ public class TriggerRewardService : ITriggerRewardService
         }
     }
     
-    public async Task TriggerUpdateTotalReadingTime(int userId, int minutesReadCounter)
+    public async Task TriggerUpdateTotalReadingTime(int minutesReadCounter, bool canCheckWin, string token)
     {
         var body = new ReadingTimeRequest
         {
-            UserId = userId,
-            MinutesReadCounter = minutesReadCounter
+            MinutesReadCounter = minutesReadCounter,
+            CanCheckWin = canCheckWin
         };
         
-        var response = await _httpClient.PutAsJsonAsync(UpdateReadingTimeUrl, body);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await _httpClient.PutAsJsonAsync(UpdateReadingTimeUrl,  body);
+        
+        response.EnsureSuccessStatusCode();
+    }
 
-        if (response.IsSuccessStatusCode)
+    public async Task TriggerUpdateTotalReadingBooks(int booksReadCounter, bool canCheckWin, string token)
+    {
+        var body = new ReadingBooksRequest
         {
-            
-        }
+            ReadingBooksCounter = booksReadCounter,
+            CanCheckWin = canCheckWin
+        };
+        
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await _httpClient.PutAsJsonAsync(UpdateReadingBookUrl,  body);
+
+        response.EnsureSuccessStatusCode();
     }
 }

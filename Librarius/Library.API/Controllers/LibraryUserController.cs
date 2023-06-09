@@ -1,6 +1,8 @@
 using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
+using Library.Application.Models.Book.Reading;
+using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.Application.Services;
@@ -14,12 +16,20 @@ namespace Library.API.Controllers;
 public class LibraryUserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IBookService _bookService;
     private readonly ITriggerRewardService _triggerRewardService;
+    private readonly HttpClient _httpClient;
 
-    public LibraryUserController(IUserService userService, ITriggerRewardService triggerRewardService)
+    public LibraryUserController(
+        IUserService userService, 
+        ITriggerRewardService triggerRewardService, 
+        IBookService bookService, 
+        HttpClient httpClient)
     {
         _userService = userService;
         _triggerRewardService = triggerRewardService;
+        _bookService = bookService;
+        _httpClient = httpClient;
     }
 
     // Route: /api/library/user/register
@@ -35,6 +45,118 @@ public class LibraryUserController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+    
+    // Check if user finished Book
+    // Route: /api/library/user/book/{bookId}/check-reading-completed
+    [HttpGet("book/{bookId:int}/check-reading-completed")]
+    public async Task<IActionResult> CheckFinishedReadingBookByIdAsync(int bookId)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var response = await _bookService.CheckIsBookFinishedReading(bookId, username);
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // User Reading Time for Book
+    // Route: /api/library/user/book/time-spent
+    [HttpPost("book/time-spent")]
+    public async Task<IActionResult> GetUserReadingTimeForBookIdSpent(ReadingRequestModel requestModel)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var response = await _bookService.GetUserReadingTimeSpentAsync(requestModel, username);
+
+            return Ok(ApiResponse<ReadingTimeSpentResponseModel>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<ReadingTimeSpentResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+
+    // Update User Reading Time
+    // Route: /api/library/user/book/time-spent/update
+    [HttpPut("book/time-spent/update")]
+    public async Task<IActionResult> UpdateUserReadingTimeForBookIdSpent(UserReadingBookRequestModel requestModel)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var totalMinutesForBookId = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
+
+            return Ok(ApiResponse<bool>.Success(true));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Finish Reading Book
+    // Route: /api/library/user/book/complete-reading
+    [HttpPost("book/complete-reading")]
+    public async Task<IActionResult> SetFinishedReadingBookByIdAsync(UserReadingBookRequestModel requestModel)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
+            
+            var totalReadingTime = await _userService.GetUserTotalReadingTimeAsync(username);
+            
+            await _triggerRewardService.TriggerUpdateTotalReadingTime(
+                totalReadingTime, 
+                false,
+                GetAuthorizationHeaderValue()
+            );
+            
+            var totalReadingBooks = await _userService.GetUserTotalCompletedBooksAsync(username);
+            await _triggerRewardService.TriggerUpdateTotalReadingBooks(
+                totalReadingBooks, 
+                true,
+                GetAuthorizationHeaderValue()
+            );
+
+            return Ok(ApiResponse<bool>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/user/book/reading/in-progress
+    [HttpGet("book/reading/in-progress")]
+    public async Task<IActionResult> GetReadingBooksInProgressUser()
+    {
+        try
+        {
+            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            
+            var response = await _userService.GetReadingBooksInProgressUserAsync(username);
+            return Ok(ApiResponse<IEnumerable<BookMinimalResponseModel>>
+                .Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
 
         }
     }
@@ -56,9 +178,10 @@ public class LibraryUserController : ControllerBase
         }
     }
     
+    // Total Reading Time
     // Route: /api/library/user/minutes-logged
     [HttpGet("minutes-logged")]
-    public async Task<IActionResult> GetUserMinutesLogged()
+    public async Task<IActionResult> GeUserTotalReadingTime()
     {
         try
         {
@@ -66,7 +189,7 @@ public class LibraryUserController : ControllerBase
                 .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
             var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
             
-            var response = await _userService.GetUserMinutesLoggedAsync(username);
+            var response = await _userService.GetUserTotalReadingTimeAsync(username);
 
             return Ok(ApiResponse<int>.Success(response));
         }
@@ -79,11 +202,11 @@ public class LibraryUserController : ControllerBase
     
     // Route: /api/library/user/all/minutes-logged
     [HttpGet("all/minutes-logged")]
-    public async Task<IActionResult> GetAllUsersByMinutesLoggedDesc()
+    public async Task<IActionResult> GetAllUsersByTotalReadingTimeDesc()
     {
         try
         {
-            var response = await _userService.GetAllUsersByMinutesLoggedDescAsync();
+            var response = await _userService.GetAllUsersByReadingTimeDescAsync();
 
             return Ok(ApiResponse<IEnumerable<UserLeaderboardByMinutes>>.Success(response));
         }
@@ -132,49 +255,38 @@ public class LibraryUserController : ControllerBase
 
         }
     }
-    
-    // Route: /api/library/user/reading/in-progress
-    [HttpGet("reading/in-progress")]
-    public async Task<IActionResult> GetReadingBooksInProgressUser()
-    {
-        try
-        {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
-            
-            var response = await _userService.GetReadingBooksInProgressUserAsync(username);
-            return Ok(ApiResponse<IEnumerable<BookMinimalResponseModel>>
-                .Success(response));
-        }
-        catch (Exception e)
-        {
-            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
-                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
 
-        }
-    }
-    
     // Route: /api/library/user/favorite/books
     [HttpGet("favorite/books")]
     public async Task<IActionResult> GetUserFavoriteBooks()
     {
-        throw new NotImplementedException();
+        // TODO
         // try
         // {
-        //     var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-        //         .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-        //     var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+        //     var username = GetUsernameFromToken();
         //     
-        //     var response = await _userService.GetBookTimeReadingTrackersByUserAsync(username);
-        //     return Ok(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+        //     var response = await _userService.GetUserFavoriteBooks(username);
+        //     return Ok(ApiResponse<>
         //         .Success(response));
         // }
         // catch (Exception e)
         // {
-        //     return BadRequest(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
+        //     return BadRequest(ApiResponse<>
         //         .Fail(new List<ApiValidationError> { new(null, e.Message) }));
         //
         // }
+        throw new NotImplementedException();
+    }
+    
+    public string GetUsernameFromToken()
+    {
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
+        return Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+    }
+    
+    public string GetAuthorizationHeaderValue()
+    {
+        return HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
     }
 }

@@ -80,7 +80,7 @@ public class UserRepository : IUserRepository
     }
 
     // Get total reading time
-    public async Task<int> GetUserMinutesLoggedAsync(string username)
+    public async Task<int> GetUserTotalReadingTimeAsync(string username)
     {
         var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
         if (user == default) throw new UnauthorizedAccessException();
@@ -92,7 +92,18 @@ public class UserRepository : IUserRepository
         return totalMinutesLogged == 0 ? 0 : totalMinutesLogged;
     }
 
-    public async Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersMinutesLoggedAsync()
+    public async Task<int> GetUserTotalCompletedBooksAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == default) throw new UnauthorizedAccessException();
+    
+        var totalUserCompletedBooks = await _dbContext.UserReadingBooks
+            .CountAsync(ur => ur.UserId == user.Id && ur.IsBookFinished);
+
+        return totalUserCompletedBooks;
+    }
+
+    public async Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersByReadingTimeDescAsync()
     {
         var userLeaderboard = await _dbContext.Users
             .Join(

@@ -3,4 +3,6 @@
 public class ReadingBooksUpdateActivityRequestModel
 {
     public int ReadingBooksCounter { get; set; }
+    
+    public bool CanCheckWin { get; set; }
 }

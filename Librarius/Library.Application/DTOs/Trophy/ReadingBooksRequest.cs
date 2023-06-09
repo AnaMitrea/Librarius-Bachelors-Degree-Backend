@@ -1,8 +1,8 @@
 ﻿namespace Library.Application.DTOs.Trophy;
 
-public class ReadingTimeRequest
+public class ReadingBooksRequest
 {
-    public int MinutesReadCounter { get; set; }
+    public int ReadingBooksCounter { get; set; }
     
     public bool CanCheckWin { get; set; }
 }

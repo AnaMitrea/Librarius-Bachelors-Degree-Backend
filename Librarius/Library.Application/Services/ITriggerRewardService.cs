@@ -2,7 +2,9 @@
 
 public interface ITriggerRewardService
 {
-    Task TriggerRequestToTrophyChecker();
+    Task TriggerRequestToTrophyChecker(string token);
 
-    Task TriggerUpdateTotalReadingTime(int userId, int minutesReadCounter);
+    Task TriggerUpdateTotalReadingTime(int minutesReadCounter, bool canCheckWin, string token);
+    
+    Task TriggerUpdateTotalReadingBooks(int booksReadCounter, bool canCheckWin, string token);
 }

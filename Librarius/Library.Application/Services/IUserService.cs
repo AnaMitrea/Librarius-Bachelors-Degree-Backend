@@ -14,9 +14,11 @@ public interface IUserService
     
     public Task<bool> SetUserUnsubscribed(string username, int authorId);
     
-    public Task<int> GetUserMinutesLoggedAsync(string username);
+    public Task<int> GetUserTotalReadingTimeAsync(string username);
     
-    public Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByMinutesLoggedDescAsync();
+    public Task<int> GetUserTotalCompletedBooksAsync(string username);
+    
+    public Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByReadingTimeDescAsync();
     
     public Task<IEnumerable<UserLeaderboardByBooks>> GetAllUsersByNumberOfBooksDescAsync();
     

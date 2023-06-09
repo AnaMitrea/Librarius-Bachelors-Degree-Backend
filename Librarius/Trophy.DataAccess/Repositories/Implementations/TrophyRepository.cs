@@ -92,7 +92,16 @@ public class TrophyRepository : ITrophyRepository
 
     public async Task<bool> UpdateReadingBooksRewardActivityAsync(int userId, int readingBooksCounter)
     {
-        throw new NotImplementedException();
+        var inProgressTrophies = await GetUserInProgressChallengesForReadingBooksAsync(userId);
+
+        foreach (var trophy in inProgressTrophies)
+        {
+            trophy.UserProgress = readingBooksCounter;
+        }
+        
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter)

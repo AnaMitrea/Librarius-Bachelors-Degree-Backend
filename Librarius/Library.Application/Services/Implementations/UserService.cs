@@ -37,14 +37,19 @@ public class UserService : IUserService
         return await _userRepository.SetUserUnsubscribed(username, authorId);
     }
 
-    public async Task<int> GetUserMinutesLoggedAsync(string username)
+    public async Task<int> GetUserTotalReadingTimeAsync(string username)
     {
-        return await _userRepository.GetUserMinutesLoggedAsync(username);
+        return await _userRepository.GetUserTotalReadingTimeAsync(username);
     }
 
-    public async Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByMinutesLoggedDescAsync()
+    public async Task<int> GetUserTotalCompletedBooksAsync(string username)
     {
-        var response = await _userRepository.GetAllUsersMinutesLoggedAsync();
+        return await _userRepository.GetUserTotalCompletedBooksAsync(username);
+    }
+
+    public async Task<IEnumerable<UserLeaderboardByMinutes>> GetAllUsersByReadingTimeDescAsync()
+    {
+        var response = await _userRepository.GetAllUsersByReadingTimeDescAsync();
         
         return _mapper.Map<IEnumerable<UserLeaderboardByMinutes>>(response);
     }

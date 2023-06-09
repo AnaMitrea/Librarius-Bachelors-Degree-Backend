@@ -15,8 +15,11 @@ public interface IUserRepository
     public Task<bool> SetUserSubscribed(string username, int authorId);
     
     public Task<bool> SetUserUnsubscribed(string username, int authorId);
-    public Task<int> GetUserMinutesLoggedAsync(string username);
-    public Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersMinutesLoggedAsync();
+    public Task<int> GetUserTotalReadingTimeAsync(string username);
+    
+    public Task<int> GetUserTotalCompletedBooksAsync(string username);
+    
+    public Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersByReadingTimeDescAsync();
     public Task<IEnumerable<UserLeaderboardByBooksDto>> GetAllUsersByNumberOfBooksDescAsync();
     public Task<IEnumerable<UserReadingFeedDto>> GetUserForReadingFeedAsync();
 

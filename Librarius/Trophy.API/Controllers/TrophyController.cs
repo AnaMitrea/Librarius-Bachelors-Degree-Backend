@@ -51,15 +51,7 @@ public class TrophyController : ControllerBase
     {
         try
         {
-            int userId;
-            if (requestModel.UserId == null)
-            {
-                userId = await GetUserIdFromIdentity();
-            }
-            else
-            {
-                userId = (int)requestModel.UserId;
-            }
+            var userId = await GetUserIdFromIdentity();;
 
             var response = await _trophyService.UpdateReadingTimeRewardActivityAsync(requestModel, userId);
 

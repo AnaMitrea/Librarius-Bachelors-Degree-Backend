@@ -4,5 +4,5 @@ public class ReadingTimeUpdateActivityRequestModel
 {
     public int MinutesReadCounter { get; set; }
     
-    public int? UserId { get; set; }
+    public bool CanCheckWin { get; set; }
 }

@@ -29,8 +29,11 @@ public class TrophyService : ITrophyService
         var response = await _trophyRepository.UpdateReadingTimeRewardActivityAsync(
             userId, requestModel.MinutesReadCounter);
 
-        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
-        
+        if (requestModel.CanCheckWin)
+        {
+            var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        }
+
         return response;
     }
 
@@ -40,7 +43,10 @@ public class TrophyService : ITrophyService
         var response = await _trophyRepository.UpdateReadingBooksRewardActivityAsync(
             userId, requestModel.ReadingBooksCounter);
         
-        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        if (requestModel.CanCheckWin)
+        {
+            var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        }
         
         return response;
     }
@@ -51,8 +57,10 @@ public class TrophyService : ITrophyService
         var response = await _trophyRepository.UpdateCategoryReaderRewardActivityAsync(
             userId, requestModel.ReadingBooksCounter);
         
-        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
-        
+        if (requestModel.CanCheckWin)
+        {
+            var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        }
         return response;
     }
 
@@ -62,8 +70,11 @@ public class TrophyService : ITrophyService
     //     var response = await _trophyRepository.UpdateActivitiesRewardActivityAsync(
     //         userId, requestModel.MinutesReadCounter);
     //     
+    //     if (requestModel.CanCheckWin)
+    // {
     //     var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
-    // return response;
+    // }
+    //     return response;
     // }
 
     public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
