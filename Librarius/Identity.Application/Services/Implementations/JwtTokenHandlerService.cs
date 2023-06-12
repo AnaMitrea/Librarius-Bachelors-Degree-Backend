@@ -10,7 +10,6 @@ namespace Identity.Application.Services.Implementations;
 
 public class JwtTokenHandlerService : IJwtTokenHandlerService
 {
-    // TODO read these from a config file!!!!
     public const string JWT_SECURITY_KEY = "sajfkafbnebrkgbT%kcba82CffskgrhtgaBGDS9f71anflgbgvbvfe";
 
     private readonly IAccountService _accountService;

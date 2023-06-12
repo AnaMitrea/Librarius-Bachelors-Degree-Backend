@@ -55,6 +55,5 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.HasOne(book => book.Author)
             .WithMany(author => author.Books)
             .HasForeignKey(book => book.AuthorId);
-          //.OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -76,8 +76,7 @@ public class LevelAssignController : ControllerBase
     
     private async Task<int> GetUserIdFromIdentity()
     {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
 
         _httpClient.DefaultRequestHeaders.Authorization = 
             new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
@@ -87,5 +86,17 @@ public class LevelAssignController : ControllerBase
         var jsonResponse = await userIdResponse.Content.ReadAsStringAsync();
         var userId = Utilities.GetJsonPropertyAsInteger(jsonResponse, new[] { "result" });
         return userId;
+    }
+    
+    public string GetUsernameFromToken()
+    {
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
+        return Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+    }
+    
+    public string GetAuthorizationHeaderValue()
+    {
+        return HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
     }
 }

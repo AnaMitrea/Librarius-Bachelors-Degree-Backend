@@ -33,4 +33,14 @@ public class UserService : IUserService
     {
         return await _userRepository.FindUserIdByUsernameAsync(username);
     }
+
+    public async Task<int> AddPointsToUserAsync(string username, int points)
+    {
+        return await _userRepository.AddPointsToUserAsync(username, points);;
+    }
+    
+    public async Task<string> SetUserLevelAsync(string username, string level)
+    {
+        return await _userRepository.SetUserLevelAsync(username, level);
+    }
 }

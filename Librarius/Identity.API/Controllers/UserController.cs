@@ -1,5 +1,9 @@
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using Identity.API.Models;
 using Identity.API.Utils;
+using Identity.Application.Models.Requests;
 using Identity.Application.Models.User;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +17,13 @@ public class UserController : ControllerBase
 {
     private readonly IAccountService _accountService;
     private readonly IUserService _userService;
+    private readonly HttpClient _httpClient;
 
-    public UserController(IAccountService accountService, IUserService userService)
+    public UserController(IAccountService accountService, IUserService userService, HttpClient httpClient)
     {
         _accountService = accountService;
         _userService = userService;
+        _httpClient = httpClient;
     }
     
     // Route: /api/user/information
@@ -26,9 +32,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _accountService.GetUserInformationAsync(username);
 
@@ -48,9 +52,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _accountService.GeUserEmailAsync(username);
 
@@ -88,9 +90,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _userService.GetUserDashboardActivityAsync(username);
 
@@ -109,9 +109,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _userService.FindUserIdByUsernameAsync(username);
 
@@ -122,5 +120,55 @@ public class UserController : ControllerBase
             return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
 
         }
+    }
+    
+    // Route: /api/user/points/add
+    [HttpPut("points/add")]
+    public async Task<IActionResult> AddPointsToUser([FromBody] OnlyPointsModel onlyPointsModel)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var userTotalPoints = await _userService.AddPointsToUserAsync(username, onlyPointsModel.Points);
+            
+            var requestModel = new 
+            {
+                Points = userTotalPoints
+            };
+
+            var requestJson = JsonSerializer.Serialize(requestModel);
+            var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAuthorizationHeaderValue());
+            var httpResponse = await _httpClient.PostAsync(
+                "http://localhost:5164/api/level/points",
+                requestContent
+            );
+            httpResponse.EnsureSuccessStatusCode();
+            
+            var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            var newLevel = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result" });
+            
+            var lvl = await _userService.SetUserLevelAsync(username, newLevel);
+
+            return Ok(ApiResponse<string>.Success(lvl));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
+
+        }
+    }
+
+    public string GetUsernameFromToken()
+    {
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
+        return Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+    }
+    
+    public string GetAuthorizationHeaderValue()
+    {
+        return HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
     }
 }

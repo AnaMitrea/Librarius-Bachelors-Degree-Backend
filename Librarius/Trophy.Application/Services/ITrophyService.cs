@@ -7,11 +7,11 @@ public interface ITrophyService
 {
     Task<IEnumerable<TrophyModel>> CheckUserIfCanWinAsync(int userId);
     
-    Task<bool> UpdateReadingTimeRewardActivityAsync(ReadingTimeUpdateActivityRequestModel requestModel, int userId);
+    Task<int> UpdateReadingTimeRewardActivityAsync(ReadingTimeUpdateActivityRequestModel requestModel, int userId);
     
-    Task<bool> UpdateReadingBooksRewardActivityAsync(ReadingBooksUpdateActivityRequestModel requestModel, int userId);
+    Task<int> UpdateReadingBooksRewardActivityAsync(ReadingBooksUpdateActivityRequestModel requestModel, int userId);
     
-    Task<bool> UpdateCategoryReaderRewardActivityAsync(CategoryReaderUpdateActivityRequestModel requestModel, int userId);
+    Task<int> UpdateCategoryReaderRewardActivityAsync(CategoryReaderUpdateActivityRequestModel requestModel, int userId);
     
     // Task<bool> UpdateActivitiesRewardActivityAsync(ActivitiesUpdateActivityRequestModel requestModel, int userId);
     

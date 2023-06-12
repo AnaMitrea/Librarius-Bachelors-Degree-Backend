@@ -15,7 +15,8 @@ public class AuthorProfile : Profile
 
         CreateMap<AuthorMaterialsDto, MaterialsResponseModel>()
             .ForMember(dest => dest.Title,
-        opt => opt.MapFrom(src => src.CategoryTitle)
+        opt 
+            => opt.MapFrom(src => src.CategoryTitle)
         );
     }
 }

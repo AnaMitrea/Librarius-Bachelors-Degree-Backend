@@ -26,9 +26,6 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        
-        // Concurrency Problems Example
-        // modelBuilder.Entity<...>().UseXminAsConcurrencyToken();
 
         base.OnModelCreating(modelBuilder);
     }

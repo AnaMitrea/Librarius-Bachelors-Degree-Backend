@@ -54,4 +54,33 @@ public class UserRepository : IUserRepository
 
         return account.Id;
     }
+
+    public async Task<int> AddPointsToUserAsync(string username, int points)
+    {
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
+        if (account == null) throw new UnauthorizedAccessException();
+
+        if (points != 0)
+        {
+            account.Points += points;
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        return account.Points;
+    }
+
+    public async Task<string> SetUserLevelAsync(string username, string level)
+    {
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
+        if (account == null) throw new UnauthorizedAccessException();
+
+        if (account.Level != level)
+        {
+            account.Level = level;
+            await _dbContext.SaveChangesAsync();
+        }
+
+        return account.Level;
+    }
 }

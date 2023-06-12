@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Validators" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Library.DataAccess\Library.DataAccess.csproj" />
     </ItemGroup>
 

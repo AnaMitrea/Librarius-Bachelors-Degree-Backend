@@ -1,10 +1,11 @@
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using Trophy.API.Models;
 using Trophy.API.Utils;
 using Trophy.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using Trophy.Application.Models;
 using Trophy.Application.Models.Trophy.Request.UserRewardActivity;
 using Trophy.Application.Models.Trophy.Response;
 
@@ -53,13 +54,18 @@ public class TrophyController : ControllerBase
         {
             var userId = await GetUserIdFromIdentity();;
 
-            var response = await _trophyService.UpdateReadingTimeRewardActivityAsync(requestModel, userId);
-
-            return Ok(ApiResponse<bool>.Success(response));
+            var pointsWon = await _trophyService.UpdateReadingTimeRewardActivityAsync(requestModel, userId);
+            
+            if (requestModel.CanCheckWin)
+            {
+                var response = await UpdateUserWithNewLevel(pointsWon);
+            }
+            
+            return Ok(ApiResponse<bool>.Success(true));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<bool>
+            return BadRequest(ApiResponse<string>
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
     }
@@ -73,9 +79,14 @@ public class TrophyController : ControllerBase
         {
             var userId = await GetUserIdFromIdentity();
             
-            var response = await _trophyService.UpdateReadingBooksRewardActivityAsync(requestModel, userId);
+            var pointsWon = await _trophyService.UpdateReadingBooksRewardActivityAsync(requestModel, userId);
 
-            return Ok(ApiResponse<bool>.Success(response));
+            if (requestModel.CanCheckWin)
+            {
+                var response = await UpdateUserWithNewLevel(pointsWon);
+            }
+            
+            return Ok(ApiResponse<bool>.Success(true));
         }
         catch (Exception e)
         {
@@ -95,7 +106,7 @@ public class TrophyController : ControllerBase
             
             var response = await _trophyService.UpdateCategoryReaderRewardActivityAsync(requestModel, userId);
 
-            return Ok(ApiResponse<bool>.Success(response));
+            return Ok(ApiResponse<int>.Success(response));
         }
         catch (Exception e)
         {
@@ -122,7 +133,6 @@ public class TrophyController : ControllerBase
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
     }
-    
     
     // Route: /api/trophy/join/{:trophyId}
     [HttpGet("join/{trophyId:int}")]
@@ -240,10 +250,30 @@ public class TrophyController : ControllerBase
         }
     }
 
+    private async Task<string> UpdateUserWithNewLevel(int pointsWon)
+    {
+        var request = new 
+        {
+            Points = pointsWon
+        };
+            
+        var requestJson = JsonSerializer.Serialize(request);
+        var requestContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetAuthorizationHeaderValue());
+            
+        var httpResponse = await _httpClient.PutAsync(
+            "http://localhost:5164/api/user/points/add",
+            requestContent
+        );
+        httpResponse.EnsureSuccessStatusCode();
+            
+        var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+        return Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result" });
+    }
+
     private async Task<int> GetUserIdFromIdentity()
     {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
 
         _httpClient.DefaultRequestHeaders.Authorization = 
             new AuthenticationHeaderValue("Bearer", authorizationHeaderValue);
@@ -253,5 +283,17 @@ public class TrophyController : ControllerBase
         var jsonResponse = await userIdResponse.Content.ReadAsStringAsync();
         var userId = Utilities.GetJsonPropertyAsInteger(jsonResponse, new[] { "result" });
         return userId;
+    }
+    
+    public string GetUsernameFromToken()
+    {
+        var authorizationHeaderValue = GetAuthorizationHeaderValue();
+        return Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+    }
+    
+    public string GetAuthorizationHeaderValue()
+    {
+        return HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
     }
 }

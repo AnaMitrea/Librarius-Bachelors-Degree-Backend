@@ -90,10 +90,7 @@ public class BookRepository : IBookRepository
     // return booksGroupedByBookshelf.ToDictionary(
     //     bgbb => bgbb.Bookshelf.Title, 
     //     bgbb => bgbb.Books.ToList());
-         
-         
-    // aprox 250ms
-         
+
     /*
      * In this implementation, the query for retrieving books has been simplified
      * to only include the Book and Category entities, and uses a projection to
@@ -338,7 +335,7 @@ public class BookRepository : IBookRepository
     
     public async Task<BookWithContentDto> GetReadingBookByIdAsync(int bookId)
     {
-        var book = await _dbContext.Books
+        var book = await _dbContext.Books                       
             .SingleOrDefaultAsync(book => book.Id == bookId);
     
         if (book == default)
