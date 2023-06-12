@@ -213,4 +213,24 @@ public class UserRepository : IUserRepository
     
         return inProgressBooks;
     }
+
+    public async Task<IEnumerable<Book>> GetUserFavoriteBooksAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException();
+        }
+
+        await _dbContext.Entry(user)
+            .Collection(u => u.FavoriteBooks)
+            .Query()
+            .Include(fb => fb.Book)
+            .ThenInclude(b => b.Author)
+            .LoadAsync();
+
+        var favoriteBooks = user.FavoriteBooks.Select(fb => fb.Book);
+
+        return favoriteBooks;
+    }
 }

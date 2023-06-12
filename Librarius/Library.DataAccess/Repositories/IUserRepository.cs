@@ -26,4 +26,5 @@ public interface IUserRepository
     Task<Dictionary<int, UserBookReadingTracker>> GetBookTimeReadingTrackersByUserAsync(string username);
     
     Task<IEnumerable<Book>> GetReadingBooksInProgressUserAsync(string username);
+    Task<IEnumerable<Book>> GetUserFavoriteBooksAsync(string username);
 }

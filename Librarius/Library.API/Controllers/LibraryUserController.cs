@@ -3,6 +3,7 @@ using Library.API.Utils;
 using Library.Application.Models.Book;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
+using Library.Application.Models.Book.Trending;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.Application.Services;
@@ -18,18 +19,15 @@ public class LibraryUserController : ControllerBase
     private readonly IUserService _userService;
     private readonly IBookService _bookService;
     private readonly ITriggerRewardService _triggerRewardService;
-    private readonly HttpClient _httpClient;
 
     public LibraryUserController(
         IUserService userService, 
         ITriggerRewardService triggerRewardService, 
-        IBookService bookService, 
-        HttpClient httpClient)
+        IBookService bookService)
     {
         _userService = userService;
         _triggerRewardService = triggerRewardService;
         _bookService = bookService;
-        _httpClient = httpClient;
     }
 
     // Route: /api/library/user/register
@@ -240,9 +238,7 @@ public class LibraryUserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _userService.GetBookTimeReadingTrackersByUserAsync(username);
             return Ok(ApiResponse<Dictionary<int, UserBookReadingTimeTrackerResponse>>
@@ -260,21 +256,19 @@ public class LibraryUserController : ControllerBase
     [HttpGet("favorite/books")]
     public async Task<IActionResult> GetUserFavoriteBooks()
     {
-        // TODO
-        // try
-        // {
-        //     var username = GetUsernameFromToken();
-        //     
-        //     var response = await _userService.GetUserFavoriteBooks(username);
-        //     return Ok(ApiResponse<>
-        //         .Success(response));
-        // }
-        // catch (Exception e)
-        // {
-        //     return BadRequest(ApiResponse<>
-        //         .Fail(new List<ApiValidationError> { new(null, e.Message) }));
-        //
-        // }
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var response = await _userService.GetUserFavoriteBooksAsync(username);
+            return Ok(ApiResponse<IEnumerable<BookMinimalResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        
+        }
         throw new NotImplementedException();
     }
     
