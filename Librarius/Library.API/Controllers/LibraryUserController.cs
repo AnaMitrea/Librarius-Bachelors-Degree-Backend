@@ -143,9 +143,7 @@ public class LibraryUserController : ControllerBase
     {
         try
         {
-            var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-                .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-            var username = Utilities.ExtractUsernameFromAccessToken(authorizationHeaderValue);
+            var username = GetUsernameFromToken();
             
             var response = await _userService.GetReadingBooksInProgressUserAsync(username);
             return Ok(ApiResponse<IEnumerable<BookMinimalResponseModel>>
