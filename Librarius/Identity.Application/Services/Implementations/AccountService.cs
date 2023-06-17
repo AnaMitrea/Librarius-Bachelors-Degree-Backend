@@ -50,11 +50,15 @@ public class AccountService : IAccountService
         return _mapper.Map<DashboardUserModel>(response);
     }
 
-    public async Task<string> GeUserEmailAsync(string username)
+    public async Task<UserEmailResponse> GetUserEmailAndUsernameAsync(string username)
     {
         var response = await _accountRepository.GetUserInformationAsync(username);
-
-        return response.Email;
+        
+        return new UserEmailResponse
+        {
+            Email = response.Email,
+            Username = response.Username
+        };
     }
 
     public async Task<bool> CheckUsernameExistence(string username)

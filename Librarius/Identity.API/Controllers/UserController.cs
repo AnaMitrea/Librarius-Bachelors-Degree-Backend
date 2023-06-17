@@ -48,21 +48,21 @@ public class UserController : ControllerBase
     
     // Route: /api/user/email
     [HttpGet("email")]
-    public async Task<IActionResult> GetUserEmail()
+    public async Task<IActionResult> GetUserEmailAndUsername()
     {
         try
         {
             var username = GetUsernameFromToken();
             
-            var response = await _accountService.GeUserEmailAsync(username);
+            var response = await _accountService.GetUserEmailAndUsernameAsync(username);
 
             if (response == null) throw new Exception("Invalid information.");
-
-            return Ok(ApiResponse<string>.Success(response));
+            
+            return Ok(ApiResponse<UserEmailResponse>.Success(response));
         }
         catch (Exception e)
         {
-            return NotFound(ApiResponse<string>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return NotFound(ApiResponse<UserEmailResponse>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

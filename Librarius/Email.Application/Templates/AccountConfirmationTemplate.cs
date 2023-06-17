@@ -62,21 +62,12 @@ public static class AccountConfirmationTemplate
                                 <div class='container'>
                                     <h1>Welcome to Our Website, " + userName + @"!</h1>
                                     <p>Dear " + userName + @",</p>
+                                    <p></p>
                                     <p>Thank you for registering an account on our website. We're excited to have you join our community!</p>
-                                    <p>To get started, please click the button below to confirm your account:</p>
-                                    <p>
-                                        <a class='button' href='http://localhost:4200/#/landing' target='_blank'>Confirm Account</a>
-                                    </p>
-                                    <p>If the button above doesn't work, you can also copy and paste the following URL into your browser:</p>
-                                    <p>http://localhost:4200/#/landing</p>
-                                    <p>We're here to help if you have any questions or need assistance. Feel free to reach out to our support team.</p>
+                                    <p>We're here to help if you have any questions or need assistance. Feel free to reach out.</p>
                                     <p>Once again, welcome aboard!</p>
                                     <p>Sincerely,</p>
                                     <p>The Librarius Team</p>
-
-                                    <div class='footer'>
-                                        <p>If you wish to unsubscribe from our mailing list, please <a href='#'>click here</a>.</p>
-                                    </div>
                                 </div>
                             </body>
                             </html>";

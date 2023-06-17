@@ -1,5 +1,5 @@
 ﻿using Library.Application.Models.Book;
-using Library.Application.Models.Book.Trending;
+using Library.Application.Models.Book.Author;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 
@@ -31,4 +31,6 @@ public interface IUserService
     public Task<IEnumerable<BookMinimalResponseModel>> GetReadingBooksInProgressUserAsync(string username);
     
     public Task<IEnumerable<BookMinimalResponseModel>> GetUserFavoriteBooksAsync(string username);
+    public Task DeleteUserFavoriteBookByIdASync(string username, int bookId);
+    public Task<IEnumerable<AuthorResponseModel>> GetUserAuthorsSubscriptionsAsync(string username);
 }

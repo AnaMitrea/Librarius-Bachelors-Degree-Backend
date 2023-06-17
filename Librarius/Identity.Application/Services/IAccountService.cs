@@ -15,7 +15,7 @@ public interface IAccountService
 
     Task<DashboardUserModel?> GetUserInformationAsync(string username);
     
-    Task<string> GeUserEmailAsync(string username);
+    Task<UserEmailResponse> GetUserEmailAndUsernameAsync(string username);
 
     Task<bool> CheckUsernameExistence(string username);
 

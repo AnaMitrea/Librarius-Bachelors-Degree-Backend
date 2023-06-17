@@ -1,6 +1,7 @@
 using Library.API.Models;
 using Library.API.Utils;
 using Library.Application.Models.Book;
+using Library.Application.Models.Book.Author;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
@@ -265,9 +266,43 @@ public class LibraryUserController : ControllerBase
         {
             return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
-        
         }
-        throw new NotImplementedException();
+    }
+    
+    // Route: /api/library/user/favorite/{bookId:int}/remove
+    [HttpDelete("favorite/{bookId:int}/remove")]
+    public async Task<IActionResult> DeleteUserFavoriteBookById(int bookId)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            await _userService.DeleteUserFavoriteBookByIdASync(username, bookId);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/library/user/authors
+    [HttpGet("authors")]
+    public async Task<IActionResult> GetUserSubscribedAuthors()
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            var response = await _userService.GetUserAuthorsSubscriptionsAsync(username);
+            return Ok(ApiResponse<IEnumerable<AuthorResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<IEnumerable<AuthorResponseModel>>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
     }
     
     public string GetUsernameFromToken()

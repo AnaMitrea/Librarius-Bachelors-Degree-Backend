@@ -233,4 +233,32 @@ public class UserRepository : IUserRepository
 
         return favoriteBooks;
     }
+
+    public async Task DeleteUserFavoriteBookByIdASync(string username, int bookId)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new UnauthorizedAccessException();
+
+        var book = await _dbContext.UserFavoriteBooks
+            .SingleOrDefaultAsync(b => b.User.Username == username && b.BookId == bookId);
+        if (book == null) throw new Exception("Book not found");
+
+        _dbContext.Remove(book);
+    }
+
+    public async Task<IEnumerable<Author>> GetUserAuthorsSubscriptionsAsync(string username)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new UnauthorizedAccessException();
+
+        await _dbContext.Entry(user)
+            .Collection(u => u.Subscriptions)
+            .Query()
+            .Include(sb => sb.Author)
+            .LoadAsync();
+
+        var subscribedAuthors = user.Subscriptions.Select(sb => sb.Author);
+
+        return subscribedAuthors;
+    }
 }

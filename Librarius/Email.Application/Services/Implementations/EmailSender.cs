@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using Email.Application.Models;
 using Email.Application.Templates;
 using Email.Application.Utils;
 using Microsoft.Extensions.Configuration;
@@ -27,9 +28,16 @@ public class EmailSender : IEmailSender
     public async Task SendAuthorSubscriptionEmailAsync(int authorId, string token)
     {
         var authorNameResponse = await GetAuthorNameAsync(authorId, token);
-        var userEmailResponse = await GetUserEmailAsync(token);
+        var userInfo = await GetUserInfoAsync(token);
 
-        await SendSubscriptionConfirmationEmailAsync(authorNameResponse, userEmailResponse);
+        await SendSubscriptionConfirmationEmailAsync(authorNameResponse, userInfo.Email);
+    }
+    
+    public async Task SendWelcomeEmailAsync(string token)
+    {
+        var userInfo = await GetUserInfoAsync(token);
+
+        await SendWelcomeConfirmationEmailAsync(userInfo.Username, userInfo.Email);
     }
 
     private async Task<string> GetAuthorNameAsync(int authorId, string token)
@@ -48,7 +56,7 @@ public class EmailSender : IEmailSender
         return name ?? throw new InvalidOperationException();
     }
 
-    private async Task<string> GetUserEmailAsync(string token)
+    private async Task<UserModel> GetUserInfoAsync(string token)
     {
         using var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -57,22 +65,15 @@ public class EmailSender : IEmailSender
         userResponse.EnsureSuccessStatusCode();
     
         var jsonResponse = await userResponse.Content.ReadAsStringAsync();
-        var email = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result" });
+        var email = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result", "email" });
+        var username = Utilities.GetJsonPropertyAsString(jsonResponse, new[] { "result", "username" });
     
-        return email ?? throw new InvalidOperationException();
+        return new UserModel
+        {
+            Email = email,
+            Username = username
+        };
     }
-    
-    // private async Task<string> GetUserEmailAsync(string token)
-    // {
-    //     using var httpClient = new HttpClient();
-    //     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-    //     
-    //     var userResponse = await httpClient.GetAsync(UserEmailRequestUrl);
-    //     userResponse.EnsureSuccessStatusCode();
-    //     
-    //     var userEmail = await Utilities.GetPropertyValueAsync<string>(userResponse, "result.email");
-    //     return userEmail;
-    // }
 
     private async Task SendSubscriptionConfirmationEmailAsync(string authorName, string userEmail)
     {
@@ -93,5 +94,22 @@ public class EmailSender : IEmailSender
         await client.SendMailAsync(message);
     }
     
-    
+    private async Task SendWelcomeConfirmationEmailAsync(string username, string userEmail)
+    {
+        using var client = new SmtpClient(_smtpHost, _smtpPort);
+        client.EnableSsl = true;
+        client.UseDefaultCredentials = false;
+        client.Credentials = new NetworkCredential(_emailAccount, _emailPassword);
+
+        var message = new MailMessage
+        {
+            From = new MailAddress(_emailAccount),
+            To = { new MailAddress(userEmail) },
+            Subject = "Welcome to Librarius",
+            Body = AccountConfirmationTemplate.GetConfirmationEmailBody(username),
+            IsBodyHtml = true
+        };
+
+        await client.SendMailAsync(message);
+    }
 }

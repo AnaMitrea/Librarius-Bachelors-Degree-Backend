@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.Models.Book;
-using Library.Application.Models.Book.Trending;
+using Library.Application.Models.Book.Author;
 using Library.Application.Models.LibraryUser.Request;
 using Library.Application.Models.LibraryUser.Response;
 using Library.DataAccess.Repositories;
@@ -89,5 +89,17 @@ public class UserService : IUserService
         var response = await _userRepository.GetUserFavoriteBooksAsync(username);
         
         return _mapper.Map<IEnumerable<BookMinimalResponseModel>>(response);
+    }
+
+    public async Task DeleteUserFavoriteBookByIdASync(string username, int bookId)
+    {
+        await _userRepository.DeleteUserFavoriteBookByIdASync(username, bookId);
+    }
+
+    public async Task<IEnumerable<AuthorResponseModel>> GetUserAuthorsSubscriptionsAsync(string username)
+    {
+        var response = await _userRepository.GetUserAuthorsSubscriptionsAsync(username);
+        
+        return _mapper.Map<IEnumerable<AuthorResponseModel>>(response);
     }
 }

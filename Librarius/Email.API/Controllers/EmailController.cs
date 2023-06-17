@@ -17,12 +17,23 @@ public class EmailController : ControllerBase
     
     // Route: /api/email/{id}/subscription
     [HttpPost("{authorId:int}/subscription")]
-    public async Task<IActionResult> SendEmail(int authorId)
+    public async Task<IActionResult> SendEmailSubscription(int authorId)
     {
         var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
             .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
         
         await _emailSender.SendAuthorSubscriptionEmailAsync(authorId, authorizationHeaderValue);
+        return NoContent();
+    }
+    
+    // Route: /api/email/welcome
+    [HttpGet("welcome")]
+    public async Task<IActionResult> SendEmailWelcome()
+    {
+        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
+            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
+        
+        await _emailSender.SendWelcomeEmailAsync(authorizationHeaderValue);
         return NoContent();
     }
 }

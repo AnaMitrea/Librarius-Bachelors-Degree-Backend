@@ -81,8 +81,6 @@ public static class AuthorSubscriptionTemplate
                                     </p>
                                     <p>Sincerely,</p>
                                     <p>The Librarius Team</p>
-                                    <div class='signature'></div>
-                                    <img class='signature' src='" + signatureImage + @"' alt='Librarius Team Signature'>
 
                                     <div class='footer'>
                                         <p>If you wish to unsubscribe from our mailing list, please <a href='#'>click here</a>.</p>

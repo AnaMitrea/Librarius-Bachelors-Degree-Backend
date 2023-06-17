@@ -70,11 +70,11 @@ public class BookContentUtil
     
     public static ReadingTimeResponseDto CalculateReadingTime(int wordCount)
     {
-        const int wordsPerMinute = 200; // Average reading speed (words per minute)
+        const int avgWordsPerMinute = 200;
         const int secondsPerMinute = 60;
 
-        var minutes = wordCount / wordsPerMinute;
-        var seconds = (int)Math.Round((double)wordCount / wordsPerMinute * secondsPerMinute) % secondsPerMinute;
+        var minutes = wordCount / avgWordsPerMinute;
+        var seconds = (int)Math.Round((double)wordCount / avgWordsPerMinute * secondsPerMinute) % secondsPerMinute;
 
         var hours = 0;
         if (minutes >= 60)
@@ -92,15 +92,4 @@ public class BookContentUtil
 
         return response;
     }
-    
-    public static string RemoveHtmlTags(string htmlContent)
-    {
-        var regex = new Regex("<[^>]+?>");
-        return regex.Replace(htmlContent, "");
-    }
-    
-    // [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-header\"\\s+lang=\"en\">([\\s\\S]*?)<\\/section>", RegexOptions.IgnoreCase, "en-GB")]
-    // private static partial Regex PgHeaderClassRegex();
-    // [GeneratedRegex("<section\\s+class=\"pg-boilerplate\\spgheader\"\\s+id=\"pg-footer\"\\s+lang=\"en\">", RegexOptions.IgnoreCase, "en-GB")]
-    // private static partial Regex PgFooterClassRegex();
 }

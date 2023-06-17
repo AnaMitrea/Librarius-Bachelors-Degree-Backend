@@ -1,4 +1,5 @@
 ﻿using Library.DataAccess.DTOs.User;
+using Library.DataAccess.Entities.BookRelated;
 using Library.DataAccess.Entities.Library;
 using Library.DataAccess.Entities.User;
 
@@ -27,4 +28,6 @@ public interface IUserRepository
     
     Task<IEnumerable<Book>> GetReadingBooksInProgressUserAsync(string username);
     Task<IEnumerable<Book>> GetUserFavoriteBooksAsync(string username);
+    Task DeleteUserFavoriteBookByIdASync(string username, int bookId);
+    Task<IEnumerable<Author>> GetUserAuthorsSubscriptionsAsync(string username);
 }
