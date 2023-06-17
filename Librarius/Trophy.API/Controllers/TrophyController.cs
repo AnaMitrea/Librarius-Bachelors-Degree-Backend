@@ -61,7 +61,9 @@ public class TrophyController : ControllerBase
                 var response = await UpdateUserWithNewLevel(pointsWon);
             }
             
-            return Ok(ApiResponse<bool>.Success(true));
+            var hasWonAnyTrophy = pointsWon == 0;
+            
+            return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
         catch (Exception e)
         {
@@ -85,8 +87,10 @@ public class TrophyController : ControllerBase
             {
                 var response = await UpdateUserWithNewLevel(pointsWon);
             }
+
+            var hasWonAnyTrophy = pointsWon == 0;
             
-            return Ok(ApiResponse<bool>.Success(true));
+            return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
         catch (Exception e)
         {

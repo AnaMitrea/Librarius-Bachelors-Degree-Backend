@@ -282,8 +282,7 @@ public class LibraryUserController : ControllerBase
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<IEnumerable<BookMinimalResponseModel>>
-                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
     }
     
@@ -302,6 +301,23 @@ public class LibraryUserController : ControllerBase
         {
             return BadRequest(ApiResponse<IEnumerable<AuthorResponseModel>>
                 .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
+    // Route: /api/library/user/authors/
+    [HttpDelete("authors/{authorId:int}/remove")]
+    public async Task<IActionResult> RemoveUserSubscribedAuthorById(int authorId)
+    {
+        try
+        {
+            var username = GetUsernameFromToken();
+            
+            await _userService.RemoveUserSubscribedAuthorByIdAsync(username, authorId);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>.Fail(new List<ApiValidationError> { new(null, e.Message) }));
         }
     }
     

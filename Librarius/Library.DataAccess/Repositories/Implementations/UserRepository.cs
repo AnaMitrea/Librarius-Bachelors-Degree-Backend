@@ -243,7 +243,9 @@ public class UserRepository : IUserRepository
             .SingleOrDefaultAsync(b => b.User.Username == username && b.BookId == bookId);
         if (book == null) throw new Exception("Book not found");
 
-        _dbContext.Remove(book);
+        _dbContext.UserFavoriteBooks.Remove(book);
+        
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Author>> GetUserAuthorsSubscriptionsAsync(string username)
@@ -260,5 +262,19 @@ public class UserRepository : IUserRepository
         var subscribedAuthors = user.Subscriptions.Select(sb => sb.Author);
 
         return subscribedAuthors;
+    }
+
+    public async Task RemoveUserSubscribedAuthorByIdAsync(string username, int authorId)
+    {
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
+        if (user == null) throw new UnauthorizedAccessException();
+
+        var subscription = await _dbContext.UserAuthorSubscriptions
+            .SingleOrDefaultAsync(sb => sb.User.Username == username && sb.AuthorId == authorId);
+        if (subscription == null) throw new Exception("Subscription not found");
+
+        _dbContext.UserAuthorSubscriptions.Remove(subscription);
+
+        await _dbContext.SaveChangesAsync();
     }
 }

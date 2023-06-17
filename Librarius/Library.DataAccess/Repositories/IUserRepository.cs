@@ -30,4 +30,5 @@ public interface IUserRepository
     Task<IEnumerable<Book>> GetUserFavoriteBooksAsync(string username);
     Task DeleteUserFavoriteBookByIdASync(string username, int bookId);
     Task<IEnumerable<Author>> GetUserAuthorsSubscriptionsAsync(string username);
+    Task RemoveUserSubscribedAuthorByIdAsync(string username, int authorId);
 }

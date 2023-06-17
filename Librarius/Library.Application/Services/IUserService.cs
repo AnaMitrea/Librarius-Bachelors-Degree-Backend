@@ -33,4 +33,5 @@ public interface IUserService
     public Task<IEnumerable<BookMinimalResponseModel>> GetUserFavoriteBooksAsync(string username);
     public Task DeleteUserFavoriteBookByIdASync(string username, int bookId);
     public Task<IEnumerable<AuthorResponseModel>> GetUserAuthorsSubscriptionsAsync(string username);
+    public Task RemoveUserSubscribedAuthorByIdAsync(string username, int authorId);
 }

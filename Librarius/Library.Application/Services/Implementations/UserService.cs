@@ -102,4 +102,9 @@ public class UserService : IUserService
         
         return _mapper.Map<IEnumerable<AuthorResponseModel>>(response);
     }
+
+    public async Task RemoveUserSubscribedAuthorByIdAsync(string username, int authorId)
+    {
+        await _userRepository.RemoveUserSubscribedAuthorByIdAsync(username, authorId);
+    }
 }
