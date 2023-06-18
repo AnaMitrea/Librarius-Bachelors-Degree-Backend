@@ -3,7 +3,6 @@ using Library.Application.Models.Book;
 using Library.Application.Models.Book.Explore.Bookshelf;
 using Library.Application.Models.Book.Explore.Category;
 using Library.Application.Models.Book.Favorite;
-using Library.Application.Models.Book.Home;
 using Library.Application.Models.Book.Reading;
 using Library.Application.Models.Book.Reading.Response;
 using Library.Application.Models.Book.Trending;
@@ -16,14 +15,12 @@ namespace Library.Application.Services.Implementations;
 public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
-    private readonly ITriggerRewardService _triggerRewardService;
     private readonly IMapper _mapper;
 
-    public BookService(IBookRepository bookRepository, IMapper mapper, ITriggerRewardService triggerRewardService)
+    public BookService(IBookRepository bookRepository, IMapper mapper)
     {
         _bookRepository = bookRepository;
         _mapper = mapper;
-        _triggerRewardService = triggerRewardService;
     }
     
     public async Task<BookResponseModel> GetBookByIdAsync(int id)

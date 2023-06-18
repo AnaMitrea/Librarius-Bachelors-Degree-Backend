@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using Library.DataAccess.DTOs;
 using Library.DataAccess.DTOs.Explore;
 using Library.DataAccess.Entities.Library;
@@ -537,20 +538,59 @@ public class BookRepository : IBookRepository
     }
 
 
-    public async Task<IEnumerable<Book?>> GetTrendingNowBooksAsync()
+    public async Task<IEnumerable<Book>> GetTrendingNowBooksAsync()
     {
-        // TODO implement
-        var result = await _dbContext.Books.Take(10).Include(b => b.Author).ToListAsync();
+        var today = DateTime.Now.Date.ToString("dd/MM/yyyy");
+        
+        var trendingBooks = await _dbContext.Books
+            .OrderByDescending(b => b.Reviews.Count(r => r.Timestamp == today))
+            .Take(10)
+            .Include(b => b.Author)
+            .ToListAsync();
 
-        return result;
+        if (trendingBooks.Count >= 10) return trendingBooks;
+        
+        var additionalBooks = await GetRandomBooksAsync(10 - trendingBooks.Count);
+        trendingBooks.AddRange(additionalBooks);
+
+        return trendingBooks;
     }
     
-    public async Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync()
+    public async Task<IEnumerable<Book>> GetTrendingWeekBooksAsync()
     {
-        // TODO implement
-        var result = await _dbContext.Books.Skip(100).Take(10).Include(b => b.Author).ToListAsync();
+        var weekAgo = DateTime.Now.Date.AddDays(-7);
+        var weekAgoString = weekAgo.ToString("dd/MM/yyyy");
 
-        return result;
+        var booksWithReviews = await _dbContext.Books
+            .Include(b => b.Reviews)
+            .Include(b => b.Author)
+            .ToListAsync();
+
+        var trendingBooks = booksWithReviews
+            .Where(b => b.Reviews.Any(r => DateTime.ParseExact(r.Timestamp, "dd/MM/yyyy", CultureInfo.InvariantCulture) >= weekAgo))
+            .ToList();
+
+        if (trendingBooks.Count >= 10) return trendingBooks;
+        
+        var additionalBooks = await GetRandomBooksAsync(10 - trendingBooks.Count);
+        trendingBooks.AddRange(additionalBooks);
+
+        return trendingBooks;
+    }
+    
+    private async Task<List<Book>> GetRandomBooksAsync(int count)
+    {
+        var totalBooks = await _dbContext.Books.CountAsync();
+        var random = new Random();
+        var skipAmount = random.Next(0, totalBooks - 4);
+
+        var randomBooks = await _dbContext.Books
+            .Skip(skipAmount)
+            .Take(count)
+            .Include(b => b.Author)
+            .ToListAsync();
+
+        return randomBooks;
     }
 
     public async Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults)

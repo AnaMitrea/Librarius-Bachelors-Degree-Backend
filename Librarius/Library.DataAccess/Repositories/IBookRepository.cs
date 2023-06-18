@@ -46,9 +46,9 @@ public interface IBookRepository
     
     Task<bool> SetFinishedReadingBookByIdAsync(int bookId, string username, int timeSpent);
 
-    Task<IEnumerable<Book?>> GetTrendingNowBooksAsync();
+    Task<IEnumerable<Book>> GetTrendingNowBooksAsync();
     
-    Task<IEnumerable<Book?>> GetTrendingWeekBooksAsync();
+    Task<IEnumerable<Book>> GetTrendingWeekBooksAsync();
     Task<IEnumerable<Book>> SearchBooksByFilterAsync(string searchByKey, int maxResults);
     Task<bool> SetOrRemoveFavoriteBookAsync(string username, int bookId);
 }
