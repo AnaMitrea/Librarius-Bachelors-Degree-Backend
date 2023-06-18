@@ -4,5 +4,5 @@ public interface ITriggerRewardService
 {
     Task TriggerRequestToTrophyChecker(string token);
 
-    Task TriggerUpdateActivity(string criterion, bool canCheckWin, string token);
+    Task<bool> TriggerUpdateActivity(string criterion, bool canCheckWin, string token);
 }

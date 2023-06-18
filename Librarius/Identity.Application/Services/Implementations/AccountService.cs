@@ -12,8 +12,11 @@ public class AccountService : IAccountService
     private readonly IAccountRepository _accountRepository;
     private readonly ILoginActivityService _loginActivityService;
 
-    public AccountService(IAccountRepository accountRepository, IMapper mapper, ILoginActivityService loginActivityService)
-    {
+    public AccountService(
+        IAccountRepository accountRepository,
+        IMapper mapper, 
+        ILoginActivityService loginActivityService
+    ){
         _mapper = mapper;
         _loginActivityService = loginActivityService;
         _accountRepository = accountRepository;
@@ -109,24 +112,7 @@ public class AccountService : IAccountService
         await _loginActivityService.CreateLoginActivityAsync(account.Id, account.LastLogin);
 
         var updatedAccount = await _accountRepository.UpdateUserInformationAsync(account);
-        
-        // check dates to trigger trophies
-        var criterion = CheckDate(today.Date);
-        if (!string.IsNullOrEmpty(criterion))
-        {
-            
-        }
 
         return _mapper.Map<AuthenticationResponseModel>(updatedAccount);
-    }
-
-    private static string CheckDate(DateTime date)
-    {
-        return date.Month switch
-        {
-            2 when date.Day == 14 => "valentine",
-            12 when date.Day == 25 => "christmas",
-            _ => date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty
-        };
     }
 }

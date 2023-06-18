@@ -32,6 +32,22 @@ public class BookshelfController : ControllerBase
         }
     }
     
+    // Route: /api/library/bookshelf/home-explore
+    [HttpGet("home-explore")]
+    public async Task<IActionResult> Get4CategoriesForHomeExplore()
+    {
+        try
+        {
+            var response = await _bookshelfService.Get4CategoriesForHomeExploreAsync();
+
+            return Ok(ApiResponse<List<BookshelfResponseModel>>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<List<BookshelfResponseModel>>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
     // Route: /api/library/bookshelf/categories
     [HttpGet("categories")]
     public async Task<IActionResult> GetAllWithCategoryAsync()

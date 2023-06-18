@@ -18,6 +18,20 @@ public class BookshelfRepository : IBookshelfRepository
         return await _dbContext.Bookshelves.ToListAsync();
     }
 
+    public async Task<List<Bookshelf>> Get4CategoriesForHomeExploreAsync()
+    {
+        var totalBookshelves = await _dbContext.Bookshelves.CountAsync();
+        var random = new Random();
+        var skipAmount = random.Next(0, totalBookshelves - 4);
+
+        var selectedBookshelves = await _dbContext.Bookshelves
+            .Skip(skipAmount)
+            .Take(4)
+            .ToListAsync();
+
+        return selectedBookshelves;
+    }
+
     public async Task<List<Bookshelf>> GetAllWithCategoryAsync()
     {
         return await _dbContext.Bookshelves.Include(bookshelf => bookshelf.Categories).ToListAsync();

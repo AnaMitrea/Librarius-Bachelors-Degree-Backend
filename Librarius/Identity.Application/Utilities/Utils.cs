@@ -1,19 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace Identity.API.Utils;
+namespace Identity.Application.Utilities;
 
-public static class Utilities
+public static class Utils
 {
-    public static string ExtractUsernameFromAccessToken(string accessToken)
-    {
-        var handler = new JwtSecurityTokenHandler();
-        var jwtSecurityToken = handler.ReadJwtToken(accessToken);
-        var username = jwtSecurityToken.Claims.First(claim => claim.Type == "name").Value;
-
-        return username;
-    }
-    
     public static string GetJsonPropertyAsString(string jsonResponse, IEnumerable<string> propertyPath)
     {
         var jsonDocument = JsonDocument.Parse(jsonResponse);
@@ -59,16 +49,5 @@ public static class Utilities
             }
         }
         return property.GetInt32();
-    }
-    
-    // valentine || christmas || weekend
-    public static string CheckDate(DateTime date)
-    {
-        return date.Month switch
-        {
-            2 when date.Day == 14 => "valentine",
-            12 when date.Day == 25 => "christmas",
-            _ => date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty
-        };
     }
 }

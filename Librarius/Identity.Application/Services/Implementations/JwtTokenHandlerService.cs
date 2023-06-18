@@ -63,18 +63,6 @@ public class JwtTokenHandlerService : IJwtTokenHandlerService
             JwtToken = token
         };
     }
-    
-    private static AuthJwtResponseModel CreateJwtOnlyResponse(string username, string role)
-    {
-        var claimsIdentity = ConfigureClaims(username, role);
-        var signingCredentials = ConfigureSigningCredentials();
-        
-        var tokenExpiryTimeStamp = DateTime.Now.AddDays(1);
-        
-        var token = ConfigureJwtToken(claimsIdentity, signingCredentials, tokenExpiryTimeStamp);
-
-        return new AuthJwtResponseModel { JwtToken = token };
-    }
 
     private static ClaimsIdentity ConfigureClaims(string username, string role)
     {

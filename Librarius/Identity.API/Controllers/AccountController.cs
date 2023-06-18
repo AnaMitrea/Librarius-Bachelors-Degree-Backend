@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Identity.API.Models;
+using Identity.API.Utils;
 using Identity.Application.Models.Requests;
 using Identity.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ public class AccountController : ControllerBase
 {
     private readonly IJwtTokenHandlerService _jwtTokenHandlerService;
     private readonly IAccountService _accountService;
+    private readonly ITriggerRewardService _triggerRewardService;
     private readonly HttpClient _httpClient;
 
     private const string LibraryUserApiEndpoint = "http://localhost:5164/api/library/user/register";
@@ -21,12 +23,13 @@ public class AccountController : ControllerBase
     public AccountController(
         IJwtTokenHandlerService jwtTokenHandlerService,
         IAccountService accountService,
-        HttpClient httpClient
-        )
+        HttpClient httpClient,
+        ITriggerRewardService triggerRewardService)
     {
         _jwtTokenHandlerService = jwtTokenHandlerService;
         _accountService = accountService;
         _httpClient = httpClient;
+        _triggerRewardService = triggerRewardService;
     }
 
     // Route: /api/account/login
@@ -40,15 +43,23 @@ public class AccountController : ControllerBase
             
             var account = await _accountService.UpdateUserActivity(response.Username);
             if (account == null) throw new Exception("Invalid User Information.");
+
+            var criterion = Utilities.CheckDate(DateTime.Now.Date);
+            var hasWonAny = false;
+            if (!string.IsNullOrEmpty(criterion))
+            {
+                hasWonAny = await _triggerRewardService.TriggerUpdateActivity(criterion, true, response.JwtToken);
+            }
             
             return Ok(ApiResponse<AuthJwtResponseModel>.Success(new AuthJwtResponseModel
             {
-                JwtToken = response.JwtToken
+                JwtToken = response.JwtToken,
+                HasWon = hasWonAny
             }));
         }
         catch (Exception e)
         {
-            return BadRequest(ApiResponse<AuthenticationResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+            return BadRequest(ApiResponse<AuthJwtResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

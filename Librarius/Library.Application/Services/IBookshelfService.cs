@@ -6,5 +6,7 @@ public interface IBookshelfService
 {
     Task<List<BookshelfResponseModel>> GetAllAsync();
     
+    Task<List<BookshelfResponseModel>> Get4CategoriesForHomeExploreAsync();
+    
     Task<List<BookshelfWithCategoriesResponseModel>> GetAllWithCategoryAsync();
 }
