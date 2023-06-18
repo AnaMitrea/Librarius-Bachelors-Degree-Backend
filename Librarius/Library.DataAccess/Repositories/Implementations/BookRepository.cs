@@ -37,11 +37,8 @@ public class BookRepository : IBookRepository
             .Include(b => b.Author)
             .SingleOrDefaultAsync(b => b.Id == bookId);
         
-        if (book == default)
-        {
-            throw new Exception("The book id is invalid");
-        }
-        
+        if (book == null) throw new Exception("The book id is invalid");
+
         // Split query in order to increase performance from 500ms to 100ms !!!
         await _dbContext.Entry(book)
             .Collection(x => x.BookCategories)
@@ -50,6 +47,20 @@ public class BookRepository : IBookRepository
             .LoadAsync();
     
         return book;
+    }
+
+    public async Task<int> GetCategoryIdOfBookByIdAsync(int id)
+    {
+        var book = await _dbContext.Books.SingleOrDefaultAsync(b => b.Id == id);
+        if (book == null) throw new Exception("The book id is invalid");
+        
+        await _dbContext.Entry(book)
+            .Collection(x => x.BookCategories)
+            .Query()
+            .Include(x => x.Category)
+            .LoadAsync();
+        
+        return book.BookCategories.First().Category.Id;
     }
 
     public async Task<IEnumerable<Book>> GetBooksForAllBookshelves()

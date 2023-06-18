@@ -56,7 +56,10 @@ public class TrophyService : ITrophyService
         CategoryReaderUpdateActivityRequestModel requestModel, int userId)
     {
         var response = await _trophyRepository.UpdateCategoryReaderRewardActivityAsync(
-            userId, requestModel.ReadingBooksCounter);
+            userId,
+            requestModel.ReadingBooksCounter,
+            requestModel.CategoryId
+        );
         
         if (!requestModel.CanCheckWin) return 0;
         
@@ -66,18 +69,25 @@ public class TrophyService : ITrophyService
         return points;
     }
 
-    // public async Task<bool> UpdateActivitiesRewardActivityAsync(
-    //     ActivitiesUpdateActivityRequestModel requestModel, int userId)
-    // {
-    //     var response = await _trophyRepository.UpdateActivitiesRewardActivityAsync(
-    //         userId, requestModel.MinutesReadCounter);
-    //     
-    //     if (requestModel.CanCheckWin)
-    // {
-    //     var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
-    // }
-    //     return response;
-    // }
+    public async Task<int> UpdateActivitiesRewardActivityAsync(
+        ActivitiesUpdateActivityRequestModel requestModel, int userId)
+    {
+        var criteria = new[] { "average", "wishlist", "review", "weekend", "login", "valentine", "christmas" };
+        
+        if (!criteria.Contains(requestModel.Criterion))
+            throw new Exception("Invalid criterion.");
+        
+        var response = await _trophyRepository.UpdateActivitiesRewardActivityAsync(
+            userId,
+            requestModel.Criterion);
+        
+        if (!requestModel.CanCheckWin) return 0;
+        
+        var wonTrophies = await _trophyRepository.CheckUserIfCanWinAsync(userId);
+        var points = (wonTrophies.Count()) * 25;
+        
+        return points;
+    }
 
     public async Task<bool> JoinTrophyChallengeByIdAsync(int userId, int trophyId)
     {

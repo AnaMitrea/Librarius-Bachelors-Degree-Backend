@@ -10,6 +10,8 @@ public interface IBookRepository
     Task<Book?> GetBookByIdAsync(int id);
 
     Task<Book?> GetBookWithCategoryByIdAsync(int id);
+    
+    Task<int> GetCategoryIdOfBookByIdAsync(int id);
 
     Task<IEnumerable<Book>> GetBooksForAllBookshelves();
 

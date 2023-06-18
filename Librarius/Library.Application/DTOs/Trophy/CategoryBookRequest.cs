@@ -1,6 +1,6 @@
-﻿namespace Trophy.Application.Models.Trophy.Request.UserRewardActivity;
+﻿namespace Library.Application.DTOs.Trophy;
 
-public class CategoryReaderUpdateActivityRequestModel
+public class CategoryBookRequest
 {
     public int CategoryId { get; set; }
     

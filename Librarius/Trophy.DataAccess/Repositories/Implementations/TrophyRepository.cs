@@ -58,16 +58,13 @@ public class TrophyRepository : ITrophyRepository
         }
 
         // Activities Challenges
-        // foreach (var challenge in inProgressActivitiesChallenges)
-        // {
-        //     // ----TODO FIND A WAY OF IMPLEMENTATION----
-        //     
-        //     
-        //     if (challenge.UserProgress < challenge.MinimumCriterionNumber) continue;
-        //     
-        //     challenge.IsWon = true;
-        //     trophies.Add(challenge.Trophy);
-        // }
+        foreach (var challenge in inProgressActivitiesChallenges)
+        {
+            if (challenge.UserProgress == 0) continue;
+            
+            challenge.IsWon = true;
+            trophies.Add(challenge.Trophy);
+        }
 
         if (trophies.Any())
         {
@@ -104,9 +101,36 @@ public class TrophyRepository : ITrophyRepository
         return true;
     }
 
-    public async Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter)
+    public async Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter, int categoryId)
     {
-        throw new NotImplementedException();
+        var inProgressTrophies = await GetUserInProgressChallengesForCategoryReaderAsync(userId);
+
+        foreach (var trophy in inProgressTrophies)
+        {
+            if (trophy.CategoryId != categoryId) continue;
+            
+            trophy.UserProgress += readingBooksCounter;
+        }
+        
+        await _dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> UpdateActivitiesRewardActivityAsync(int userId, string criterion)
+    {
+        var inProgressTrophies = await GetUserInProgressChallengesForActivitiesAsync(userId);
+
+        foreach (var trophy in inProgressTrophies)
+        {
+            if (trophy.MinimumCriterionText != criterion) continue;
+            
+            trophy.UserProgress = 1;
+        }
+        
+        await _dbContext.SaveChangesAsync();
+
+        return true;
     }
 
 

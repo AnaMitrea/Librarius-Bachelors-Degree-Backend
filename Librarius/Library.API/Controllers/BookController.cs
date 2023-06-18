@@ -23,15 +23,11 @@ public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
     private readonly IReviewService _reviewService;
-    private readonly ITriggerRewardService _triggerRewardService;
-    private readonly HttpClient _httpClient;
 
-    public BookController(IBookService bookService, IReviewService reviewService, HttpClient httpClient, ITriggerRewardService triggerRewardService)
+    public BookController(IBookService bookService, IReviewService reviewService)
     {
         _bookService = bookService;
         _reviewService = reviewService;
-        _httpClient = httpClient;
-        _triggerRewardService = triggerRewardService;
     }
     
     // Route: /api/library/book/{bookId}
@@ -47,6 +43,22 @@ public class BookController : ControllerBase
         catch (Exception e)
         {
             return BadRequest(ApiResponse<BookResponseModel>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
+        }
+    }
+    
+    // Route: /api/library/book/{bookId}/categoryId
+    [HttpGet("{bookId:int}/categoryId")]
+    public async Task<IActionResult> GetCategoryIdOfBookById(int bookId)
+    {
+        try
+        {
+            var response = await _bookService.GetCategoryIdOfBookByIdAsync(bookId);
+
+            return Ok(ApiResponse<int>.Success(response));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<int>.Fail(new List<ApiValidationError> { new(null, e.Message) }) );
         }
     }
     

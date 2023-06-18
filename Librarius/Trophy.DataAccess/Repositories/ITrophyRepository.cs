@@ -18,10 +18,8 @@ public interface ITrophyRepository
     
     Task<bool> UpdateReadingTimeRewardActivityAsync(int userId, int readingHoursCounter); 
     Task<bool> UpdateReadingBooksRewardActivityAsync(int userId, int readingBooksCounter);
-    Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter);
-    
-    
-    // Task<bool> UpdateActivitiesRewardActivityAsync(int userId, int readingHoursCounter);
+    Task<bool> UpdateCategoryReaderRewardActivityAsync(int userId, int readingBooksCounter, int categoryId);
+    Task<bool> UpdateActivitiesRewardActivityAsync(int userId, string requestModelCriterion);
     
     
     // -- JOIN --

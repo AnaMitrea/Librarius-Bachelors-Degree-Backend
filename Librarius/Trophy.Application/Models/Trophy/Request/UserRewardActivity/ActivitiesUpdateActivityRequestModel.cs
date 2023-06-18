@@ -2,5 +2,7 @@
 
 public class ActivitiesUpdateActivityRequestModel
 {
+    public string Criterion { get; set; }
     
+    public bool CanCheckWin { get; set; }
 }

@@ -20,6 +20,7 @@ public static class ServiceCollection
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<ILoginActivityService, LoginActivityService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ITriggerRewardService, TriggerRewardService>();
 
         return services;
     }

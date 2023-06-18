@@ -14,8 +14,8 @@ namespace Library.Application.Services;
 public interface IBookService
 {
     Task<BookResponseModel> GetBookWithCategoryByIdAsync(int id);
-
-    Task<IEnumerable<ExploreBookResponseModel>> GetBooksForAllBookshelves();
+    
+    Task<int> GetCategoryIdOfBookByIdAsync(int bookId);
 
     Task<Dictionary<string, BooksForBookshelfResponseModel>> GetBooksGroupedByBookshelf(int? maxResults, string? title);
 

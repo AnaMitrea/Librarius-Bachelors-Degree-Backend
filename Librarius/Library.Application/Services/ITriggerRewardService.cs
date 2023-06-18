@@ -4,7 +4,9 @@ public interface ITriggerRewardService
 {
     Task TriggerRequestToTrophyChecker(string token);
 
-    Task TriggerUpdateTotalReadingTime(int minutesReadCounter, bool canCheckWin, string token);
+    Task<bool> TriggerUpdateTotalReadingTime(int minutesReadCounter, bool canCheckWin, string token);
     
-    Task TriggerUpdateTotalReadingBooks(int booksReadCounter, bool canCheckWin, string token);
+    Task<bool> TriggerUpdateTotalReadingBooks(int booksReadCounter, bool canCheckWin, string token);
+    
+    Task<bool> TriggerUpdateCategoryReadingBook(int counter, int categoryId, bool canCheckWin, string token);
 }

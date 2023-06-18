@@ -61,7 +61,7 @@ public class TrophyController : ControllerBase
                 var response = await UpdateUserWithNewLevel(pointsWon);
             }
             
-            var hasWonAnyTrophy = pointsWon == 0;
+            var hasWonAnyTrophy = pointsWon != 0;
             
             return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
@@ -88,7 +88,7 @@ public class TrophyController : ControllerBase
                 var response = await UpdateUserWithNewLevel(pointsWon);
             }
 
-            var hasWonAnyTrophy = pointsWon == 0;
+            var hasWonAnyTrophy = pointsWon != 0;
             
             return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
@@ -108,9 +108,16 @@ public class TrophyController : ControllerBase
         {
             var userId = await GetUserIdFromIdentity();
             
-            var response = await _trophyService.UpdateCategoryReaderRewardActivityAsync(requestModel, userId);
+            var pointsWon = await _trophyService.UpdateCategoryReaderRewardActivityAsync(requestModel, userId);
+            
+            if (requestModel.CanCheckWin)
+            {
+                var response = await UpdateUserWithNewLevel(pointsWon);
+            }
 
-            return Ok(ApiResponse<int>.Success(response));
+            var hasWonAnyTrophy = pointsWon != 0;
+            
+            return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
         catch (Exception e)
         {
@@ -126,10 +133,17 @@ public class TrophyController : ControllerBase
         try
         {
             var userId = await GetUserIdFromIdentity();
+            
+            var pointsWon = await _trophyService.UpdateActivitiesRewardActivityAsync(requestModel, userId);
+            
+            if (requestModel.CanCheckWin)
+            {
+                var response = await UpdateUserWithNewLevel(pointsWon);
+            }
 
-            // var response = await _trophyService.UpdateActivitiesRewardActivityAsync(requestModel, userId);
-
-            return Ok(ApiResponse<bool>.Success(false));
+            var hasWonAnyTrophy = pointsWon != 0;
+            
+            return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
         }
         catch (Exception e)
         {

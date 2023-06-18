@@ -13,7 +13,7 @@ public interface ITrophyService
     
     Task<int> UpdateCategoryReaderRewardActivityAsync(CategoryReaderUpdateActivityRequestModel requestModel, int userId);
     
-    // Task<bool> UpdateActivitiesRewardActivityAsync(ActivitiesUpdateActivityRequestModel requestModel, int userId);
+    Task<int> UpdateActivitiesRewardActivityAsync(ActivitiesUpdateActivityRequestModel requestModel, int userId);
     
     Task<IEnumerable<TrophyModel>> GetTrophiesByCategoryAsync(string category, bool canTakeLimit);
     

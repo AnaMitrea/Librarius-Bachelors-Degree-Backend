@@ -95,9 +95,16 @@ public class LibraryUserController : ControllerBase
         {
             var username = GetUsernameFromToken();
             
-            var totalMinutesForBookId = await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
+            await _bookService.UpdateUserReadingTimeSpentAsync(requestModel, username);
+            
+            var totalReadingTime = await _userService.GetUserTotalReadingTimeAsync(username);
+            var hasWonAny = await _triggerRewardService.TriggerUpdateTotalReadingTime(
+                totalReadingTime, 
+                true,
+                GetAuthorizationHeaderValue()
+            );
 
-            return Ok(ApiResponse<bool>.Success(true));
+            return Ok(ApiResponse<bool>.Success(hasWonAny));
         }
         catch (Exception e)
         {
@@ -113,10 +120,9 @@ public class LibraryUserController : ControllerBase
         try
         {
             var username = GetUsernameFromToken();
-            var response = await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
+            await _bookService.SetFinishedReadingBookByIdAsync(requestModel, username);
             
             var totalReadingTime = await _userService.GetUserTotalReadingTimeAsync(username);
-            
             await _triggerRewardService.TriggerUpdateTotalReadingTime(
                 totalReadingTime, 
                 false,
@@ -126,11 +132,19 @@ public class LibraryUserController : ControllerBase
             var totalReadingBooks = await _userService.GetUserTotalCompletedBooksAsync(username);
             await _triggerRewardService.TriggerUpdateTotalReadingBooks(
                 totalReadingBooks, 
+                false,
+                GetAuthorizationHeaderValue()
+            );
+            
+            var categoryId = await _bookService.GetCategoryIdOfBookByIdAsync(requestModel.BookId);
+            var hasWonAny = await _triggerRewardService.TriggerUpdateCategoryReadingBook(
+                1, 
+                categoryId,
                 true,
                 GetAuthorizationHeaderValue()
             );
 
-            return Ok(ApiResponse<bool>.Success(response));
+            return Ok(ApiResponse<bool>.Success(hasWonAny));
         }
         catch (Exception e)
         {
