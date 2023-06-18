@@ -559,7 +559,6 @@ public class BookRepository : IBookRepository
     public async Task<IEnumerable<Book>> GetTrendingWeekBooksAsync()
     {
         var weekAgo = DateTime.Now.Date.AddDays(-7);
-        var weekAgoString = weekAgo.ToString("dd/MM/yyyy");
 
         var booksWithReviews = await _dbContext.Books
             .Include(b => b.Reviews)
