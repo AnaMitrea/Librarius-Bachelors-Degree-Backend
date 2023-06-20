@@ -33,11 +33,9 @@ public class EmailSender : IEmailSender
         await SendSubscriptionConfirmationEmailAsync(authorNameResponse, userInfo.Email);
     }
     
-    public async Task SendWelcomeEmailAsync(string token)
+    public async Task SendWelcomeEmailAsync(WelcomeEmailRequest request)
     {
-        var userInfo = await GetUserInfoAsync(token);
-
-        await SendWelcomeConfirmationEmailAsync(userInfo.Username, userInfo.Email);
+        await SendWelcomeConfirmationEmailAsync(request.Username, request.Email);
     }
 
     private async Task<string> GetAuthorNameAsync(int authorId, string token)

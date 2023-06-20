@@ -10,6 +10,7 @@ public class TriggerRewardService : ITriggerRewardService
     private readonly HttpClient _httpClient;
     
     private const string TrophyRewardUrl = "http://localhost:5164/api/trophy/reward/check-win";
+    private const string JoinTrophyFirstLoginUrl = "http://localhost:5164/api/trophy/join/20";
     private const string UpdateActivityUrl = "http://localhost:5164/api/trophy/activities/reward/update-activity";
     
     public TriggerRewardService(HttpClient httpClient)
@@ -21,6 +22,13 @@ public class TriggerRewardService : ITriggerRewardService
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await _httpClient.GetAsync(TrophyRewardUrl);
+    }
+
+    public async Task TriggerJoinFirstLoginTrophy(string token)
+    {
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var response = await _httpClient.GetAsync(JoinTrophyFirstLoginUrl);
+        response.EnsureSuccessStatusCode();
     }
 
     public async Task<bool> TriggerUpdateActivity(string criterion, bool canCheckWin, string token)

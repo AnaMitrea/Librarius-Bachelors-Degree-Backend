@@ -10,7 +10,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/account/register",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AllowAnonymous": true
+      }
     },
     {
       "DownstreamPathTemplate": "/api/account/login",
@@ -22,7 +25,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/account/login",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AllowAnonymous": true
+      }
     },
     {
       "DownstreamPathTemplate": "/api/user/{everything}",
@@ -76,6 +82,22 @@
       }
     },
     {
+      "Priority": 2,
+      "DownstreamPathTemplate": "/api/library/user/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5104
+        }
+      ],
+      "UpstreamPathTemplate": "/api/library/user/register",
+      "UpstreamHttpMethod": [ "POST"],
+      "AuthenticationOptions": {
+        "AllowAnonymous": true
+      }
+    },
+    {
       "Priority": 1,
       "DownstreamPathTemplate": "/api/library/user/{everything}",
       "DownstreamScheme": "http",
@@ -112,6 +134,23 @@
       }
     },
     {
+      "Priority": 1,
+      "DownstreamPathTemplate": "/api/email/welcome",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5231
+        }
+      ],
+      "UpstreamPathTemplate": "/api/email/welcome",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
+      "AuthenticationOptions": {
+        "AllowAnonymous": true
+      }
+    },
+    {
+      "Priority": 0,
       "DownstreamPathTemplate": "/api/email/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

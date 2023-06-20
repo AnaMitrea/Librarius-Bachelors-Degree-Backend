@@ -3,6 +3,4 @@
 public class EmailRequestModel
 {
     public string AuthorId { get; set; }
-    
-    
 }

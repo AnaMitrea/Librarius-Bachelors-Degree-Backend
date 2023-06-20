@@ -171,6 +171,36 @@ public class TrophyController : ControllerBase
         }
     }
     
+    // Route: /api/trophy/win/first-login-trophy
+    [HttpGet("win/first-login-trophy")]
+    public async Task<IActionResult> JoinFirstLoginTrophyChallenge()
+    {
+        try
+        {
+            var userId = await GetUserIdFromIdentity();
+            
+            await _trophyService.JoinTrophyChallengeByIdAsync(userId, 20);
+
+            var requestModel = new ActivitiesUpdateActivityRequestModel
+            {
+                CanCheckWin = true,
+                Criterion = "login"
+            };
+            
+            var pointsWon = await _trophyService.UpdateActivitiesRewardActivityAsync(requestModel, userId);
+            await UpdateUserWithNewLevel(pointsWon);
+
+            var hasWonAnyTrophy = pointsWon != 0;
+            
+            return Ok(ApiResponse<bool>.Success(hasWonAnyTrophy));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(ApiResponse<bool>
+                .Fail(new List<ApiValidationError> { new(null, e.Message) }));
+        }
+    }
+    
     // Route: /api/trophy/leave/{:trophyId}
     [HttpGet("leave/{trophyId:int}")]
     public async Task<IActionResult> LeaveTrophyChallengeById([FromRoute] int trophyId)

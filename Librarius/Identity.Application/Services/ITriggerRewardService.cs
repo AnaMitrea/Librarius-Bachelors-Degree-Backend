@@ -3,6 +3,8 @@
 public interface ITriggerRewardService
 {
     Task TriggerRequestToTrophyChecker(string token);
+    
+    Task TriggerJoinFirstLoginTrophy(string token);
 
     Task<bool> TriggerUpdateActivity(string criterion, bool canCheckWin, string token);
 }

@@ -20,4 +20,6 @@ public interface IAccountRepository
     Task<Account> GetUserInformationAsync(string username);
 
     Task<Account?> UpdateUserInformationAsync(Account userModel);
+    
+    Task<bool> IsFirstLoginEver(string username);
 }

@@ -73,7 +73,12 @@ public class AccountService : IAccountService
     {
         return await _accountRepository.CheckEmailExistence(email);
     }
-    
+
+    public async Task<bool> IsFirstLoginEver(string username)
+    {
+        return await _accountRepository.IsFirstLoginEver(username);
+    }
+
     public async Task<AuthenticationResponseModel?> UpdateUserActivity(string username)
     {
         var today = DateTime.Now.Date;

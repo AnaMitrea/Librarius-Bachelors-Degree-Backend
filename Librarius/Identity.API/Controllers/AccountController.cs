@@ -19,6 +19,7 @@ public class AccountController : ControllerBase
 
     private const string LibraryUserApiEndpoint = "http://localhost:5164/api/library/user/register";
     private const string WelcomeEmailApiEndpoint = "http://localhost:5164/api/email/welcome";
+    private const string JoinLoginTrophyApiEndpoint = "http://localhost:5164/api/trophy/join/20";
     
     public AccountController(
         IJwtTokenHandlerService jwtTokenHandlerService,
@@ -41,10 +42,22 @@ public class AccountController : ControllerBase
             var response = await _jwtTokenHandlerService.AuthenticateAccount(authenticationRequest);
             if (response == null) return Unauthorized();
             
+            var isFirstLoginEver = await _accountService.IsFirstLoginEver(authenticationRequest.Username);
+            
             var account = await _accountService.UpdateUserActivity(response.Username);
             if (account == null) throw new Exception("Invalid User Information.");
-
-            var criterion = Utilities.CheckDate(DateTime.Now.Date);
+            
+            string criterion;
+            if (isFirstLoginEver)
+            {
+                criterion = "login";
+                await _triggerRewardService.TriggerJoinFirstLoginTrophy(response.JwtToken);
+            }
+            else
+            {
+                criterion = Utilities.CheckDate(DateTime.Now.Date);
+            }
+            
             var hasWonAny = false;
             if (!string.IsNullOrEmpty(criterion))
             {
@@ -85,7 +98,13 @@ public class AccountController : ControllerBase
                 var response = await _httpClient.PostAsync(LibraryUserApiEndpoint, content);
                 response.EnsureSuccessStatusCode();
 
-                var email = await _httpClient.GetAsync(WelcomeEmailApiEndpoint);
+                var welcomeEmailData = new
+                {
+                    registerRequest.Username,
+                    registerRequest.Email
+                };
+                
+                var email = await _httpClient.PostAsJsonAsync(WelcomeEmailApiEndpoint, welcomeEmailData);
                 email.EnsureSuccessStatusCode();
                 
                 return Ok(ApiResponse<bool>.Success(true));

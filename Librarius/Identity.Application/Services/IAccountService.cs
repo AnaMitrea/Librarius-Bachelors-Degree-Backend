@@ -20,5 +20,6 @@ public interface IAccountService
     Task<bool> CheckUsernameExistence(string username);
 
     Task<bool> CheckEmailExistence(string email);
-    
+
+    Task<bool> IsFirstLoginEver(string username);
 }

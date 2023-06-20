@@ -1,3 +1,4 @@
+using Email.Application.Models;
 using Email.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -27,13 +28,10 @@ public class EmailController : ControllerBase
     }
     
     // Route: /api/email/welcome
-    [HttpGet("welcome")]
-    public async Task<IActionResult> SendEmailWelcome()
+    [HttpPost("welcome")]
+    public async Task<IActionResult> SendEmailWelcome([FromBody] WelcomeEmailRequest request)
     {
-        var authorizationHeaderValue = HttpContext.Request.Headers[HeaderNames.Authorization]
-            .ToString().Replace("Bearer ", "", StringComparison.OrdinalIgnoreCase);
-        
-        await _emailSender.SendWelcomeEmailAsync(authorizationHeaderValue);
+        await _emailSender.SendWelcomeEmailAsync(request);
         return NoContent();
     }
 }

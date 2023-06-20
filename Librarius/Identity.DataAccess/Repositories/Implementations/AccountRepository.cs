@@ -30,7 +30,7 @@ public class AccountRepository : IAccountRepository
             Email = registerUser.Email,
             CurrentStreak = 1,
             LongestStreak = 1,
-            LastLogin = DateTime.Now.Date.ToString("dd/MM/yyyy"),
+            LastLogin = string.Empty,
             Level = "Beginner",
             Points = 0,
             Role = "User"
@@ -68,6 +68,14 @@ public class AccountRepository : IAccountRepository
         await _dbContext.SaveChangesAsync();
         
         return account;
+    }
+
+    public async Task<bool> IsFirstLoginEver(string username)
+    {
+        var account = await _dbContext.Accounts.SingleOrDefaultAsync(ac => ac.Username == username);
+        if (account == null)  throw new Exception("Invalid Credentials.");
+        
+        return string.IsNullOrEmpty(account.LastLogin) || string.IsNullOrWhiteSpace(account.LastLogin);
     }
 
     public async Task<bool> CheckUsernameExistence(string username)
