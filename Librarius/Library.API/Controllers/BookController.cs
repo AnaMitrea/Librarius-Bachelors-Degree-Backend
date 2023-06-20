@@ -23,11 +23,13 @@ public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
     private readonly IReviewService _reviewService;
+    private readonly ITriggerRewardService _triggerRewardService;
 
-    public BookController(IBookService bookService, IReviewService reviewService)
+    public BookController(IBookService bookService, IReviewService reviewService, ITriggerRewardService triggerRewardService)
     {
         _bookService = bookService;
         _reviewService = reviewService;
+        _triggerRewardService = triggerRewardService;
     }
     
     // Route: /api/library/book/{bookId}
@@ -89,8 +91,14 @@ public class BookController : ControllerBase
             var username = GetUsernameFromToken();
             
             var response = await _reviewService.SetUserReviewByBookIdAsync(requestModel, username);
+
+            var hasWonAny = false;
+            if (requestModel.ReviewContent.Length >= 1500)
+            {
+                hasWonAny = await _triggerRewardService.TriggerRewardForLengthyReview(GetAuthorizationHeaderValue());
+            }
             
-            return Ok(ApiResponse<bool>.Success(response));
+            return Ok(ApiResponse<bool>.Success(hasWonAny));
         }
         catch (Exception e)
         {

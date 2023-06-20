@@ -6,6 +6,12 @@ namespace Library.Application.Utilities;
 
 public static class Utils
 {
+    public const string TrophyRewardUrl = "http://localhost:5164/api/trophy/reward/check-win";
+    public const string TrophyLengthyReviewRewardUrl = "http://localhost:5164/api/trophy/win/lengthy-review";
+    public const string UpdateReadingTimeUrl = "http://localhost:5164/api/trophy/reading-time/reward/update-activity";
+    public const string UpdateReadingBookUrl = "http://localhost:5164/api/trophy/reading-books/reward/update-activity";
+    public const string UpdateCategoryBookUrl = "http://localhost:5164/api/trophy/category-reader/reward/update-activity";
+    
     public static string CalculateTimeUnit(string timestamp)
     {
         if (DateTime.TryParseExact(timestamp, "dd/MM/yyyy", null, DateTimeStyles.None, out var timestampDate))

@@ -72,7 +72,7 @@ public class TrophyService : ITrophyService
     public async Task<int> UpdateActivitiesRewardActivityAsync(
         ActivitiesUpdateActivityRequestModel requestModel, int userId)
     {
-        var criteria = new[] { "average", "wishlist", "review", "weekend", "login", "valentine", "christmas" };
+        var criteria = new[] { "wishlist", "review", "weekend", "login", "valentine", "christmas" };
         
         if (!criteria.Contains(requestModel.Criterion))
             throw new Exception("Invalid criterion.");
