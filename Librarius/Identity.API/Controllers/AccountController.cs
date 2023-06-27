@@ -19,8 +19,7 @@ public class AccountController : ControllerBase
 
     private const string LibraryUserApiEndpoint = "http://localhost:5164/api/library/user/register";
     private const string WelcomeEmailApiEndpoint = "http://localhost:5164/api/email/welcome";
-    private const string JoinLoginTrophyApiEndpoint = "http://localhost:5164/api/trophy/join/20";
-    
+
     public AccountController(
         IJwtTokenHandlerService jwtTokenHandlerService,
         IAccountService accountService,

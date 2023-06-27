@@ -15,14 +15,6 @@ public class LevelAssignService : ILevelAssignService
         _mapper = mapper;
         _levelRepository = levelRepository;
     }
-    
-    public async Task AddUserPointsByUserIdAsync(int userId, int points)
-    {
-        if (points < 0) throw new Exception("Points cannot be negative.");
-        
-        // TODO make method to request the update of points in account table
-        
-    }
 
     public async Task<string> GetLevelByPointsAsync(LevelRequestModel requestModel)
     {

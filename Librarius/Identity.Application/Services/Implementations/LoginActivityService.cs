@@ -15,9 +15,4 @@ public class LoginActivityService : ILoginActivityService
     {
         return  await _activityRepository.CreateLoginActivityAsync(accountId, date);
     }
-
-    public async Task CheckForActivityTrophies(string criterion)
-    {
-        throw new NotImplementedException();
-    }
 }

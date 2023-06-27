@@ -21,7 +21,6 @@ public static class ServiceCollection
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
-        services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IReviewsRepository, ReviewsRepository>();
 

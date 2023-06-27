@@ -428,8 +428,7 @@ public class BookRepository : IBookRepository
         
         return userReadingBook;
     }
-
-    // TODO de mutat in library user
+    
     public async Task<int> GetUserTotalReadingTimeSpentAsync(int userId)
     {
         var user = await _dbContext.Users
@@ -442,8 +441,7 @@ public class BookRepository : IBookRepository
 
         return userReadingBook;
     }
-
-    // TODO de mutat in library user
+    
     public async Task<int> GetUserTotalReadingTimeSpentByUsernameAsync(string username)
     {
         var user = await _dbContext.Users

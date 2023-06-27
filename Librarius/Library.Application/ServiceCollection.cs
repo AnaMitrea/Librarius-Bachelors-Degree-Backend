@@ -30,9 +30,6 @@ public static class ServiceCollection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITriggerRewardService, TriggerRewardService>();
 
-
-        // TODO models validators as:  services.AddScoped<IValidator<DogRequestModel>, DogRequestModelValidator>();
-        
         return services;
     }
 }

@@ -106,17 +106,20 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<UserLeaderboardByMinutesDto>> GetAllUsersByReadingTimeDescAsync()
     {
         var userLeaderboard = await _dbContext.Users
-            .Join(
+            .GroupJoin(
                 _dbContext.UserReadingBooks,
                 user => user.Id,
                 userReadingBook => userReadingBook.UserId,
-                (user, userReadingBook) => new { user, userReadingBook })
+                (user, userReadingBooks) => new { user, userReadingBooks })
+            .SelectMany(
+                x => x.userReadingBooks.DefaultIfEmpty(),
+                (x, userReadingBook) => new { x.user, userReadingBook })
             .GroupBy(x => new { x.user.Id, x.user.Username })
             .Select(x => new UserLeaderboardByMinutesDto
             {
                 Id = x.Key.Id,
                 Username = x.Key.Username,
-                MinutesLogged = x.Sum(ur => ur.userReadingBook.MinutesSpent)
+                MinutesLogged = x.Sum(ur => ur.userReadingBook != null ? ur.userReadingBook.MinutesSpent : 0)
             })
             .OrderByDescending(u => u.MinutesLogged)
             .ToListAsync();
@@ -132,17 +135,20 @@ public class UserRepository : IUserRepository
     public async Task<IEnumerable<UserLeaderboardByBooksDto>> GetAllUsersByNumberOfBooksDescAsync()
     {
         var userLeaderboard = await _dbContext.Users
-            .Join(
+            .GroupJoin(
                 _dbContext.UserReadingBooks,
                 user => user.Id,
                 userReadingBook => userReadingBook.UserId,
-                (user, userReadingBook) => new { user, userReadingBook })
+                (user, userReadingBooks) => new { user, userReadingBooks })
+            .SelectMany(
+                x => x.userReadingBooks.DefaultIfEmpty(),
+                (x, userReadingBook) => new { x.user, userReadingBook })
             .GroupBy(x => new { x.user.Id, x.user.Username })
             .Select(x => new UserLeaderboardByBooksDto
             {
                 Id = x.Key.Id,
                 Username = x.Key.Username,
-                NumberOfBooks = x.Count()
+                NumberOfBooks = x.Count(user => user.userReadingBook != null)
             })
             .OrderByDescending(u => u.NumberOfBooks)
             .ToListAsync();
