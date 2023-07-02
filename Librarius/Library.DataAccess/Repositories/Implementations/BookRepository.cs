@@ -481,16 +481,14 @@ public class BookRepository : IBookRepository
             
             _dbContext.UserReadingBooks.Add(newReadingBook);
             await _dbContext.SaveChangesAsync();
+            return newReadingBook.MinutesSpent;
         }
-        else
-        {
-            // update the timeSpent into db
-            userReadingBook.MinutesSpent = timeSpent;
+
+        // update the timeSpent into db
+        userReadingBook.MinutesSpent = timeSpent;
             
-            _dbContext.UserReadingBooks.Update(userReadingBook);
-            await _dbContext.SaveChangesAsync();
-        }
-        
+        _dbContext.UserReadingBooks.Update(userReadingBook);
+        await _dbContext.SaveChangesAsync();
         return userReadingBook.MinutesSpent;
     }
 
